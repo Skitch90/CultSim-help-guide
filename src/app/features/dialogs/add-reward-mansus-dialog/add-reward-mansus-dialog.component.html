@@ -1,0 +1,41 @@
+<h2 mat-dialog-title>Add reward to mansus door</h2>
+
+<mat-dialog-content [formGroup]="form">
+    <mat-form-field>
+        <input matInput placeholder="Mansus door" readonly formControlName="door">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-select placeholder="Select type" formControlName="rewardType">
+            <mat-option value="Influence">Influence</mat-option>
+            <mat-option value="Lore">Lore</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="loreSelected">
+        <input type="text" placeholder="Select lore" matInput formControlName="lore" [matAutocomplete]="autoLore">
+        <mat-autocomplete #autoLore="matAutocomplete">
+            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                {{option}}
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="influenceSelected">
+            <input type="text" placeholder="Select Influence" matInput formControlName="influence" [matAutocomplete]="autoInfluence">
+            <mat-autocomplete #autoInfluence="matAutocomplete">
+                <mat-option *ngFor="let option of filteredInfluences | async" [value]="option">
+                    {{option}}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button class="mat-raised-button" (click)="close()">
+        Close
+    </button>
+    <button class="mat-raised-button mat-primary" (click)="save()">
+        Save
+    </button>
+</mat-dialog-actions>

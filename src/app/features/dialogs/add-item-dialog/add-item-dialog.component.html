@@ -1,0 +1,50 @@
+<h2 mat-dialog-title>Save item</h2>
+
+<mat-dialog-content [formGroup]="form">
+    <mat-form-field>
+        <input matInput placeholder="Name" formControlName="name">
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-select placeholder="Select type" formControlName="itemType">
+            <!-- <mat-option value="Follower">Follower</mat-option>-->
+            <mat-option value="Aspect">Aspect</mat-option>
+            <mat-option value="Influence">Influence</mat-option>
+            <mat-option value="Location">Location</mat-option>
+            <mat-option value="Lore">Lore</mat-option>
+            <mat-option value="MansusDoor">Mansus Door</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <ng-container *ngIf="loreSelected || influenceSelected">
+        <mat-form-field>
+            <mat-select placeholder="Select aspect" formControlName="aspect">
+                <mat-option *ngFor="let item of aspects" value={{item}}>{{item}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-select placeholder="Select quantity" formControlName="quantity">
+                <ng-container *ngIf="loreSelected">
+                    <mat-option value=2>2</mat-option>
+                    <mat-option value=4>4</mat-option>
+                    <mat-option value=6>6</mat-option>
+                    <mat-option value=8>8</mat-option>
+                    <mat-option value=10>10</mat-option>
+                    <mat-option value=12>12</mat-option>
+                    <mat-option value=14>14</mat-option>
+                </ng-container>
+                <ng-container *ngIf="influenceSelected">
+                    <mat-option value=2>2</mat-option>
+                    <mat-option value=6>6</mat-option>
+                    <mat-option value=10>10</mat-option>
+                    <mat-option value=15>15</mat-option>
+                </ng-container>
+            </mat-select>
+        </mat-form-field>
+    </ng-container>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button class="mat-raised-button" (click)="close()">Close</button>
+    <button class="mat-raised-button mat-primary" (click)="save()">Save</button>
+</mat-dialog-actions>

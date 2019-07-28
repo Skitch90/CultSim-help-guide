@@ -1,0 +1,45 @@
+<h2 mat-dialog-title>Add Reward to book</h2>
+
+<mat-dialog-content [formGroup]="form">
+    <mat-form-field>
+        <textarea class="origin-name-text" matInput placeholder="Book" readonly matTextareaAutosize
+            formControlName="book"></textarea>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-select placeholder="Select type" formControlName="rewardType">
+            <mat-option value="Lore">Lore</mat-option>
+            <mat-option value="Language">Language</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="loreSelected">
+        <input type="text" placeholder="Select lore" matInput formControlName="lore" [matAutocomplete]="auto">
+        <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                {{option}}
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="languageSelected">
+        <input type="text" placeholder="Select language" matInput formControlName="language" [matAutocomplete]="autoLanguage">
+        <mat-autocomplete #autoLanguage="matAutocomplete">
+            <mat-option *ngFor="let option of filteredLanguages | async" [value]="option">
+                {{option}}
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+
+    <button class="mat-raised-button" (click)="close()">
+        Close
+    </button>
+
+    <button class="mat-raised-button mat-primary" (click)="save()">
+        Save
+    </button>
+
+</mat-dialog-actions>
