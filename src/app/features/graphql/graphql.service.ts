@@ -12,9 +12,12 @@ import {
     SET_INFLUENCE_DREAMING_RESULT_MUTATION,
     SET_INFLUENCE_DECAY_MUTATION,
     CREATE_LOCATION_MUTATION,
-    SET_BOOK_LANGUAGE_RESULT_MUTATION
+    SET_BOOK_LANGUAGE_RESULT_MUTATION,
+    GET_ENTITY_WITH_ASPECT_QUERY
 } from './queries';
 import { SaveLocationRewardInput, SaveItemInput, SaveMansusDoorOptionInput } from './graphql.types';
+import { AspectSearchGroupResult, Entity } from 'src/app/shared/model';
+import { group } from '@angular/animations';
 
 @Injectable({
     providedIn: 'root'
@@ -24,7 +27,7 @@ export class GraphqlService {
     constructor(private apollo: Apollo) { }
 
 
-    async getEntities(name: String) {
+    async getEntities(name: string): Promise<Entity[]> {
         const { data } = await this.apollo.query<any>({
             query: GET_ENTITY_QUERY,
             variables: {
@@ -34,6 +37,7 @@ export class GraphqlService {
 
         const result = data.entityWithName.map(item => {
             return {
+                id: item._id,
                 name: item.name,
                 label: item.label,
                 aspects: item.aspects.map(aspect => {
@@ -42,10 +46,32 @@ export class GraphqlService {
                         quantity: aspect.quantity
                     };
                 })
-            }
+            };
         });
 
         return result;
+    }
+
+    async getEntitiesByAspect(aspect: string) {
+        const { data } = await this.apollo.query<any>({
+            query: GET_ENTITY_WITH_ASPECT_QUERY,
+            variables: {
+                aspect
+            }
+        }).toPromise();
+
+        return data.entityWithAspect.map(entityGroup => {
+            return {
+                label: entityGroup.label,
+                entities: entityGroup.entities.map(entity => {
+                    return {
+                        id: entity._id,
+                        name: entity.name,
+                        aspectQuantity: entity.aspectQuantity
+                    };
+                })
+            };
+        });
     }
 
     async getLanguages() {
@@ -193,7 +219,7 @@ export class GraphqlService {
                         variables: {
                             language
                         }
-                    })
+                    });
                 }
 
                 await this.apollo.mutate({

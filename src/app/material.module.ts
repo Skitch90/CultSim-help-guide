@@ -13,7 +13,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
-import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [],
@@ -30,7 +32,9 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     MatButtonModule,
     MatDialogModule,
     MatSelectModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatExpansionModule,
+    MatListModule
   ],
   exports: [
     DragDropModule,
@@ -44,7 +48,9 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     MatButtonModule,
     MatDialogModule,
     MatSelectModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatExpansionModule,
+    MatListModule
   ]
 })
 export class MaterialModule { }

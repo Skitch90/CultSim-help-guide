@@ -1,0 +1,9 @@
+<mat-expansion-panel>
+  <mat-expansion-panel-header>{{ group.label | outputLabel }}</mat-expansion-panel-header>
+  <mat-list>
+    <mat-list-item *ngFor="let entity of group.entities" (click)="addToBoard(entity)">
+        <span *ngIf="entity.aspectQuantity === null">{{ entity.name }}</span>
+        <span *ngIf="entity.aspectQuantity !== null">{{ entity.name }} ({{ entity.aspectQuantity }})</span>
+    </mat-list-item>
+  </mat-list>
+</mat-expansion-panel>

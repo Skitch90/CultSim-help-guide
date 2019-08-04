@@ -1,14 +1,13 @@
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { BoardComponent } from './features/board/board.component';
-import { Entity } from './shared/utils';
-import { Apollo } from 'apollo-angular';
+import { Entity } from './shared/model';
 
 import { debounceTime, tap, switchMap, filter, finalize, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { GraphqlService } from './features/graphql/graphql.service';
 import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
 import { AddItemDialogComponent } from './features/dialogs/add-item-dialog/add-item-dialog.component';
+import { BoardService } from './features/board/board.service';
 
 @Component({
   selector: 'app-root',
@@ -22,9 +21,9 @@ export class AppComponent implements OnInit {
   isLoading = false;
 
   constructor(private dialog: MatDialog,
-    private service: GraphqlService) { }
+              private service: GraphqlService,
+              private boardService: BoardService) { }
 
-  @ViewChild(BoardComponent, { static: false }) child;
 
   ngOnInit(): void {
     this.searchResults = this.myControl.valueChanges.pipe(
@@ -37,26 +36,28 @@ export class AppComponent implements OnInit {
       finalize(() => {
         this.isLoading = false;
       })
-    )
+    );
   }
 
-  isEntity(item: String | Entity): item is Entity {
-    return (<Entity>item).name !== undefined;
+  isEntity(item: string | Entity): item is Entity {
+    return (item as Entity).name !== undefined;
   }
 
   onKey(event): void {
-    const value = this.myControl.value;
-    if (event.key === 'Enter' && this.isEntity(value)) {
+    if (event.key === 'Enter') {
       this.addItemToBoard();
     }
   }
 
   addItemToBoard() {
-    this.child.boardItems.push(this.myControl.value);
+    const value = this.myControl.value;
+    if (this.isEntity(value)) {
+      this.boardService.addBoardItem(value);
+    }
   }
 
-  displayFn(user?: Entity): String | undefined {
-    return user ? user.name : undefined;
+  displayFn(item?: Entity): string | undefined {
+    return item ? item.name : undefined;
   }
 
   saveItem() {

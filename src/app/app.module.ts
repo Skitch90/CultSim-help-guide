@@ -16,17 +16,23 @@ import { AddRewardLocationDialogComponent } from './features/dialogs/add-reward-
 import { AddMansusDoorOptionDialogComponent } from './features/dialogs/add-mansus-door-option-dialog/add-mansus-door-option-dialog.component';
 import { AddRewardMansusDialogComponent } from './features/dialogs/add-reward-mansus-dialog/add-reward-mansus-dialog.component';
 import { AddInfluenceDecayDialogComponent } from './features/dialogs/add-influence-decay-dialog/add-influence-decay-dialog.component';
+import { BoardItemComponent } from './features/board/board-item/board-item.component';
+import { EntityGroupComponent } from './features/entity-group/entity-group.component';
+import { OutputLabelPipe } from './shared/OutputLabelPipe';
 
 @NgModule({
   declarations: [
     AppComponent,
+    OutputLabelPipe,
     BoardComponent,
     AddRewardLocationDialogComponent,
     AddItemDialogComponent,
     AddRewardBookDialogComponent,
     AddMansusDoorOptionDialogComponent,
     AddRewardMansusDialogComponent,
-    AddInfluenceDecayDialogComponent
+    AddInfluenceDecayDialogComponent,
+    BoardItemComponent,
+    EntityGroupComponent
   ],
   imports: [
     BrowserModule,
@@ -39,7 +45,7 @@ import { AddInfluenceDecayDialogComponent } from './features/dialogs/add-influen
   ],
   providers: [GraphqlService],
   entryComponents: [
-    BoardComponent, 
+    BoardComponent,
     AddRewardLocationDialogComponent,
     AddItemDialogComponent,
     AddRewardBookDialogComponent,

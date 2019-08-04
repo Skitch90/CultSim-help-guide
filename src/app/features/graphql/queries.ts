@@ -3,11 +3,25 @@ import gql from 'graphql-tag';
 export const GET_ENTITY_QUERY = gql`
     query getEntity($name: String!){
         entityWithName(name: $name) {
+            _id
             name
             label
             aspects {
-            aspect
-            quantity
+                aspect
+                quantity
+            }
+        }
+    }
+`;
+
+export const GET_ENTITY_WITH_ASPECT_QUERY = gql`
+    query getEntitiesByAspect($aspect: String!) {
+        entityWithAspect(aspect: $aspect) {
+            label
+            entities {
+                _id
+                name
+                aspectQuantity
             }
         }
     }
@@ -79,7 +93,7 @@ export const SET_BOOK_LOCATION_MUTATION = gql`
                 name
             }
             chance
-        }   
+        }
     }
 `;
 
