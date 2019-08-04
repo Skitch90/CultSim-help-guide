@@ -143,7 +143,13 @@ export class GraphqlService {
                     mutation: SET_LORE_ASPECT_MUTATION,
                     variables: {
                         lore: name, aspect, quantity: +quantity
-                    }
+                    },
+                    refetchQueries: [{
+                        query: GET_ENTITY_WITH_ASPECT_QUERY,
+                        variables: {
+                            aspect
+                        }
+                    }]
                 }).toPromise();
             } else if (itemType === 'Influence') {
                 await this.apollo.mutate({
@@ -162,7 +168,13 @@ export class GraphqlService {
                         influence: name,
                         aspect,
                         quantity: +quantity
-                    }
+                    },
+                    refetchQueries: [{
+                        query: GET_ENTITY_WITH_ASPECT_QUERY,
+                        variables: {
+                            aspect
+                        }
+                    }]
                 }).toPromise();
             }
         } catch (err) {
