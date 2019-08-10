@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { AspectSearchGroupResult, AspectSearchEntity, Entity } from 'src/app/shared/model';
+import { AspectSearchGroupResult, AspectSearchEntity } from 'src/app/shared/model';
 import { BoardService } from '../board/board.service';
 import { GraphqlService } from '../graphql/graphql.service';
 
