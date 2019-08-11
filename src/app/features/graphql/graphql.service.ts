@@ -250,15 +250,7 @@ export class GraphqlService {
 
     async saveLocationReward(params: SaveLocationRewardInput) {
         try {
-            // const { location, name, rewardType, language, newLanguage, chance } = params;
-            console.log(params);
             const { location, rewards, chance } = params;
-            //             {location: "Oriflamme's Auction House", rewards: Array(2), chance: true}
-            // chance: true
-            // location: "Oriflamme's Auction House"
-            // rewards: Array(2)
-            // 0: {type: "Book", name: "A Collection of Essays"}
-            // 1: {type: "Book", name: "A Collection of Poetry"}
             rewards.forEach(async reward => {
                 const { type, name } = reward;
                 switch (type) {
@@ -275,43 +267,6 @@ export class GraphqlService {
                     }
                 }
             });
-            // if (rewardType === 'Book') {
-            // if (newLanguage) {
-            //     // Saving the new language
-            //     await this.apollo.mutate({
-            //         mutation: CREATE_LANGUAGE_MUTATION,
-            //         variables: {
-            //             language
-            //         }
-            //     });
-            // }
-
-            // await this.apollo.mutate({
-            //     mutation: CREATE_BOOK_MUTATION,
-            //     variables: {
-            //         title: name
-            //     }
-            // }).toPromise();
-
-            // await this.apollo.mutate({
-            //     mutation: SET_BOOK_LOCATION_MUTATION,
-            //     variables: {
-            //         title: name,
-            //         location,
-            //         chance
-            //     }
-            // }).toPromise();
-
-            // if (language) {
-            //     await this.apollo.mutate({
-            //         mutation: SET_BOOK_LANGUAGE_MUTATION,
-            //         variables: {
-            //             title: name,
-            //             language
-            //         }
-            //     }).toPromise();
-            // }
-            // }
         } catch (err) {
             console.error(err);
         }
