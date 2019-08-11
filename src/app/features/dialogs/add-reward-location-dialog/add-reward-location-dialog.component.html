@@ -1,70 +1,39 @@
-<h2 mat-dialog-title>Add Reward to location</h2>
+<h2 mat-dialog-title>Add reward to location</h2>
 
 <mat-dialog-content [formGroup]="form">
-    <mat-form-field>
-        <input matInput placeholder="Location" readonly formControlName="location" >
-    </mat-form-field>
+  <mat-form-field class="reward-source">
+    <input matInput class="origin-name-text" placeholder="Location" readonly formControlName="location">
+  </mat-form-field>
 
-    <mat-form-field>
-        <input matInput placeholder="Name" formControlName="name">
-    </mat-form-field>
+  <div>
+    <h3 class="reward-title">Rewards</h3>
+    <mat-icon matTooltip="Add new reward" class="reward-add-icon" (click)="addReward()">add_circle_outline</mat-icon>
+</div>
 
-    <mat-form-field>
-        <mat-select placeholder="Select type" formControlName="rewardType">
+<mat-slide-toggle class="chance-toggle" formControlName="chance">Chance to get rewards</mat-slide-toggle>
+
+<div class="reward-data" formArrayName="rewards" *ngFor="let item of form.get('rewards').controls; let i = index;">
+    <div [formGroupName]="i">
+        <mat-form-field class="type-field">
+        <mat-select placeholder="Select type" formControlName="type">
             <mat-option value="Book">Book</mat-option>
         </mat-select>
     </mat-form-field>
-
-    <mat-checkbox *ngIf="bookSelected" [(checked)]="isNewLanguage" formControlName="newLanguage">
-        New Language
-    </mat-checkbox>
-
-    <mat-form-field *ngIf="bookSelected && !isNewLanguage">
-        <mat-select placeholder="Select language" formControlName="language">
-            <mat-option *ngFor="let lang of languages" value={{lang}}>{{lang}}</mat-option>
-        </mat-select>
+    <mat-form-field class="item-field">
+        <input matInput type="text" placeholder="Select reward" formControlName="name" [matAutocomplete]="auto">
+        <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let option of filteredOptions[i] | async" [value]="option">
+                {{option}}
+            </mat-option>
+        </mat-autocomplete>
     </mat-form-field>
-
-    <mat-form-field *ngIf="bookSelected && isNewLanguage">
-        <input matInput placeholder="Language" formControlName="language" #language>
-    </mat-form-field>
-
-    <mat-checkbox formControlName="chance">Chance to get it</mat-checkbox>
-    <!--
-    <mat-form-field>
-
-        <input matInput [matDatepicker]="myDatepicker"
-            formControlName="releasedAt">
-
-        <mat-datepicker-toggle matSuffix
-                               [for]="myDatepicker">
-
-        </mat-datepicker-toggle>
-
-        <mat-datepicker #myDatepicker></mat-datepicker>
-
-    </mat-form-field>
-
-    <mat-form-field>
-
-        <textarea matInput placeholder="Description"
-            formControlName="longDescription">
-
-        </textarea>
-
-    </mat-form-field> -->
-
-
+    <mat-icon matSuffix class="reward-delete-icon" matTooltip="Delete reward" (click)="removeReward(i)">
+        remove_circle_outline</mat-icon>
+    </div>
+</div>
 </mat-dialog-content>
 
 <mat-dialog-actions>
-
-    <button class="mat-raised-button" (click)="close()">
-        Close
-    </button>
-
-    <button class="mat-raised-button mat-primary" (click)="save()">
-        Save
-    </button>
-
+  <button class="mat-raised-button" (click)="close()">Close</button>
+  <button class="mat-raised-button mat-primary" (click)="save()">Save</button>
 </mat-dialog-actions>

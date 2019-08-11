@@ -97,6 +97,11 @@ export class GraphqlService {
         return data.Aspect.map(item => item.name);
     }
 
+    async getBooks() {
+        const { data } = await this.apollo.query<any>({ query: GET_BOOKS_QUERY }).toPromise();
+        return data.Book.map(item => item.name);
+    }
+
     async getInfluences() {
         const { data } = await this.apollo.query<any>({ query: GET_INFLUENCES_QUERY }).toPromise();
         return data.Influence.map(item => item.name);
@@ -245,45 +250,68 @@ export class GraphqlService {
 
     async saveLocationReward(params: SaveLocationRewardInput) {
         try {
-            const { location, name, rewardType, language, newLanguage, chance } = params;
+            // const { location, name, rewardType, language, newLanguage, chance } = params;
             console.log(params);
-            if (rewardType === 'Book') {
-                if (newLanguage) {
-                    // Saving the new language
-                    await this.apollo.mutate({
-                        mutation: CREATE_LANGUAGE_MUTATION,
-                        variables: {
-                            language
-                        }
-                    });
-                }
-
-                await this.apollo.mutate({
-                    mutation: CREATE_BOOK_MUTATION,
-                    variables: {
-                        title: name
+            const { location, rewards, chance } = params;
+            //             {location: "Oriflamme's Auction House", rewards: Array(2), chance: true}
+            // chance: true
+            // location: "Oriflamme's Auction House"
+            // rewards: Array(2)
+            // 0: {type: "Book", name: "A Collection of Essays"}
+            // 1: {type: "Book", name: "A Collection of Poetry"}
+            rewards.forEach(async reward => {
+                const { type, name } = reward;
+                switch (type) {
+                    case 'Book': {
+                        await this.apollo.mutate({
+                            mutation: SET_BOOK_LOCATION_MUTATION,
+                            variables: {
+                                title: name,
+                                location,
+                                chance
+                            }
+                        }).toPromise();
+                        break;
                     }
-                }).toPromise();
-
-                await this.apollo.mutate({
-                    mutation: SET_BOOK_LOCATION_MUTATION,
-                    variables: {
-                        title: name,
-                        location,
-                        chance
-                    }
-                }).toPromise();
-
-                if (language) {
-                    await this.apollo.mutate({
-                        mutation: SET_BOOK_LANGUAGE_MUTATION,
-                        variables: {
-                            title: name,
-                            language
-                        }
-                    }).toPromise();
                 }
-            }
+            });
+            // if (rewardType === 'Book') {
+            // if (newLanguage) {
+            //     // Saving the new language
+            //     await this.apollo.mutate({
+            //         mutation: CREATE_LANGUAGE_MUTATION,
+            //         variables: {
+            //             language
+            //         }
+            //     });
+            // }
+
+            // await this.apollo.mutate({
+            //     mutation: CREATE_BOOK_MUTATION,
+            //     variables: {
+            //         title: name
+            //     }
+            // }).toPromise();
+
+            // await this.apollo.mutate({
+            //     mutation: SET_BOOK_LOCATION_MUTATION,
+            //     variables: {
+            //         title: name,
+            //         location,
+            //         chance
+            //     }
+            // }).toPromise();
+
+            // if (language) {
+            //     await this.apollo.mutate({
+            //         mutation: SET_BOOK_LANGUAGE_MUTATION,
+            //         variables: {
+            //             title: name,
+            //             language
+            //         }
+            //     }).toPromise();
+            // }
+            // }
         } catch (err) {
             console.error(err);
         }

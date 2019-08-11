@@ -3,12 +3,14 @@ export class SaveMansusDoorOptionInput {
     option: string;
 }
 
+export class Reward {
+    type: string;
+    name: string;
+}
+
 export class SaveLocationRewardInput {
     location: string;
-    name: string;
-    rewardType: string;
-    language: string;
-    newLanguage: boolean;
+    rewards: Reward[];
     chance: boolean;
 }
 
