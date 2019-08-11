@@ -3,7 +3,7 @@ import { Apollo } from 'apollo-angular';
 import {
     GET_ENTITY_QUERY, GET_LANGUAGES_QUERY, GET_ASPECTS_QUERY, GET_LORES_QUERY,
     CREATE_ASPECT_MUTATION, CREATE_LANGUAGE_MUTATION, CREATE_BOOK_MUTATION, SET_BOOK_LOCATION_MUTATION,
-    SET_BOOK_LANGUAGE_MUTATION, SET_BOOK_LORE_RESULT, CREATE_LORE_MUTATION, SET_LORE_ASPECT_MUTATION,
+    SET_BOOK_LANGUAGE_MUTATION, SET_BOOK_LORE_RESULT_MUTATION, CREATE_LORE_MUTATION, SET_LORE_ASPECT_MUTATION,
     CREATE_MANSUS_DOOR_MUTATION, CREATE_MANSUS_DOOR_OPTION_MUTATION, SET_MANSUS_DOOR_OPTION_MUTATION,
     SET_LORE_DREAMING_RESULT_MUTATION,
     GET_INFLUENCES_QUERY,
@@ -13,7 +13,8 @@ import {
     SET_INFLUENCE_DECAY_MUTATION,
     CREATE_LOCATION_MUTATION,
     SET_BOOK_LANGUAGE_RESULT_MUTATION,
-    GET_ENTITY_WITH_ASPECT_QUERY
+    GET_ENTITY_WITH_ASPECT_QUERY,
+    SET_BOOK_INFLUENCE_RESULT_MUTATION
 } from './queries';
 import { SaveLocationRewardInput, SaveItemInput, SaveMansusDoorOptionInput } from './graphql.types';
 import { AspectSearchGroupResult, Entity } from 'src/app/shared/model';
@@ -267,27 +268,50 @@ export class GraphqlService {
 
     async saveBookReward(params) {
         try {
-            // {book: "Kühner and Gerth", rewardType: "Language", lore: "", language: "Greek"}
-            const { book, rewardType, lore, language } = params;
-
-            if (rewardType === 'Lore') {
-                await this.apollo.mutate({
-                    mutation: SET_BOOK_LORE_RESULT,
-                    variables: {
-                        title: book,
-                        lore
+            console.log(params);
+            const book = params.book;
+            const rewards = params.rewards as any[];
+            rewards.forEach(async reward => {
+                const { type, name } = reward;
+                switch (type) {
+                    case 'Influence': {
+                        console.log('Saving influence', name, 'as reward for book', book);
+                        await this.apollo.mutate({
+                            mutation: SET_BOOK_INFLUENCE_RESULT_MUTATION,
+                            variables: {
+                                title: book,
+                                influence: name
+                            }
+                        }).toPromise();
+                        break;
                     }
-                }).toPromise();
-            } else if (rewardType === 'Language') {
-                await this.apollo.mutate({
-                    mutation: SET_BOOK_LANGUAGE_RESULT_MUTATION,
-                    variables: {
-                        title: book,
-                        language
+                    case 'Language': {
+                        await this.apollo.mutate({
+                            mutation: SET_BOOK_LANGUAGE_RESULT_MUTATION,
+                            variables: {
+                                title: book,
+                                language: name
+                            }
+                        }).toPromise();
+                        break;
                     }
-                }).toPromise();
-            }
-
+                    case 'Lore': {
+                        console.log('Saving lore', name, 'as reward for book', book);
+                        await this.apollo.mutate({
+                            mutation: SET_BOOK_LORE_RESULT_MUTATION,
+                            variables: {
+                                title: book,
+                                lore: name
+                            }
+                        }).toPromise();
+                        break;
+                    }
+                    // <mat-option value="Ritual">Ritual</mat-option>
+                    default: {
+                        console.error('Book reward type', type, 'not managed');
+                    }
+                }
+            });
         } catch (err) {
             console.error(err);
         }

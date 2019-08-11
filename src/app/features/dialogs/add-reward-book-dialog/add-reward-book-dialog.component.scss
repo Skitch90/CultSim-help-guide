@@ -1,5 +1,35 @@
-mat-form-field {
-    width: 100%
+.reward-source {
+    width: 100%;
+}
+
+.reward-data {
+    display: block;
+}
+
+.reward-delete-icon {
+    margin-left: 8px;
+    vertical-align: sub;
+    font-size: large;
+}
+
+.reward-add-icon {
+    display: inline;
+    margin-left: 73%;
+    vertical-align: sub;
+    font-size: large;
+}
+
+.reward-title {
+    display: inline;
+}
+
+.type-field {
+    width: 30%;
+    padding: 0 20px 0 0;
+}
+
+.item-field {
+    width: 55%;
 }
 
 .origin-name-text {

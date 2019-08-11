@@ -110,8 +110,8 @@ export const SET_BOOK_LANGUAGE_MUTATION = gql`
     }
 `;
 
-export const SET_BOOK_LORE_RESULT = gql`
-    mutation setBookLoreReult($title: String!, $lore: String!) {
+export const SET_BOOK_LORE_RESULT_MUTATION = gql`
+    mutation setBookLoreResult($title: String!, $lore: String!) {
         AddBookStudiedIntoLore(from: {name: $title}, to: {name: $lore}) {
             from {
                 name
@@ -124,8 +124,21 @@ export const SET_BOOK_LORE_RESULT = gql`
 `;
 
 export const SET_BOOK_LANGUAGE_RESULT_MUTATION = gql`
-    mutation setBookLanguageReult($title: String!, $language: String!) {
+    mutation setBookLanguageResult($title: String!, $language: String!) {
         AddBookTeachesLanguage(from: { name: $title }, to: { name: $language }) {
+            from {
+                name
+            }
+            to {
+                name
+            }
+        }
+    }
+`;
+
+export const SET_BOOK_INFLUENCE_RESULT_MUTATION = gql`
+    mutation setBookInfluenceResult($title: String!, $influence: String!) {
+        AddBookResultsInInfluence(from: { name: $title }, to: { name: $influence }) {
             from {
                 name
             }
