@@ -17,7 +17,9 @@ export class AddItemDialogComponent implements OnInit {
 
   loreSelected = false;
   influenceSelected = false;
+  bookSelected = false;
   aspects = [];
+  languages = [];
 
   constructor(
     private service: GraphqlService,
@@ -27,15 +29,16 @@ export class AddItemDialogComponent implements OnInit {
         name: new FormControl('', [Validators.required]),
         itemType: this.itemTypeFormControl,
         aspect: this.aspectFormControl,
-        quantity: this.quantityFormControl
+        quantity: this.quantityFormControl,
+        language: new FormControl('')
       });
     }
 
   ngOnInit() {
-    
-    this.itemTypeFormControl.valueChanges.subscribe(val => {
-      this.loreSelected = (val === 'Lore');
-      this.influenceSelected = (val === 'Influence');
+    this.itemTypeFormControl.valueChanges.subscribe(typeVal => {
+      this.loreSelected = (typeVal === 'Lore');
+      this.influenceSelected = (typeVal === 'Influence');
+      this.bookSelected = (typeVal === 'Book');
 
       if (this.loreSelected || this.influenceSelected) {
         // Fetching previously saved apsects
@@ -51,6 +54,10 @@ export class AddItemDialogComponent implements OnInit {
       this.aspectFormControl.markAsTouched({ onlySelf: true });
       this.quantityFormControl.updateValueAndValidity();
       this.quantityFormControl.markAsTouched({ onlySelf: true });
+
+      if (this.bookSelected) {
+        this.service.getLanguages().then(list => this.languages = list);
+      }
     });
   }
 

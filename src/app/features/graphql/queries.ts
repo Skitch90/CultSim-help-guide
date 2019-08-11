@@ -59,6 +59,14 @@ export const GET_INFLUENCES_QUERY = gql`
     }
 `;
 
+export const GET_BOOKS_QUERY = gql`
+    query getBooks {
+        Book(orderBy: name_asc) {
+            name
+        }
+    }
+`;
+
 export const CREATE_LANGUAGE_MUTATION = gql`
     mutation createLanguage($language: String!) {
         CreateLanguage(name: $language) {

@@ -14,7 +14,8 @@ import {
     CREATE_LOCATION_MUTATION,
     SET_BOOK_LANGUAGE_RESULT_MUTATION,
     GET_ENTITY_WITH_ASPECT_QUERY,
-    SET_BOOK_INFLUENCE_RESULT_MUTATION
+    SET_BOOK_INFLUENCE_RESULT_MUTATION,
+    GET_BOOKS_QUERY
 } from './queries';
 import { SaveLocationRewardInput, SaveItemInput, SaveMansusDoorOptionInput } from './graphql.types';
 import { AspectSearchGroupResult, Entity } from 'src/app/shared/model';
@@ -103,7 +104,7 @@ export class GraphqlService {
 
     async saveItem(params: SaveItemInput) {
         try {
-            const { name, itemType, aspect, quantity } = params;
+            const { name, itemType, aspect, quantity, language } = params;
 
             if (itemType === 'Aspect') {
                 await this.apollo.mutate({
@@ -115,6 +116,28 @@ export class GraphqlService {
                         query: GET_ASPECTS_QUERY
                     }]
                 }).toPromise();
+            } else if (itemType === 'Book') {
+                console.log(params);
+
+                await this.apollo.mutate({
+                    mutation: CREATE_BOOK_MUTATION,
+                    variables: {
+                        title: name
+                    },
+                    refetchQueries: [{
+                        query: GET_BOOKS_QUERY
+                    }]
+                }).toPromise();
+
+                if (language) {
+                    await this.apollo.mutate({
+                        mutation: SET_BOOK_LANGUAGE_MUTATION,
+                        variables: {
+                            title: name,
+                            language
+                        }
+                    }).toPromise();
+                }
             } else if (itemType === 'Location') {
                 await this.apollo.mutate({
                     mutation: CREATE_LOCATION_MUTATION,
@@ -268,14 +291,12 @@ export class GraphqlService {
 
     async saveBookReward(params) {
         try {
-            console.log(params);
             const book = params.book;
             const rewards = params.rewards as any[];
             rewards.forEach(async reward => {
                 const { type, name } = reward;
                 switch (type) {
                     case 'Influence': {
-                        console.log('Saving influence', name, 'as reward for book', book);
                         await this.apollo.mutate({
                             mutation: SET_BOOK_INFLUENCE_RESULT_MUTATION,
                             variables: {
@@ -296,7 +317,6 @@ export class GraphqlService {
                         break;
                     }
                     case 'Lore': {
-                        console.log('Saving lore', name, 'as reward for book', book);
                         await this.apollo.mutate({
                             mutation: SET_BOOK_LORE_RESULT_MUTATION,
                             variables: {

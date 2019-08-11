@@ -1,20 +1,23 @@
 export class SaveMansusDoorOptionInput {
-    door: String
-    option: String
+    door: string;
+    option: string;
 }
 
 export class SaveLocationRewardInput {
-    location: String
-    name: String
-    rewardType: String
-    language: String
-    newLanguage: Boolean
-    chance: Boolean
+    location: string;
+    name: string;
+    rewardType: string;
+    language: string;
+    newLanguage: boolean;
+    chance: boolean;
 }
 
 export class SaveItemInput {
-    name: String
-    itemType: String
-    aspect: String
-    quantity: Number
+    name: string;
+    itemType: string;
+    // Lore and influence info
+    aspect?: string;
+    quantity?: number;
+    // Book related info
+    language?: string;
 }

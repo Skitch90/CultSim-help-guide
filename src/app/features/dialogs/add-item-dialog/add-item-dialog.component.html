@@ -9,6 +9,7 @@
     <mat-select placeholder="Select type" formControlName="itemType">
       <!-- <mat-option value="Follower">Follower</mat-option>-->
       <mat-option value="Aspect">Aspect</mat-option>
+      <mat-option value="Book">Book</mat-option>
       <mat-option value="Influence">Influence</mat-option>
       <mat-option value="Location">Location</mat-option>
       <mat-option value="Lore">Lore</mat-option>
@@ -40,6 +41,14 @@
           <mat-option value=10>10</mat-option>
           <mat-option value=15>15</mat-option>
         </ng-container>
+      </mat-select>
+    </mat-form-field>
+  </ng-container>
+
+  <ng-container *ngIf="bookSelected">
+    <mat-form-field>
+      <mat-select placeholder="Select language" formControlName="language">
+        <mat-option *ngFor="let item of languages" value={{item}}>{{item}}</mat-option>
       </mat-select>
     </mat-form-field>
   </ng-container>
