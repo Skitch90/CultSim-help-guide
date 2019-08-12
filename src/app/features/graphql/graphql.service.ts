@@ -109,7 +109,7 @@ export class GraphqlService {
 
     async saveItem(params: SaveItemInput) {
         try {
-            const { name, itemType, aspect, quantity, language } = params;
+            const { name, itemType, aspects, language } = params;
 
             if (itemType === 'Aspect') {
                 await this.apollo.mutate({
@@ -158,6 +158,7 @@ export class GraphqlService {
                     }
                 }).toPromise();
             } else if (itemType === 'Lore') {
+                const { aspect, quantity } = aspects[0];
                 await this.apollo.mutate({
                     mutation: CREATE_LORE_MUTATION,
                     variables: {
@@ -191,20 +192,23 @@ export class GraphqlService {
                     }]
                 }).toPromise();
 
-                await this.apollo.mutate({
-                    mutation: SET_INFLUENCE_ASPECT_MUTATION,
-                    variables: {
-                        influence: name,
-                        aspect,
-                        quantity: +quantity
-                    },
-                    refetchQueries: [{
-                        query: GET_ENTITY_WITH_ASPECT_QUERY,
+                aspects.forEach(async aspectInfo => {
+                    const { aspect, quantity } = aspectInfo;
+                    await this.apollo.mutate({
+                        mutation: SET_INFLUENCE_ASPECT_MUTATION,
                         variables: {
-                            aspect
-                        }
-                    }]
-                }).toPromise();
+                            influence: name,
+                            aspect,
+                            quantity: +quantity
+                        },
+                        refetchQueries: [{
+                            query: GET_ENTITY_WITH_ASPECT_QUERY,
+                            variables: {
+                                aspect
+                            }
+                        }]
+                    }).toPromise();
+                });
             }
         } catch (err) {
             console.error(err);

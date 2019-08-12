@@ -14,12 +14,16 @@ export class SaveLocationRewardInput {
     chance: boolean;
 }
 
+export class AspectInfo {
+    aspect: string;
+    quantity: number;
+}
+
 export class SaveItemInput {
     name: string;
     itemType: string;
     // Lore and influence info
-    aspect?: string;
-    quantity?: number;
+    aspects?: AspectInfo[];
     // Book related info
     language?: string;
 }

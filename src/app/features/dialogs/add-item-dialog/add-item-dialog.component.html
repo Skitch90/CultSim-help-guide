@@ -1,11 +1,11 @@
 <h2 mat-dialog-title>Save item</h2>
 
 <mat-dialog-content [formGroup]="form">
-  <mat-form-field>
-    <input matInput placeholder="Name" formControlName="name">
+  <mat-form-field class="reward-source">
+    <input matInput placeholder="Name" class="origin-name-text" formControlName="name">
   </mat-form-field>
 
-  <mat-form-field>
+  <mat-form-field class="reward-source">
     <mat-select placeholder="Select type" formControlName="itemType">
       <!-- <mat-option value="Follower">Follower</mat-option>-->
       <mat-option value="Aspect">Aspect</mat-option>
@@ -18,35 +18,46 @@
   </mat-form-field>
 
   <ng-container *ngIf="loreSelected || influenceSelected">
-    <mat-form-field>
-      <mat-select placeholder="Select aspect" formControlName="aspect">
-        <mat-option *ngFor="let item of aspects" value={{item}}>{{item}}</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field>
-      <mat-select placeholder="Select quantity" formControlName="quantity">
-        <ng-container *ngIf="loreSelected">
-          <mat-option value=2>2</mat-option>
-          <mat-option value=4>4</mat-option>
-          <mat-option value=6>6</mat-option>
-          <mat-option value=8>8</mat-option>
-          <mat-option value=10>10</mat-option>
-          <mat-option value=12>12</mat-option>
-          <mat-option value=14>14</mat-option>
-        </ng-container>
-        <ng-container *ngIf="influenceSelected">
-          <mat-option value=1>1</mat-option>
-          <mat-option value=2>2</mat-option>
-          <mat-option value=6>6</mat-option>
-          <mat-option value=10>10</mat-option>
-          <mat-option value=15>15</mat-option>
-        </ng-container>
-      </mat-select>
-    </mat-form-field>
+    <div *ngIf="influenceSelected">
+      <h3 class="reward-title">Aspects</h3>
+      <mat-icon matTooltip="Add new apsect" class="reward-add-icon" (click)="addAspect()">add_circle_outline</mat-icon>
+    </div>
+
+    <div class="reward-data" formArrayName="aspects" *ngFor="let item of form.get('aspects').controls; let i = index;">
+      <div [formGroupName]="i">
+        <mat-form-field class="type-field">
+          <mat-select placeholder="Select aspect" formControlName="aspect">
+            <mat-option *ngFor="let item of aspects" value={{item}}>{{item}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field [ngClass]="{ 'item-field-single': loreSelected, 'item-field': influenceSelected }">
+          <mat-select placeholder="Select quantity" formControlName="quantity">
+            <ng-container *ngIf="loreSelected">
+              <mat-option value=2>2</mat-option>
+              <mat-option value=4>4</mat-option>
+              <mat-option value=6>6</mat-option>
+              <mat-option value=8>8</mat-option>
+              <mat-option value=10>10</mat-option>
+              <mat-option value=12>12</mat-option>
+              <mat-option value=14>14</mat-option>
+            </ng-container>
+            <ng-container *ngIf="influenceSelected">
+              <mat-option value=1>1</mat-option>
+              <mat-option value=2>2</mat-option>
+              <mat-option value=6>6</mat-option>
+              <mat-option value=10>10</mat-option>
+              <mat-option value=15>15</mat-option>
+            </ng-container>
+          </mat-select>
+        </mat-form-field>
+        <mat-icon *ngIf="influenceSelected" matSuffix class="reward-delete-icon" matTooltip="Delete aspect" (click)="removeAspect(i)">
+          remove_circle_outline</mat-icon>
+      </div>
+    </div>
   </ng-container>
 
   <ng-container *ngIf="bookSelected">
-    <mat-form-field>
+    <mat-form-field class="reward-source">
       <mat-select placeholder="Select language" formControlName="language">
         <mat-option *ngFor="let item of languages" value={{item}}>{{item}}</mat-option>
       </mat-select>

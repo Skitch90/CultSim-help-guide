@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl, Validators, FormArray } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { GraphqlService } from '../../graphql/graphql.service';
 
@@ -12,8 +12,6 @@ export class AddItemDialogComponent implements OnInit {
   form: FormGroup;
 
   private itemTypeFormControl = new FormControl('', [Validators.required]);
-  private aspectFormControl = new FormControl('');
-  private quantityFormControl = new FormControl('');
 
   loreSelected = false;
   influenceSelected = false;
@@ -25,14 +23,13 @@ export class AddItemDialogComponent implements OnInit {
     private service: GraphqlService,
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<AddItemDialogComponent>) {
-      this.form = fb.group({
-        name: new FormControl('', [Validators.required]),
-        itemType: this.itemTypeFormControl,
-        aspect: this.aspectFormControl,
-        quantity: this.quantityFormControl,
-        language: new FormControl('')
-      });
-    }
+    this.form = fb.group({
+      name: new FormControl('', [Validators.required]),
+      itemType: this.itemTypeFormControl,
+      aspects: fb.array([]),
+      language: new FormControl('')
+    });
+  }
 
   ngOnInit() {
     this.itemTypeFormControl.valueChanges.subscribe(typeVal => {
@@ -40,20 +37,12 @@ export class AddItemDialogComponent implements OnInit {
       this.influenceSelected = (typeVal === 'Influence');
       this.bookSelected = (typeVal === 'Book');
 
+      const rewards = this.form.get('aspects') as FormArray;
+      rewards.clear();
       if (this.loreSelected || this.influenceSelected) {
-        // Fetching previously saved apsects
         this.service.getAspects().then(val => this.aspects = val);
-
-        this.aspectFormControl.setValidators([Validators.required]);
-        this.quantityFormControl.setValidators([Validators.required]);
-      } else {
-        this.aspectFormControl.setValidators(null);
-        this.quantityFormControl.setValidators(null);
+        this.addAspect();
       }
-      this.aspectFormControl.updateValueAndValidity();
-      this.aspectFormControl.markAsTouched({ onlySelf: true });
-      this.quantityFormControl.updateValueAndValidity();
-      this.quantityFormControl.markAsTouched({ onlySelf: true });
 
       if (this.bookSelected) {
         this.service.getLanguages().then(list => this.languages = list);
@@ -61,11 +50,28 @@ export class AddItemDialogComponent implements OnInit {
     });
   }
 
+  private createAspect(): FormGroup {
+    return this.fb.group({
+      aspect: new FormControl('', Validators.required),
+      quantity: new FormControl('', Validators.required)
+    });
+  }
+
+  public addAspect() {
+    const rewards = this.form.get('aspects') as FormArray;
+    rewards.push(this.createAspect());
+  }
+
   save() {
     this.form.updateValueAndValidity();
     if (this.form.valid) {
       this.dialogRef.close(this.form.value);
     }
+  }
+
+  public removeAspect(index: number) {
+    const rewards = this.form.get('aspects') as FormArray;
+    rewards.removeAt(index);
   }
 
   close() {
