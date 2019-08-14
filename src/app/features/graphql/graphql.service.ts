@@ -122,8 +122,6 @@ export class GraphqlService {
                     }]
                 }).toPromise();
             } else if (itemType === 'Book') {
-                console.log(params);
-
                 await this.apollo.mutate({
                     mutation: CREATE_BOOK_MUTATION,
                     variables: {
@@ -143,6 +141,16 @@ export class GraphqlService {
                         }
                     }).toPromise();
                 }
+            } else if (itemType === 'Language') {
+                await this.apollo.mutate({
+                    mutation: CREATE_LANGUAGE_MUTATION,
+                    variables: {
+                        language: name
+                    },
+                    refetchQueries: [{
+                        query: GET_LANGUAGES_QUERY
+                    }]
+                }).toPromise();
             } else if (itemType === 'Location') {
                 await this.apollo.mutate({
                     mutation: CREATE_LOCATION_MUTATION,

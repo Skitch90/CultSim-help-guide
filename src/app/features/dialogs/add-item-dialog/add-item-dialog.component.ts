@@ -9,6 +9,10 @@ import { GraphqlService } from '../../graphql/graphql.service';
   styleUrls: ['./add-item-dialog.component.scss']
 })
 export class AddItemDialogComponent implements OnInit {
+  itemTypes: string[] = [ 'Aspect', 'Book', 'Influence', 'Language', 'Location', 'Lore', 'MansusDoor' ];
+  loreAspectQuantities: number[] = [ 2, 4, 6, 8, 10, 12, 14 ];
+  influenceAspectQuantities: number[] = [ 1, 2, 6, 10, 15 ];
+
   form: FormGroup;
 
   private itemTypeFormControl = new FormControl('', [Validators.required]);
