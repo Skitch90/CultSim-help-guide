@@ -239,6 +239,19 @@ export const SET_LORE_DREAMING_RESULT_MUTATION = gql`
     }
 `;
 
+export const SET_LANGUAGE_DREAMING_RESULT_MUTATION = gql`
+    mutation setLanguageBreamingResult($door: String!, $language: String!) {
+        AddLanguageFromDreamingIn(from: { name: $door }, to: { name: $language }) {
+            from {
+                name
+            }
+            to {
+                name
+            }
+        }
+    }
+`;
+
 export const SET_INFLUENCE_DECAY_MUTATION = gql`
     mutation setInfluenceDecay($originInfluence: String!, $influence: String!) {
         AddInfluenceDecaysTo(from: { name: $originInfluence }, to: { name: $influence }) {

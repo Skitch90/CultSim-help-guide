@@ -15,7 +15,8 @@ import {
     SET_BOOK_LANGUAGE_RESULT_MUTATION,
     GET_ENTITY_WITH_ASPECT_QUERY,
     SET_BOOK_INFLUENCE_RESULT_MUTATION,
-    GET_BOOKS_QUERY
+    GET_BOOKS_QUERY,
+    SET_LANGUAGE_DREAMING_RESULT_MUTATION
 } from './queries';
 import { SaveLocationRewardInput, SaveItemInput, SaveMansusDoorOptionInput } from './graphql.types';
 import { AspectSearchGroupResult, Entity } from 'src/app/shared/model';
@@ -334,8 +335,16 @@ export class GraphqlService {
 
     async saveMansusReward(params) {
         try {
-            const { door, rewardType, lore, influence } = params;
-            if (rewardType === 'Lore') {
+            const { door, rewardType, lore, influence, language } = params;
+            if (rewardType === 'Language') {
+                await this.apollo.mutate({
+                    mutation: SET_LANGUAGE_DREAMING_RESULT_MUTATION,
+                    variables: {
+                        door,
+                        language
+                    }
+                }).toPromise();
+            } else if (rewardType === 'Lore') {
                 await this.apollo.mutate({
                     mutation: SET_LORE_DREAMING_RESULT_MUTATION,
                     variables: {
