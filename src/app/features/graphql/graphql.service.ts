@@ -16,10 +16,11 @@ import {
     GET_ENTITY_WITH_ASPECT_QUERY,
     SET_BOOK_INFLUENCE_RESULT_MUTATION,
     GET_BOOKS_QUERY,
-    SET_LANGUAGE_DREAMING_RESULT_MUTATION
+    SET_LANGUAGE_DREAMING_RESULT_MUTATION,
+    GET_BOOK_QUERY
 } from './queries';
 import { SaveLocationRewardInput, SaveItemInput, SaveMansusDoorOptionInput } from './graphql.types';
-import { AspectSearchGroupResult, Entity } from 'src/app/shared/model';
+import { EntitiesGroup, Entity } from 'src/app/shared/model';
 import { group } from '@angular/animations';
 
 @Injectable({
@@ -101,6 +102,16 @@ export class GraphqlService {
     async getBooks() {
         const { data } = await this.apollo.query<any>({ query: GET_BOOKS_QUERY }).toPromise();
         return data.Book.map(item => item.name);
+    }
+
+    async getBook(title: string) {
+        const { data } = await this.apollo.query<any>({
+            query: GET_BOOK_QUERY,
+            variables: {
+                title
+            }
+        }).toPromise();
+        return data.Book;
     }
 
     async getInfluences() {

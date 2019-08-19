@@ -59,6 +59,56 @@ export const GET_INFLUENCES_QUERY = gql`
     }
 `;
 
+export const GET_BOOK_QUERY = gql`
+    query getBook($title: String!) {
+        Book(name: $title, orderBy: name_asc) {
+            _id
+            name
+            foundInLocation {
+                Location {
+                    _id
+                    name
+                }
+                chance
+            }
+            language {
+                _id
+                name
+            }
+            studiedIntoLore{
+                _id
+                name
+                aspects {
+                    Aspect {
+                        _id
+                        name
+                    }
+                    quantity
+                }
+            }
+            teachesRitual {
+                _id
+                name
+            }
+            teachesLanguage {
+                _id
+                name
+            }
+            resultsInInfluence {
+                _id
+                name
+                aspects {
+                    Aspect {
+                        _id
+                        name
+                    }
+                    quantity
+                }
+            }
+        }
+    }
+`;
+
 export const GET_BOOKS_QUERY = gql`
     query getBooks {
         Book(orderBy: name_asc) {

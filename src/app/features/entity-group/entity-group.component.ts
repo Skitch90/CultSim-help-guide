@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { AspectSearchGroupResult, AspectSearchEntity } from 'src/app/shared/model';
+import { Component, OnInit, Input, ViewChild, TemplateRef } from '@angular/core';
+import { EntitiesGroup, EntitiesGroupItem } from 'src/app/shared/model';
 import { BoardService } from '../board/board.service';
 import { GraphqlService } from '../graphql/graphql.service';
 
@@ -9,20 +9,19 @@ import { GraphqlService } from '../graphql/graphql.service';
   styleUrls: ['./entity-group.component.scss']
 })
 export class EntityGroupComponent implements OnInit {
-  @Input() group: AspectSearchGroupResult;
+  @Input() group: EntitiesGroup;
   @Input() aspect: string;
+  @Input() type: string;
 
   constructor(private boardService: BoardService,
-              private graphql: GraphqlService) { }
+              private graphql: GraphqlService) {  }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
-  addToBoard(entity: AspectSearchEntity) {
+  addToBoard(entity: EntitiesGroupItem) {
     this.graphql.getEntities(entity.name).then(result => {
       const itemToAdd = result.find(item => item.name === entity.name);
       if (itemToAdd !== undefined) {
-        console.log('adding item', itemToAdd);
         this.boardService.addBoardItem(itemToAdd);
       } else {
         console.error(`No entities found with name "${entity.name}"`);

@@ -13,13 +13,15 @@ export interface Entity {
   aspects: AspectQuantity[];
 }
 
-export class AspectSearchGroupResult {
+export class EntitiesGroup {
   label: string;
-  entities: AspectSearchEntity[];
+  entities: EntitiesGroupItem[];
 }
 
-export class AspectSearchEntity {
+export class EntitiesGroupItem {
   id: number;
   name: string;
+  label: string;
+  aspect: string;
   aspectQuantity: number;
 }

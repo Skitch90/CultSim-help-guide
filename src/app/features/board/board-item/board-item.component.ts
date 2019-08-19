@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Entity, AspectSearchGroupResult } from 'src/app/shared/model';
+import { Entity, EntitiesGroup, EntitiesGroupItem } from 'src/app/shared/model';
 import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
 import { AddRewardLocationDialogComponent } from '../../dialogs/add-reward-location-dialog/add-reward-location-dialog.component';
 import { GraphqlService } from '../../graphql/graphql.service';
@@ -16,7 +16,7 @@ import { BoardService } from '../board.service';
 })
 export class BoardItemComponent implements OnInit {
   @Input() item: Entity;
-  entities: AspectSearchGroupResult[];
+  entities: EntitiesGroup[] = [];
 
   constructor(private dialog: MatDialog, private service: GraphqlService, private boardService: BoardService) { }
 
@@ -26,6 +26,63 @@ export class BoardItemComponent implements OnInit {
         this.entities = entities;
       });
     }
+    if (this.item.label === 'Book') {
+      this.service.getBook(this.item.name).then(books => {
+        const { foundInLocation, language, teachesLanguage, studiedIntoLore, teachesRitual, resultsInInfluence } = books[0];
+        if (foundInLocation.length > 0) {
+          this.entities.push({
+            label: 'Found In',
+            entities: foundInLocation.map(location => {
+              return this.convertToGroupItem(location.Location);
+            })
+          });
+        }
+        if (language !== null) {
+          this.entities.push({
+            label: 'Need Translation from',
+            entities: [this.convertToGroupItem(language)]
+          });
+        }
+        if (teachesLanguage !== null) {
+          this.entities.push({
+            label: 'Rewards',
+            entities: [this.convertToGroupItem(teachesLanguage)]
+          });
+        } else {
+          const loreRewards = studiedIntoLore.map(lore => {
+            return this.convertToGroupItem(lore);
+          });
+          const riteReward = (teachesRitual !== null) ? [ this.convertToGroupItem(teachesRitual) ] : [];
+          const influenceRewards = resultsInInfluence.map(influnce => {
+            return this.convertToGroupItem(influnce);
+          });
+          this.entities.push({
+            label: 'Rewards',
+            entities: [
+              ...loreRewards,
+              ...riteReward,
+              ...influenceRewards
+            ]
+          });
+        }
+      });
+    }
+  }
+
+  onlyNameFromLabel(label: string) {
+    return label === 'Follower' || label === 'Need Translation from';
+  }
+
+  private convertToGroupItem(item): EntitiesGroupItem {
+    const { aspects } = item;
+    const aspect = (aspects !== undefined && aspects.length === 1) ? aspects[0] : null;
+    return {
+      id: item._id,
+      name: item.name,
+      label: item.__typename,
+      aspect: aspect !== null ? aspect.Aspect.name : null,
+      aspectQuantity: aspect !== null ? aspect.quantity : null
+    };
   }
 
   removeFromBoard(item: Entity) {

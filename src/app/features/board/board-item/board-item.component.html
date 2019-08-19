@@ -4,8 +4,12 @@
         <mat-card-subtitle>{{ item.label | outputLabel }}</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
+        <!-- add section for apsects -->
         <ng-container *ngIf="item.label === 'Aspect'">
-            <app-entity-group *ngFor="let group of entities" [group]="group" [aspect]="item.name"></app-entity-group>
+            <app-entity-group *ngFor="let group of entities" [group]="group" [aspect]="item.name" [type]="item.label"></app-entity-group>
+        </ng-container>
+        <ng-container *ngIf="item.label === 'Book'">
+            <app-entity-group *ngFor="let group of entities" [group]="group" [aspect]="item.name" [type]="item.label"></app-entity-group>
         </ng-container>
     </mat-card-content>
     <mat-card-actions>
