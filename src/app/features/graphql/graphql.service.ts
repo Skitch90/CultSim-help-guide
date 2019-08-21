@@ -17,11 +17,16 @@ import {
     SET_BOOK_INFLUENCE_RESULT_MUTATION,
     GET_BOOKS_QUERY,
     SET_LANGUAGE_DREAMING_RESULT_MUTATION,
-    GET_BOOK_QUERY
+    GET_BOOK_QUERY,
+    CREATE_INGREDIENT_MUTATION,
+    GET_INGREDIENTS_QUERY,
+    SET_INGREDIENT_ASPECT_MUTATION,
+    CREATE_TOOL_MUTATION,
+    GET_TOOLS_QUERY,
+    SET_TOOL_ASPECT_MUTATION
 } from './queries';
 import { SaveLocationRewardInput, SaveItemInput, SaveMansusDoorOptionInput } from './graphql.types';
-import { EntitiesGroup, Entity } from 'src/app/shared/model';
-import { group } from '@angular/animations';
+import { Entity } from 'src/app/shared/model';
 
 @Injectable({
     providedIn: 'root'
@@ -153,6 +158,8 @@ export class GraphqlService {
                         }
                     }).toPromise();
                 }
+            } else if (itemType === 'Ingredient') {
+                this.saveItemWithAspects(params, CREATE_INGREDIENT_MUTATION, GET_INGREDIENTS_QUERY, SET_INGREDIENT_ASPECT_MUTATION);
             } else if (itemType === 'Language') {
                 await this.apollo.mutate({
                     mutation: CREATE_LANGUAGE_MUTATION,
@@ -229,10 +236,43 @@ export class GraphqlService {
                         }]
                     }).toPromise();
                 });
+            } else if (itemType === 'Tool') {
+                this.saveItemWithAspects(params, CREATE_TOOL_MUTATION, GET_TOOLS_QUERY, SET_TOOL_ASPECT_MUTATION);
             }
         } catch (err) {
             console.error(err);
         }
+    }
+
+    async saveItemWithAspects(data: SaveItemInput, createMutation, createRefetchQuery, setAspectMutation) {
+        const { name, aspects } = data;
+        await this.apollo.mutate({
+            mutation: createMutation,
+            variables: {
+                name
+            },
+            refetchQueries: [{
+                query: createRefetchQuery
+            }]
+        }).toPromise();
+
+        aspects.forEach(async aspectInfo => {
+            const { aspect, quantity } = aspectInfo;
+            await this.apollo.mutate({
+                mutation: setAspectMutation,
+                variables: {
+                    name,
+                    aspect,
+                    quantity: +quantity
+                },
+                refetchQueries: [{
+                    query: GET_ENTITY_WITH_ASPECT_QUERY,
+                    variables: {
+                        aspect
+                    }
+                }]
+            }).toPromise();
+        });
     }
 
     async saveInfluenceDecay(params) {

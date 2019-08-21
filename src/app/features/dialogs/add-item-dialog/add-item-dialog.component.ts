@@ -9,9 +9,20 @@ import { GraphqlService } from '../../graphql/graphql.service';
   styleUrls: ['./add-item-dialog.component.scss']
 })
 export class AddItemDialogComponent implements OnInit {
-  itemTypes: string[] = [ 'Aspect', 'Book', 'Influence', 'Language', 'Location', 'Lore', 'MansusDoor' ];
-  loreAspectQuantities: number[] = [ 2, 4, 6, 8, 10, 12, 14 ];
-  influenceAspectQuantities: number[] = [ 1, 2, 6, 10, 15 ];
+  itemTypes: string[] = [ 'Aspect', 'Book', 'Influence', 'Ingredient', 'Language', 'Location', 'Lore', 'MansusDoor', 'Tool' ];
+  itemTypesWithAspects: string[] = [ 'Influence', 'Ingredient', 'Lore', 'Tool' ];
+  multipleAspects = {
+    Influence: true,
+    Ingredient: true,
+    Lore: false,
+    Tool: true
+  };
+  itemAspectQuantities = {
+    Influence: [ 1, 2, 6, 10, 15 ],
+    Ingredient: [ 1, 2, 3, 4, 8, 12 ],
+    Lore: [ 2, 4, 6, 8, 10, 12, 14 ],
+    Tool: [ 2, 4, 8, 12 ]
+  };
 
   form: FormGroup;
 
@@ -43,7 +54,7 @@ export class AddItemDialogComponent implements OnInit {
 
       const rewards = this.form.get('aspects') as FormArray;
       rewards.clear();
-      if (this.loreSelected || this.influenceSelected) {
+      if (this.hasAspects(typeVal)) {
         this.service.getAspects().then(val => this.aspects = val);
         this.addAspect();
       }
@@ -52,6 +63,10 @@ export class AddItemDialogComponent implements OnInit {
         this.service.getLanguages().then(list => this.languages = list);
       }
     });
+  }
+
+  hasAspects(itemType: string): boolean {
+    return this.itemTypesWithAspects.includes(itemType);
   }
 
   private createAspect(): FormGroup {

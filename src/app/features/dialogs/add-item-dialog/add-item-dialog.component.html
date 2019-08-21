@@ -11,8 +11,8 @@
     </mat-select>
   </mat-form-field>
 
-  <ng-container *ngIf="loreSelected || influenceSelected">
-    <div *ngIf="influenceSelected">
+  <ng-container *ngIf="hasAspects(itemTypeFormControl.value)">
+    <div *ngIf="multipleAspects[itemTypeFormControl.value]">
       <h3 class="reward-title">Aspects</h3>
       <mat-icon matTooltip="Add new apsect" class="reward-add-icon" (click)="addAspect()">add_circle_outline</mat-icon>
     </div>
@@ -26,12 +26,7 @@
         </mat-form-field>
         <mat-form-field [ngClass]="{ 'item-field-single': loreSelected, 'item-field': influenceSelected }">
           <mat-select placeholder="Select quantity" formControlName="quantity">
-            <ng-container *ngIf="loreSelected">
-              <mat-option *ngFor="let quantity of loreAspectQuantities" value={{quantity}}>{{quantity}}</mat-option>
-            </ng-container>
-            <ng-container *ngIf="influenceSelected">
-              <mat-option *ngFor="let quantity of influenceAspectQuantities" value={{quantity}}>{{quantity}}</mat-option>
-            </ng-container>
+            <mat-option *ngFor="let quantity of itemAspectQuantities[itemTypeFormControl.value]" value={{quantity}}>{{quantity}}</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-icon *ngIf="influenceSelected" matSuffix class="reward-delete-icon" matTooltip="Delete aspect" (click)="removeAspect(i)">

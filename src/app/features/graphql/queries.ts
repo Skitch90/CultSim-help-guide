@@ -59,6 +59,14 @@ export const GET_INFLUENCES_QUERY = gql`
     }
 `;
 
+export const GET_INGREDIENTS_QUERY = gql`
+    query getIngredients {
+        Ingredient(orderBy: name_asc) {
+            name
+        }
+    }
+`;
+
 export const GET_BOOK_QUERY = gql`
     query getBook($title: String!) {
         Book(name: $title, orderBy: name_asc) {
@@ -112,6 +120,14 @@ export const GET_BOOK_QUERY = gql`
 export const GET_BOOKS_QUERY = gql`
     query getBooks {
         Book(orderBy: name_asc) {
+            name
+        }
+    }
+`;
+
+export const GET_TOOLS_QUERY = gql`
+    query getTools {
+        Tool(orderBy: name_asc) {
             name
         }
     }
@@ -247,6 +263,22 @@ export const SET_INFLUENCE_ASPECT_MUTATION = gql`
     }
 `;
 
+export const CREATE_INGREDIENT_MUTATION = gql`
+    mutation saveIngredient($name: String!) {
+        CreateIngredient(name: $name) {
+            name
+        }
+    }
+`;
+
+export const SET_INGREDIENT_ASPECT_MUTATION = gql`
+    mutation setIngredientAspect($name: String!, $aspect: String!, $quantity: Int!) {
+        AddIngredientAspects(from: { name: $name }, to: { name: $aspect }, data: { quantity: $quantity }) {
+            quantity
+        }
+    }
+`;
+
 export const CREATE_MANSUS_DOOR_MUTATION = gql`
     mutation createMansusDoor($door: String!) {
         CreateMansusDoor(name: $door) {
@@ -324,6 +356,22 @@ export const SET_INFLUENCE_DREAMING_RESULT_MUTATION = gql`
             to {
                 name
             }
+        }
+    }
+`;
+
+export const CREATE_TOOL_MUTATION = gql`
+    mutation saveTool($name: String!) {
+        CreateTool(name: $name) {
+            name
+        }
+    }
+`;
+
+export const SET_TOOL_ASPECT_MUTATION = gql`
+    mutation setToolAspect($name: String!, $aspect: String!, $quantity: Int!) {
+        AddToolAspects(from: { name: $name }, to: { name: $aspect }, data: { quantity: $quantity }) {
+            quantity
         }
     }
 `;
