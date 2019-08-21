@@ -240,8 +240,8 @@ export const CREATE_LORE_MUTATION = gql`
 `;
 
 export const SET_LORE_ASPECT_MUTATION = gql`
-    mutation setLoreAspect($lore: String!, $aspect: String!, $quantity: Int!) {
-        AddLoreAspects(from: {name: $lore}, to: {name: $aspect}, data: {quantity: $quantity}) {
+    mutation setLoreAspect($name: String!, $aspect: String!, $quantity: Int!) {
+        AddLoreAspects(from: {name: $name}, to: {name: $aspect}, data: {quantity: $quantity}) {
             quantity
         }
     }

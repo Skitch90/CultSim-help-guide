@@ -185,29 +185,7 @@ export class GraphqlService {
                     }
                 }).toPromise();
             } else if (itemType === 'Lore') {
-                const { aspect, quantity } = aspects[0];
-                await this.apollo.mutate({
-                    mutation: CREATE_LORE_MUTATION,
-                    variables: {
-                        name
-                    },
-                    refetchQueries: [{
-                        query: GET_LORES_QUERY
-                    }]
-                }).toPromise();
-
-                await this.apollo.mutate({
-                    mutation: SET_LORE_ASPECT_MUTATION,
-                    variables: {
-                        lore: name, aspect, quantity: +quantity
-                    },
-                    refetchQueries: [{
-                        query: GET_ENTITY_WITH_ASPECT_QUERY,
-                        variables: {
-                            aspect
-                        }
-                    }]
-                }).toPromise();
+                this.saveItemWithAspects(params, CREATE_LORE_MUTATION, GET_LORES_QUERY, SET_LORE_ASPECT_MUTATION);
             } else if (itemType === 'Influence') {
                 await this.apollo.mutate({
                     mutation: CREATE_INFLUENCE_MUTATION,
@@ -325,7 +303,13 @@ export class GraphqlService {
                                 title: name,
                                 location,
                                 chance
-                            }
+                            },
+                            refetchQueries: [{
+                                query: GET_BOOK_QUERY,
+                                variables: {
+                                    title: name
+                                }
+                            }]
                         }).toPromise();
                         break;
                     }
@@ -349,7 +333,13 @@ export class GraphqlService {
                             variables: {
                                 title: book,
                                 influence: name
-                            }
+                            },
+                            refetchQueries: [{
+                                query: GET_BOOK_QUERY,
+                                variables: {
+                                    title: book
+                                }
+                            }]
                         }).toPromise();
                         break;
                     }
@@ -359,7 +349,13 @@ export class GraphqlService {
                             variables: {
                                 title: book,
                                 language: name
-                            }
+                            },
+                            refetchQueries: [{
+                                query: GET_BOOK_QUERY,
+                                variables: {
+                                    title: book
+                                }
+                            }]
                         }).toPromise();
                         break;
                     }
@@ -369,7 +365,13 @@ export class GraphqlService {
                             variables: {
                                 title: book,
                                 lore: name
-                            }
+                            },
+                            refetchQueries: [{
+                                query: GET_BOOK_QUERY,
+                                variables: {
+                                    title: book
+                                }
+                            }]
                         }).toPromise();
                         break;
                     }
