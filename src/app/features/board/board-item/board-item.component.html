@@ -24,6 +24,9 @@
         <button mat-button *ngIf="item.label === 'Influence'" (click)="openAddInfluenceDecay(item.name)">
             ADD DECAY
         </button>
+        <button mat-button *ngIf="secretHistoriesLore" (click)="openAddLocationDialog(item.name)">
+            ADD LOCATION
+        </button>
         <button mat-button (click)="removeFromBoard(item)">REMOVE</button>
     </mat-card-actions>
 </mat-card>

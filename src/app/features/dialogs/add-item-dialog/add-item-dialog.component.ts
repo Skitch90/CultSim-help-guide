@@ -42,7 +42,8 @@ export class AddItemDialogComponent implements OnInit {
       name: new FormControl('', [Validators.required]),
       itemType: this.itemTypeFormControl,
       aspects: fb.array([]),
-      language: new FormControl('')
+      language: new FormControl(''),
+      vault: new FormControl(false)
     });
   }
 

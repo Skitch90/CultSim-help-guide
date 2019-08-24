@@ -11,6 +11,10 @@
     </mat-select>
   </mat-form-field>
 
+  <ng-container *ngIf="itemTypeFormControl.value === 'Location'">
+    <mat-slide-toggle formControlName="vault">Vault</mat-slide-toggle>
+  </ng-container> 
+
   <ng-container *ngIf="hasAspects(itemTypeFormControl.value)">
     <div *ngIf="multipleAspects[itemTypeFormControl.value]">
       <h3 class="reward-title">Aspects</h3>

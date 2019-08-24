@@ -23,7 +23,10 @@ import {
     SET_INGREDIENT_ASPECT_MUTATION,
     CREATE_TOOL_MUTATION,
     GET_TOOLS_QUERY,
-    SET_TOOL_ASPECT_MUTATION
+    SET_TOOL_ASPECT_MUTATION,
+    GET_LORE_QUERY,
+    GET_LOCATIONS_QUERY,
+    SET_LORE_EXPLORING_LOCATION_MUTATION
 } from './queries';
 import { SaveLocationRewardInput, SaveItemInput, SaveMansusDoorOptionInput } from './graphql.types';
 import { Entity } from 'src/app/shared/model';
@@ -91,9 +94,26 @@ export class GraphqlService {
         return data.Language.map(item => item.name);
     }
 
+    async getLocations() {
+        const { data } = await this.apollo.query<any>({
+            query: GET_LOCATIONS_QUERY
+        }).toPromise();
+        return data.Location;
+    }
+
     async getLores() {
         const { data } = await this.apollo.query<any>({ query: GET_LORES_QUERY }).toPromise();
         return data.Lore.map(item => item.name);
+    }
+
+    async getLore(name: string) {
+        const { data } = await this.apollo.query<any>({
+            query: GET_LORE_QUERY,
+            variables: {
+                name
+            }
+        }).toPromise();
+        return data.Lore;
     }
 
     async getAspects() {
@@ -126,7 +146,7 @@ export class GraphqlService {
 
     async saveItem(params: SaveItemInput) {
         try {
-            const { name, itemType, aspects, language } = params;
+            const { name, itemType, aspects, language, vault } = params;
 
             if (itemType === 'Aspect') {
                 await this.apollo.mutate({
@@ -174,8 +194,12 @@ export class GraphqlService {
                 await this.apollo.mutate({
                     mutation: CREATE_LOCATION_MUTATION,
                     variables: {
-                        location: name
-                    }
+                        location: name,
+                        vault
+                    },
+                    refetchQueries: [{
+                        query: GET_LOCATIONS_QUERY
+                    }]
                 }).toPromise();
             } else if (itemType === 'MansusDoor') {
                 await this.apollo.mutate({
@@ -283,6 +307,21 @@ export class GraphqlService {
                 variables: {
                     door,
                     option
+                }
+            }).toPromise();
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    async saveSecretHistoryLocation(params) {
+        const { history, location } = params;
+        try {
+            await this.apollo.mutate({
+                mutation: SET_LORE_EXPLORING_LOCATION_MUTATION,
+                variables: {
+                    lore: history,
+                    location
                 }
             }).toPromise();
         } catch (err) {

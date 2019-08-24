@@ -8,6 +8,7 @@ import { AddRewardMansusDialogComponent } from '../../dialogs/add-reward-mansus-
 import { AddMansusDoorOptionDialogComponent } from '../../dialogs/add-mansus-door-option-dialog/add-mansus-door-option-dialog.component';
 import { AddInfluenceDecayDialogComponent } from '../../dialogs/add-influence-decay-dialog/add-influence-decay-dialog.component';
 import { BoardService } from '../board.service';
+import { AddLocationDialogComponent } from '../../dialogs/add-location-dialog/add-location-dialog.component';
 
 @Component({
   selector: 'app-board-item',
@@ -17,6 +18,8 @@ import { BoardService } from '../board.service';
 export class BoardItemComponent implements OnInit {
   @Input() item: Entity;
   entities: EntitiesGroup[] = [];
+
+  secretHistoriesLore = false;
 
   constructor(private dialog: MatDialog, private service: GraphqlService, private boardService: BoardService) { }
 
@@ -65,6 +68,12 @@ export class BoardItemComponent implements OnInit {
             ]
           });
         }
+      });
+    }
+    if (this.item.label === 'Lore') {
+      this.service.getLore(this.item.name).then(lores => {
+        const { aspects } = lores[0];
+        this.secretHistoriesLore = aspects.some(aspect => aspect.Aspect.name === 'Secret Histories');
       });
     }
   }
@@ -167,6 +176,23 @@ export class BoardItemComponent implements OnInit {
     dialogRef.afterClosed().subscribe(val => {
       if (val) {
         this.service.saveInfluenceDecay(val);
+      }
+    });
+  }
+
+  openAddLocationDialog(itemName) {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = '400px';
+    dialogConfig.data = {
+      secretHistory: itemName
+    };
+    const dialogRef = this.dialog.open(AddLocationDialogComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(val => {
+      if (val) {
+        this.service.saveSecretHistoryLocation(val);
       }
     });
   }

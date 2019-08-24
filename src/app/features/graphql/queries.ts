@@ -43,6 +43,21 @@ export const GET_LORES_QUERY = gql`
     }
 `;
 
+export const GET_LORE_QUERY = gql`
+    query getLore($name: String!) {
+        Lore(name: $name) {
+            _id
+            name
+            aspects {
+                Aspect {
+                    name
+                }
+                quantity
+            }
+        }
+    }
+`;
+
 export const GET_ASPECTS_QUERY = gql`
     query getAspects {
         Aspect(orderBy: name_asc) {
@@ -125,6 +140,15 @@ export const GET_BOOKS_QUERY = gql`
     }
 `;
 
+export const GET_LOCATIONS_QUERY = gql`
+    query getLocations {
+        Location(orderBy: name_asc) {
+            name
+            vault
+        }
+    }
+`;
+
 export const GET_TOOLS_QUERY = gql`
     query getTools {
         Tool(orderBy: name_asc) {
@@ -142,8 +166,8 @@ export const CREATE_LANGUAGE_MUTATION = gql`
 `;
 
 export const CREATE_LOCATION_MUTATION = gql`
-    mutation createLocation($location: String!) {
-        CreateLocation(name: $location) {
+    mutation createLocation($location: String!, $vault: Boolean!) {
+        CreateLocation(name: $location, vault: $vault) {
             name
         }
     }
@@ -243,6 +267,19 @@ export const SET_LORE_ASPECT_MUTATION = gql`
     mutation setLoreAspect($name: String!, $aspect: String!, $quantity: Int!) {
         AddLoreAspects(from: {name: $name}, to: {name: $aspect}, data: {quantity: $quantity}) {
             quantity
+        }
+    }
+`;
+
+export const SET_LORE_EXPLORING_LOCATION_MUTATION = gql`
+    mutation setLoreExploringLocation($lore: String!, $location: String!) {
+        AddLoreExploreResults(from: { name: $lore }, to: { name: $location }) {
+            from {
+                name
+            }
+            to {
+                name
+            }
         }
     }
 `;

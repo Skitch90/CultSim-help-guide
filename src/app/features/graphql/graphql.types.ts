@@ -26,4 +26,6 @@ export class SaveItemInput {
     aspects?: AspectInfo[];
     // Book related info
     language?: string;
+    // Location related info
+    vault?: boolean;
 }

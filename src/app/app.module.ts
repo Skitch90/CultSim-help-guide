@@ -19,6 +19,7 @@ import { AddInfluenceDecayDialogComponent } from './features/dialogs/add-influen
 import { BoardItemComponent } from './features/board/board-item/board-item.component';
 import { EntityGroupComponent } from './features/entity-group/entity-group.component';
 import { OutputLabelPipe } from './shared/OutputLabelPipe';
+import { AddLocationDialogComponent } from './features/dialogs/add-location-dialog/add-location-dialog.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { OutputLabelPipe } from './shared/OutputLabelPipe';
     AddRewardMansusDialogComponent,
     AddInfluenceDecayDialogComponent,
     BoardItemComponent,
-    EntityGroupComponent
+    EntityGroupComponent,
+    AddLocationDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -51,7 +53,8 @@ import { OutputLabelPipe } from './shared/OutputLabelPipe';
     AddRewardBookDialogComponent,
     AddMansusDoorOptionDialogComponent,
     AddRewardMansusDialogComponent,
-    AddInfluenceDecayDialogComponent
+    AddInfluenceDecayDialogComponent,
+    AddLocationDialogComponent
   ],
   bootstrap: [AppComponent]
 })
