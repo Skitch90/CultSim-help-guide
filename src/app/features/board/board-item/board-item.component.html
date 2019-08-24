@@ -5,12 +5,7 @@
     </mat-card-header>
     <mat-card-content>
         <!-- add section for apsects -->
-        <ng-container *ngIf="item.label === 'Aspect'">
-            <app-entity-group *ngFor="let group of entities" [group]="group" [aspect]="item.name" [type]="item.label"></app-entity-group>
-        </ng-container>
-        <ng-container *ngIf="item.label === 'Book'">
-            <app-entity-group *ngFor="let group of entities" [group]="group" [aspect]="item.name" [type]="item.label"></app-entity-group>
-        </ng-container>
+        <app-entity-group *ngFor="let group of entities" [group]="group" [aspect]="item.name" [type]="item.label"></app-entity-group>
     </mat-card-content>
     <mat-card-actions>
         <button mat-button

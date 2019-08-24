@@ -59,21 +59,41 @@ export class BoardItemComponent implements OnInit {
           const influenceRewards = resultsInInfluence.map(influnce => {
             return this.convertToGroupItem(influnce);
           });
-          this.entities.push({
-            label: 'Rewards',
-            entities: [
-              ...loreRewards,
-              ...riteReward,
-              ...influenceRewards
-            ]
-          });
+          const rewards = [
+            ...loreRewards,
+            ...riteReward,
+            ...influenceRewards
+          ];
+          if (rewards.length > 0) {
+            this.entities.push({
+              label: 'Rewards',
+              entities: rewards
+            });
+          }
         }
       });
     }
     if (this.item.label === 'Lore') {
       this.service.getLore(this.item.name).then(lores => {
-        const { aspects } = lores[0];
+        const { aspects, exploreResults } = lores[0];
         this.secretHistoriesLore = aspects.some(aspect => aspect.Aspect.name === 'Secret Histories');
+        if (exploreResults.length > 0) {
+          this.entities.push({
+            label: 'Vaults',
+            entities: exploreResults.map(vault => this.convertToGroupItem(vault))
+          });
+        }
+      });
+    }
+    if (this.item.label === 'Location') {
+      this.service.getLocation(this.item.name).then(locations => locations[0]).then(location => {
+        const { histories } = location;
+        if (histories.length > 0) {
+          this.entities.push({
+            label: 'From histories',
+            entities: histories.map(history => this.convertToGroupItem(history))
+          });
+        }
       });
     }
   }

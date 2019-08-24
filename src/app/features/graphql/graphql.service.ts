@@ -26,7 +26,8 @@ import {
     SET_TOOL_ASPECT_MUTATION,
     GET_LORE_QUERY,
     GET_LOCATIONS_QUERY,
-    SET_LORE_EXPLORING_LOCATION_MUTATION
+    SET_LORE_EXPLORING_LOCATION_MUTATION,
+    GET_LOCATION_QUERY
 } from './queries';
 import { SaveLocationRewardInput, SaveItemInput, SaveMansusDoorOptionInput } from './graphql.types';
 import { Entity } from 'src/app/shared/model';
@@ -98,6 +99,16 @@ export class GraphqlService {
     async getLocations() {
         const { data } = await this.apollo.query<any>({
             query: GET_LOCATIONS_QUERY
+        }).toPromise();
+        return data.Location;
+    }
+
+    async getLocation(name: string) {
+        const { data } = await this.apollo.query<any>({
+            query: GET_LOCATION_QUERY,
+            variables: {
+                location: name
+            }
         }).toPromise();
         return data.Location;
     }
