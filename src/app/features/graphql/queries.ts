@@ -21,6 +21,7 @@ export const GET_ENTITY_WITH_ASPECT_QUERY = gql`
             entities {
                 _id
                 name
+                type
                 aspectQuantity
             }
         }

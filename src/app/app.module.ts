@@ -20,6 +20,7 @@ import { BoardItemComponent } from './features/board/board-item/board-item.compo
 import { EntityGroupComponent } from './features/entity-group/entity-group.component';
 import { OutputLabelPipe } from './shared/OutputLabelPipe';
 import { AddLocationDialogComponent } from './features/dialogs/add-location-dialog/add-location-dialog.component';
+import { EntityGroupItemComponent } from './features/entity-group/entity-group-item/entity-group-item.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { AddLocationDialogComponent } from './features/dialogs/add-location-dial
     AddInfluenceDecayDialogComponent,
     BoardItemComponent,
     EntityGroupComponent,
-    AddLocationDialogComponent
+    AddLocationDialogComponent,
+    EntityGroupItemComponent
   ],
   imports: [
     BrowserModule,

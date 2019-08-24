@@ -1,0 +1,17 @@
+<ng-container *ngTemplateOutlet="itemTemplate()"></ng-container>
+
+<ng-template #onlyName>
+    <mat-list-item (click)="addToBoard(item)">{{ item.name }}</mat-list-item>
+</ng-template>
+
+<ng-template #nameAndAspectNum>
+    <mat-list-item (click)="addToBoard(item)">{{ item.name }} ({{ item.aspectQuantity }})</mat-list-item>
+</ng-template>
+
+<ng-template #nameAndType>
+    <mat-list-item (click)="addToBoard(item)">{{ item.name }} ({{ item.label }})</mat-list-item>
+</ng-template>
+
+<ng-template #nameTypeAspect>
+    <mat-list-item (click)="addToBoard(item)">{{ item.name }} ({{ item.label }} {{ item.aspect }} {{ item.aspectQuantity }})</mat-list-item>
+</ng-template>

@@ -79,6 +79,7 @@ export class GraphqlService {
                     return {
                         id: entity._id,
                         name: entity.name,
+                        label: entity.type,
                         aspectQuantity: entity.aspectQuantity
                     };
                 })
