@@ -277,6 +277,27 @@ export const CREATE_ASPECT_MUTATION = gql`
   }
 `;
 
+export const CREATE_OBSTACLE_MUTATION = gql`
+  mutation saveObstacle($name: String!) {
+    CreateExpeditionObstacle(name: $name) {
+      name
+    }
+  }
+`;
+
+export const SET_OBSTACLE_ASPECT_MUTATION = gql`
+  mutation setObstacleAspect($obstacle: String!, $aspect: String!) {
+    AddExpeditionObstacleDefeatedWith(from: { name: $obstacle }, to: { name: $aspect }) {
+      from {
+        name
+      }
+      to {
+        name
+      }
+    }
+  }
+`;
+
 export const CREATE_LORE_MUTATION = gql`
   mutation saveLore($name: String!) {
     CreateLore(name: $name) {

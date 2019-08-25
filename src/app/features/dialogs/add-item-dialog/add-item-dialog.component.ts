@@ -9,7 +9,8 @@ import { GraphqlService } from '../../graphql/graphql.service';
   styleUrls: ['./add-item-dialog.component.scss']
 })
 export class AddItemDialogComponent implements OnInit {
-  itemTypes: string[] = [ 'Aspect', 'Book', 'Influence', 'Ingredient', 'Language', 'Location', 'Lore', 'MansusDoor', 'Tool' ];
+  itemTypes: string[] = [ 'Aspect', 'Book', 'ExpeditionObstacle', 'Influence', 'Ingredient',
+                          'Language', 'Location', 'Lore', 'MansusDoor', 'Tool' ];
   itemTypesWithAspects: string[] = [ 'Influence', 'Ingredient', 'Lore', 'Tool' ];
   multipleAspects = {
     Influence: true,
@@ -43,7 +44,14 @@ export class AddItemDialogComponent implements OnInit {
       itemType: this.itemTypeFormControl,
       aspects: fb.array([]),
       language: new FormControl(''),
-      vault: new FormControl(false)
+      vault: new FormControl(false),
+      obstacleAspects: fb.array([ this.createObstacleAspect(), this.createObstacleAspect(), this.createObstacleAspect() ])
+    });
+  }
+
+  createObstacleAspect(): FormGroup {
+    return this.fb.group({
+      obstacleAspect: new FormControl('')
     });
   }
 
@@ -62,6 +70,9 @@ export class AddItemDialogComponent implements OnInit {
 
       if (this.bookSelected) {
         this.service.getLanguages().then(list => this.languages = list);
+      }
+      if (typeVal === 'ExpeditionObstacle') {
+        this.service.getAspects().then(val => this.aspects = val);
       }
     });
   }

@@ -27,7 +27,9 @@ import {
     GET_LORE_QUERY,
     GET_LOCATIONS_QUERY,
     SET_LORE_EXPLORING_LOCATION_MUTATION,
-    GET_LOCATION_QUERY
+    GET_LOCATION_QUERY,
+    CREATE_OBSTACLE_MUTATION,
+    SET_OBSTACLE_ASPECT_MUTATION
 } from './queries';
 import { SaveLocationRewardInput, SaveItemInput, SaveMansusDoorOptionInput } from './graphql.types';
 import { Entity } from 'src/app/shared/model';
@@ -190,6 +192,27 @@ export class GraphqlService {
                         }
                     }).toPromise();
                 }
+            } else if (itemType === 'ExpeditionObstacle') {
+                console.log(params);
+                const obstacleAspects = new Set(params.obstacleAspects.map(item => item.obstacleAspect));
+                await this.apollo.mutate({
+                    mutation: CREATE_OBSTACLE_MUTATION,
+                    variables: {
+                        name
+                    }
+                }).toPromise();
+
+                obstacleAspects.forEach(async item => {
+                    if (item) {
+                        await this.apollo.mutate({
+                            mutation: SET_OBSTACLE_ASPECT_MUTATION,
+                            variables: {
+                                obstacle: name,
+                                aspect: item
+                            }
+                        }).toPromise();
+                    }
+                });
             } else if (itemType === 'Ingredient') {
                 this.saveItemWithAspects(params, CREATE_INGREDIENT_MUTATION, GET_INGREDIENTS_QUERY, SET_INGREDIENT_ASPECT_MUTATION);
             } else if (itemType === 'Language') {

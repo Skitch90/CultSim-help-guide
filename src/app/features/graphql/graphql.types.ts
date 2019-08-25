@@ -19,6 +19,10 @@ export class AspectInfo {
     quantity: number;
 }
 
+export class ObstacleAspect {
+    obstacleAspect: string;
+}
+
 export class SaveItemInput {
     name: string;
     itemType: string;
@@ -28,4 +32,5 @@ export class SaveItemInput {
     language?: string;
     // Location related info
     vault?: boolean;
+    obstacleAspects?: ObstacleAspect[];
 }

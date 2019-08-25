@@ -7,6 +7,8 @@ export class OutputLabelPipe implements PipeTransform {
             return 'Mansus Door';
         } else if (label === 'MansusDoorOption') {
             return 'Mansus Door Option';
+        } else if (label === 'ExpeditionObstacle') {
+            return 'Expedition Obstacle';
         } else {
             return label;
         }
