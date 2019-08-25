@@ -109,7 +109,7 @@ export class BoardItemComponent implements OnInit {
       id: item._id,
       name: item.name,
       label: item.__typename,
-      aspect: aspect !== null ? aspect.Aspect.name : null,
+      aspect: (aspect && aspect.Aspect) ? aspect.Aspect.name : null,
       aspectQuantity: aspect !== null ? aspect.quantity : null
     };
   }
