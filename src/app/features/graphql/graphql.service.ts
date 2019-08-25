@@ -152,7 +152,7 @@ export class GraphqlService {
         const { data } = await this.apollo.query<any>({
             query: GET_BOOK_QUERY,
             variables: {
-                title
+                name: title
             }
         }).toPromise();
         return data.Book;
@@ -465,7 +465,7 @@ export class GraphqlService {
                             refetchQueries: [{
                                 query: GET_BOOK_QUERY,
                                 variables: {
-                                    title: book
+                                    name: book
                                 }
                             }]
                         }).toPromise();
@@ -481,7 +481,7 @@ export class GraphqlService {
                             refetchQueries: [{
                                 query: GET_BOOK_QUERY,
                                 variables: {
-                                    title: book
+                                    name: book
                                 }
                             }]
                         }).toPromise();
@@ -497,7 +497,7 @@ export class GraphqlService {
                             refetchQueries: [{
                                 query: GET_BOOK_QUERY,
                                 variables: {
-                                    title: book
+                                    name: book
                                 }
                             }]
                         }).toPromise();
