@@ -31,9 +31,12 @@ import {
     CREATE_OBSTACLE_MUTATION,
     SET_OBSTACLE_ASPECT_MUTATION,
     GET_OBSTACLES_QUERY,
-    SET_LOCATION_OBSTACLE_MUTATION
+    SET_LOCATION_OBSTACLE_MUTATION,
+    SET_INGREDIENT_LOCATION_MUTATION,
+    SET_INFLUENCE_LOCATION_MUTATION,
+    SET_TOOL_LOCATION_MUTATION
 } from './queries';
-import { SaveLocationRewardInput, SaveItemInput, SaveMansusDoorOptionInput } from './graphql.types';
+import { SaveLocationRewardInput, SaveItemInput, SaveMansusDoorOptionInput, Reward } from './graphql.types';
 import { Entity } from 'src/app/shared/model';
 
 @Injectable({
@@ -140,7 +143,7 @@ export class GraphqlService {
         return data.Aspect.map(item => item.name);
     }
 
-    async getBooks() {
+    getBooks = async () => {
         const { data } = await this.apollo.query<any>({ query: GET_BOOKS_QUERY }).toPromise();
         return data.Book.map(item => item.name);
     }
@@ -155,14 +158,24 @@ export class GraphqlService {
         return data.Book;
     }
 
-    async getInfluences() {
+    getInfluences = async () => {
         const { data } = await this.apollo.query<any>({ query: GET_INFLUENCES_QUERY }).toPromise();
         return data.Influence.map(item => item.name);
+    }
+
+    getIngredients = async () => {
+        const { data } = await this.apollo.query<any>({ query: GET_INGREDIENTS_QUERY }).toPromise();
+        return data.Ingredient.map(item => item.name);
     }
 
     async getLocationObstacles() {
         const { data } = await this.apollo.query<any>({ query: GET_OBSTACLES_QUERY }).toPromise();
         return data.ExpeditionObstacle.map(item => item.name);
+    }
+
+    getTools = async () => {
+        const { data } = await this.apollo.query<any>({ query: GET_TOOLS_QUERY }).toPromise();
+        return data.Tool.map(item => item.name);
     }
 
     async saveItem(params: SaveItemInput) {
@@ -200,7 +213,6 @@ export class GraphqlService {
                     }).toPromise();
                 }
             } else if (itemType === 'ExpeditionObstacle') {
-                console.log(params);
                 const obstacleAspects = new Set(params.obstacleAspects.map(item => item.obstacleAspect));
                 await this.apollo.mutate({
                     mutation: CREATE_OBSTACLE_MUTATION,
@@ -402,30 +414,38 @@ export class GraphqlService {
         try {
             const { location, rewards, chance } = params;
             rewards.forEach(async reward => {
-                const { type, name } = reward;
-                switch (type) {
-                    case 'Book': {
-                        await this.apollo.mutate({
-                            mutation: SET_BOOK_LOCATION_MUTATION,
-                            variables: {
-                                title: name,
-                                location,
-                                chance
-                            },
-                            refetchQueries: [{
-                                query: GET_BOOK_QUERY,
-                                variables: {
-                                    title: name
-                                }
-                            }]
-                        }).toPromise();
-                        break;
-                    }
+                const { type } = reward;
+                if (type === 'Book') {
+                    this.executeSaveLocationReward(reward, location, chance, SET_BOOK_LOCATION_MUTATION, GET_BOOK_QUERY);
+                } else if (type === 'Ingredient') {
+                    this.executeSaveLocationReward(reward, location, chance, SET_INGREDIENT_LOCATION_MUTATION);
+                } else if (type === 'Influence') {
+                    this.executeSaveLocationReward(reward, location, chance, SET_INFLUENCE_LOCATION_MUTATION);
+                } else if (type === 'Tool') {
+                    this.executeSaveLocationReward(reward, location, chance, SET_TOOL_LOCATION_MUTATION);
                 }
             });
         } catch (err) {
             console.error(err);
         }
+    }
+
+    private async executeSaveLocationReward(reward: Reward, location: string, chance: boolean, mutation: any, refetchQuery?: any) {
+        const name = reward.name;
+        await this.apollo.mutate({
+            mutation,
+            variables: {
+                name,
+                location,
+                chance
+            },
+            refetchQueries: refetchQuery ? [{
+                query: refetchQuery,
+                variables: {
+                    name
+                }
+            }] : []
+        }).toPromise();
     }
 
     async saveBookReward(params) {

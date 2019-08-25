@@ -88,8 +88,8 @@ export const GET_INGREDIENTS_QUERY = gql`
 `;
 
 export const GET_BOOK_QUERY = gql`
-  query getBook($title: String!) {
-    Book(name: $title, orderBy: name_asc) {
+  query getBook($name: String!) {
+    Book(name: $name, orderBy: name_asc) {
       _id
       name
       foundInLocation {
@@ -232,8 +232,8 @@ export const CREATE_BOOK_MUTATION = gql`
 `;
 
 export const SET_BOOK_LOCATION_MUTATION = gql`
-  mutation setBookLocation($title: String!, $location: String!, $chance: Boolean!) {
-    AddBookFoundInLocation(from: {name: $title}, to: {name: $location}, data: {chance: $chance}) {
+  mutation setBookLocation($name: String!, $location: String!, $chance: Boolean!) {
+    AddBookFoundInLocation(from: {name: $name}, to: {name: $location}, data: {chance: $chance}) {
       from {
         name
       }
@@ -387,6 +387,20 @@ export const SET_INGREDIENT_ASPECT_MUTATION = gql`
   }
 `;
 
+export const SET_INGREDIENT_LOCATION_MUTATION = gql`
+  mutation setIngredientLocation($name: String!, $location: String!, $chance: Boolean!) {
+    AddIngredientFoundInLocation(from: {name: $name}, to: {name: $location}, data: {chance: $chance}) {
+      from {
+        name
+      }
+      to {
+        name
+      }
+      chance
+    }
+  }
+`;
+
 export const CREATE_MANSUS_DOOR_MUTATION = gql`
   mutation createMansusDoor($door: String!) {
     CreateMansusDoor(name: $door) {
@@ -468,6 +482,20 @@ export const SET_INFLUENCE_DREAMING_RESULT_MUTATION = gql`
   }
 `;
 
+export const SET_INFLUENCE_LOCATION_MUTATION = gql`
+  mutation setInfluenceLocation($name: String!, $location: String!, $chance: Boolean!) {
+    AddInfluenceFoundInLocation(from: {name: $name}, to: {name: $location}, data: {chance: $chance}) {
+      from {
+        name
+      }
+      to {
+        name
+      }
+      chance
+    }
+  }
+`;
+
 export const CREATE_TOOL_MUTATION = gql`
   mutation saveTool($name: String!) {
     CreateTool(name: $name) {
@@ -480,6 +508,20 @@ export const SET_TOOL_ASPECT_MUTATION = gql`
   mutation setToolAspect($name: String!, $aspect: String!, $quantity: Int!) {
     AddToolAspects(from: { name: $name }, to: { name: $aspect }, data: { quantity: $quantity }) {
       quantity
+    }
+  }
+`;
+
+export const SET_TOOL_LOCATION_MUTATION = gql`
+  mutation setToolLocation($name: String!, $location: String!, $chance: Boolean!) {
+    AddToolFoundInLocation(from: {name: $name}, to: {name: $location}, data: {chance: $chance}) {
+      from {
+        name
+      }
+      to {
+        name
+      }
+      chance
     }
   }
 `;

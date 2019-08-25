@@ -4,6 +4,7 @@ import { GraphqlService } from '../../graphql/graphql.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
+import { filterOptions } from 'src/app/shared/utils';
 
 @Component({
   selector: 'app-add-reward-location-dialog',
@@ -13,6 +14,8 @@ import { startWith, map } from 'rxjs/operators';
 export class AddRewardLocationDialogComponent implements OnInit {
   form: FormGroup;
   locationName: string;
+  rewardTypes = [ 'Book', 'Ingredient', 'Influence', 'Tool' ];
+  typeRetrieveFunctions = {};
 
   options: any[][] = [];
   filteredOptions: Observable<string[]>[] = [];
@@ -24,13 +27,19 @@ export class AddRewardLocationDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) { locationName }) {
     this.locationName = locationName;
 
-
     this.form = fb.group({
       location: new FormControl(locationName),
       rewards: this.fb.array([this.createReward()]),
       chance: new FormControl(false)
     });
     this.manageRewardControl(0);
+
+    this.typeRetrieveFunctions = {
+      Book: service.getBooks,
+      Ingredient: service.getIngredients,
+      Influence: service.getInfluences,
+      Tool: service.getTools
+    };
   }
 
   ngOnInit() {
@@ -59,32 +68,19 @@ export class AddRewardLocationDialogComponent implements OnInit {
   private manageRewardControl(index: number) {
     const rewards = this.form.get('rewards') as FormArray;
     rewards.at(index).get('type').valueChanges.subscribe(newVal => {
-      switch (newVal) {
-        case 'Book': {
-          this.service.getBooks().then(books => this.options[index] = books);
-          break;
-        }
-      }
-      rewards.at(index).get('name').setValue('');
-      this.filteredOptions[index] = this.filteredOptions[index].pipe(startWith(this.options[index]));
+      this.configureAutoComplete(index, this.typeRetrieveFunctions[newVal], rewards);
     });
-    this.filteredOptions[index] = rewards.at(index).get('name').valueChanges.pipe(
-      startWith(''),
-      map(value => {
-        return this._filter(this.options[index], value);
-      })
-    );
   }
 
-  private _filter(options: string[], value: string): string[] {
-    if (options === undefined) {
-        return [];
-    }
-
-    const filterValue = value.toLowerCase();
-
-    return options.filter(option => option.toLowerCase().includes(filterValue));
-}
+  configureAutoComplete(index: number, retrieveFunc: () => Promise<any>, rewards: FormArray) {
+    retrieveFunc().then(books => this.options[index] = books)
+                  .then(val => {
+                    this.filteredOptions[index] = rewards.at(index).get('name').valueChanges.pipe(
+                      startWith(''),
+                      map(value => filterOptions(this.options[index], value))
+                    );
+                  });
+  }
 
   save() {
     this.form.updateValueAndValidity();
