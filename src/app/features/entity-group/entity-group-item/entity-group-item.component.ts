@@ -49,6 +49,10 @@ export class EntityGroupItemComponent implements OnInit, AfterViewInit {
           return this.nameAndTypeTemplate;
         }
       }
+    } else if (this.groupType === 'Location') {
+      if (itemType === 'Lore') {
+        return this.nameAndAspectNumTemplate;
+      }
     }
     return this.onlyNameTemplate;
   }
