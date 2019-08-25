@@ -9,6 +9,11 @@
     </mat-card-content>
     <mat-card-actions>
         <button mat-button
+            *ngIf="vaultLocation"
+            (click)="openAddObstaclesDialog(item.name)">
+            ADD OBSTACLES
+        </button>
+        <button mat-button
             *ngIf="item.label === 'Location' || item.label === 'Book' || item.label === 'MansusDoorOption'"
             (click)="openAddRewardDialog(item.name, item.label)">
             ADD REWARD

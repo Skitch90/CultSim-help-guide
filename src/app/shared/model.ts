@@ -22,6 +22,7 @@ export class EntitiesGroupItem {
   id: number;
   name: string;
   label: string;
-  aspect: string;
-  aspectQuantity: number;
+  aspect?: string;
+  aspectQuantity?: number;
+  aspects?: string[];
 }

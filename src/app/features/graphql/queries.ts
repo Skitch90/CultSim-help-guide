@@ -167,6 +167,21 @@ export const GET_LOCATION_QUERY = gql`
           quantity
         }
       }
+      obstacles {
+        _id
+        name
+        defeatedWith {
+          name
+        }
+      }
+    }
+  }
+`;
+
+export const GET_OBSTACLES_QUERY = gql`
+  query getObstacles {
+    ExpeditionObstacle(orderBy: name_asc) {
+      name
     }
   }
 `;
@@ -191,6 +206,19 @@ export const CREATE_LOCATION_MUTATION = gql`
   mutation createLocation($location: String!, $vault: Boolean!) {
     CreateLocation(name: $location, vault: $vault) {
       name
+    }
+  }
+`;
+
+export const SET_LOCATION_OBSTACLE_MUTATION = gql`
+  mutation setLocationObstacle($location: String!, $obstacle: String!) {
+    AddLocationObstacles(from: { name: $location }, to: { name: $obstacle }) {
+      from {
+        name
+      }
+      to {
+        name
+      }
     }
   }
 `;

@@ -29,7 +29,9 @@ import {
     SET_LORE_EXPLORING_LOCATION_MUTATION,
     GET_LOCATION_QUERY,
     CREATE_OBSTACLE_MUTATION,
-    SET_OBSTACLE_ASPECT_MUTATION
+    SET_OBSTACLE_ASPECT_MUTATION,
+    GET_OBSTACLES_QUERY,
+    SET_LOCATION_OBSTACLE_MUTATION
 } from './queries';
 import { SaveLocationRewardInput, SaveItemInput, SaveMansusDoorOptionInput } from './graphql.types';
 import { Entity } from 'src/app/shared/model';
@@ -158,6 +160,11 @@ export class GraphqlService {
         return data.Influence.map(item => item.name);
     }
 
+    async getLocationObstacles() {
+        const { data } = await this.apollo.query<any>({ query: GET_OBSTACLES_QUERY }).toPromise();
+        return data.ExpeditionObstacle.map(item => item.name);
+    }
+
     async saveItem(params: SaveItemInput) {
         try {
             const { name, itemType, aspects, language, vault } = params;
@@ -199,7 +206,10 @@ export class GraphqlService {
                     mutation: CREATE_OBSTACLE_MUTATION,
                     variables: {
                         name
-                    }
+                    },
+                    refetchQueries: [{
+                        query: GET_OBSTACLES_QUERY
+                    }]
                 }).toPromise();
 
                 obstacleAspects.forEach(async item => {
@@ -359,6 +369,30 @@ export class GraphqlService {
                     location
                 }
             }).toPromise();
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    async saveLocationObstacle(params) {
+        try {
+            const { location } = params;
+            const obstacles = new Set(params.obstacles.map(item => item.obstacle));
+            obstacles.forEach(async obstacle => {
+                this.apollo.mutate({
+                    mutation: SET_LOCATION_OBSTACLE_MUTATION,
+                    variables: {
+                        location,
+                        obstacle
+                    },
+                    refetchQueries: [{
+                        query: GET_LOCATION_QUERY,
+                        variables: {
+                            location
+                        }
+                    }]
+                }).toPromise();
+            });
         } catch (err) {
             console.error(err);
         }

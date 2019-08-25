@@ -9,6 +9,7 @@ import { AddMansusDoorOptionDialogComponent } from '../../dialogs/add-mansus-doo
 import { AddInfluenceDecayDialogComponent } from '../../dialogs/add-influence-decay-dialog/add-influence-decay-dialog.component';
 import { BoardService } from '../board.service';
 import { AddLocationDialogComponent } from '../../dialogs/add-location-dialog/add-location-dialog.component';
+import { AddObstacleLocationDialogComponent } from '../../dialogs/add-obstacle-location-dialog/add-obstacle-location-dialog.component';
 
 @Component({
   selector: 'app-board-item',
@@ -20,6 +21,7 @@ export class BoardItemComponent implements OnInit {
   entities: EntitiesGroup[] = [];
 
   secretHistoriesLore = false;
+  vaultLocation = false;
 
   constructor(private dialog: MatDialog, private service: GraphqlService, private boardService: BoardService) { }
 
@@ -87,19 +89,30 @@ export class BoardItemComponent implements OnInit {
     }
     if (this.item.label === 'Location') {
       this.service.getLocation(this.item.name).then(locations => locations[0]).then(location => {
-        const { histories } = location;
+        const { vault, histories, obstacles } = location;
+        this.vaultLocation = vault;
         if (histories.length > 0) {
           this.entities.push({
             label: 'From histories',
             entities: histories.map(history => this.convertToGroupItem(history))
           });
         }
+        if (obstacles.length > 0) {
+          this.entities.push({
+            label: 'Obstacles',
+            entities: obstacles.map(obstacle => {
+              const { _id, name, __typename, defeatedWith} = obstacle;
+              return {
+                id: _id,
+                name,
+                label: __typename,
+                aspects: defeatedWith.map(item => item.name)
+              };
+            })
+          });
+        }
       });
     }
-  }
-
-  onlyNameFromLabel(label: string) {
-    return label === 'Follower' || label === 'Need Translation from';
   }
 
   private convertToGroupItem(item): EntitiesGroupItem {
@@ -213,6 +226,23 @@ export class BoardItemComponent implements OnInit {
     dialogRef.afterClosed().subscribe(val => {
       if (val) {
         this.service.saveSecretHistoryLocation(val);
+      }
+    });
+  }
+
+  openAddObstaclesDialog(itemName: string) {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = '400px';
+    dialogConfig.data = {
+      vault: itemName
+    };
+    const dialogRef = this.dialog.open(AddObstacleLocationDialogComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(val => {
+      if (val) {
+        this.service.saveLocationObstacle(val);
       }
     });
   }

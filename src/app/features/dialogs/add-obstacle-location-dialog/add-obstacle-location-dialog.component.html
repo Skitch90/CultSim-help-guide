@@ -1,0 +1,29 @@
+<h2 mat-dialog-title>Add obstacle to location</h2>
+
+<mat-dialog-content [formGroup]="form">
+  <mat-form-field class="reward-source">
+    <textarea class="origin-name-text" matInput placeholder="Location" readonly matTextareaAutosize formControlName="location"></textarea>
+  </mat-form-field>
+
+  <div>
+    <h3 class="reward-title">Obstacles</h3>
+    <span class="spacer"></span>
+    <mat-icon matTooltip="Add new obstacle" class="reward-add-icon" (click)="addObstacle()">add_circle_outline</mat-icon>
+  </div>
+
+  <div class="reward-data" formArrayName="obstacles" *ngFor="let item of form.get('obstacles').controls; let i = index;">
+    <div [formGroupName]="i">
+      <mat-form-field class="item-field">
+        <mat-select placeholder="Select obstacle" formControlName="obstacle">
+          <mat-option *ngFor="let item of obstacles" value={{item}}>{{item}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-icon matSuffix class="reward-delete-icon" matTooltip="Delete reward" (click)="removeObstacle(i)">remove_circle_outline</mat-icon>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button class="mat-raised-button" (click)="close()">Close</button>
+  <button class="mat-raised-button mat-primary" (click)="save()">Save</button>
+</mat-dialog-actions>

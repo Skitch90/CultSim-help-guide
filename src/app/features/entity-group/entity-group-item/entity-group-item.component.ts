@@ -17,6 +17,7 @@ export class EntityGroupItemComponent implements OnInit, AfterViewInit {
   @ViewChild('nameAndAspectNum', { static: false }) nameAndAspectNumTemplate: TemplateRef<any>;
   @ViewChild('nameAndType', { static: false }) nameAndTypeTemplate: TemplateRef<any>;
   @ViewChild('nameTypeAspect', { static: false }) nameTypeAspectTemplate: TemplateRef<any>;
+  @ViewChild('nameListAspects', { static: false }) nameListAspectsTemplate: TemplateRef<any>;
 
   constructor(
     private cd: ChangeDetectorRef,
@@ -52,6 +53,8 @@ export class EntityGroupItemComponent implements OnInit, AfterViewInit {
     } else if (this.groupType === 'Location') {
       if (itemType === 'Lore') {
         return this.nameAndAspectNumTemplate;
+      } else if (itemType === 'ExpeditionObstacle') {
+        return this.nameListAspectsTemplate;
       }
     }
     return this.onlyNameTemplate;

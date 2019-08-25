@@ -21,6 +21,7 @@ import { EntityGroupComponent } from './features/entity-group/entity-group.compo
 import { OutputLabelPipe } from './shared/OutputLabelPipe';
 import { AddLocationDialogComponent } from './features/dialogs/add-location-dialog/add-location-dialog.component';
 import { EntityGroupItemComponent } from './features/entity-group/entity-group-item/entity-group-item.component';
+import { AddObstacleLocationDialogComponent } from './features/dialogs/add-obstacle-location-dialog/add-obstacle-location-dialog.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { EntityGroupItemComponent } from './features/entity-group/entity-group-i
     BoardItemComponent,
     EntityGroupComponent,
     AddLocationDialogComponent,
-    EntityGroupItemComponent
+    EntityGroupItemComponent,
+    AddObstacleLocationDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -56,7 +58,8 @@ import { EntityGroupItemComponent } from './features/entity-group/entity-group-i
     AddMansusDoorOptionDialogComponent,
     AddRewardMansusDialogComponent,
     AddInfluenceDecayDialogComponent,
-    AddLocationDialogComponent
+    AddLocationDialogComponent,
+    AddObstacleLocationDialogComponent
   ],
   bootstrap: [AppComponent]
 })
