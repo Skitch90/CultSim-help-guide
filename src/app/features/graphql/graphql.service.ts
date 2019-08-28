@@ -34,7 +34,8 @@ import {
     SET_LOCATION_OBSTACLE_MUTATION,
     SET_INGREDIENT_LOCATION_MUTATION,
     SET_INFLUENCE_LOCATION_MUTATION,
-    SET_TOOL_LOCATION_MUTATION
+    SET_TOOL_LOCATION_MUTATION,
+    SET_INGREDIENT_DREAMING_RESUTL_MUTATION as SET_INGREDIENT_DREAMING_RESULT_MUTATION
 } from './queries';
 import { SaveLocationRewardInput, SaveItemInput, SaveMansusDoorOptionInput, Reward } from './graphql.types';
 import { Entity } from 'src/app/shared/model';
@@ -525,7 +526,7 @@ export class GraphqlService {
 
     async saveMansusReward(params) {
         try {
-            const { door, rewardType, lore, influence, language } = params;
+            const { door, rewardType, lore, influence, language, ingredient } = params;
             if (rewardType === 'Language') {
                 await this.apollo.mutate({
                     mutation: SET_LANGUAGE_DREAMING_RESULT_MUTATION,
@@ -548,6 +549,14 @@ export class GraphqlService {
                     variables: {
                         door,
                         influence
+                    }
+                }).toPromise();
+            } else if (rewardType === 'Ingredient') {
+                await this.apollo.mutate({
+                    mutation: SET_INGREDIENT_DREAMING_RESULT_MUTATION,
+                    variables: {
+                        door,
+                        ingredient
                     }
                 }).toPromise();
             } else {

@@ -438,6 +438,19 @@ export const SET_INGREDIENT_LOCATION_MUTATION = gql`
   }
 `;
 
+export const SET_INGREDIENT_DREAMING_RESUTL_MUTATION = gql`
+  mutation setIngredientBreamingResult($door: String!, $ingredient: String!) {
+    AddIngredientFromDreamingIn(from: { name: $door }, to: { name: $ingredient }) {
+      from {
+        name
+      }
+      to {
+        name
+      }
+    }
+  }
+`;
+
 export const CREATE_MANSUS_DOOR_MUTATION = gql`
   mutation createMansusDoor($door: String!) {
     CreateMansusDoor(name: $door) {

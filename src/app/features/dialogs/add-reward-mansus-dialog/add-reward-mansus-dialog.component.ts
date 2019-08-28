@@ -4,6 +4,7 @@ import { GraphqlService } from '../../graphql/graphql.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable, of } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
+import { filterOptions } from 'src/app/shared/utils';
 
 @Component({
   selector: 'app-add-reward-mansus-dialog',
@@ -13,12 +14,16 @@ import { startWith, map } from 'rxjs/operators';
 export class AddRewardMansusDialogComponent implements OnInit {
   form: FormGroup;
   mansusDoorOption: string;
-  rewardTypes: string[] = [ 'Influence', 'Language', 'Lore' ];
+  rewardTypes: string[] = [ 'Ingredient', 'Influence', 'Language', 'Lore' ];
 
   // lore
   lores: string[] = [];
   filteredOptions: Observable<string[]>;
   loreSelected = false;
+  // Ingredient
+  ingredientSelected = false;
+  ingredients: string[] = [];
+  filteredIngredients: Observable<string[]>;
   // influence
   influenceSelected = false;
   influences: string[] = [];
@@ -42,13 +47,15 @@ export class AddRewardMansusDialogComponent implements OnInit {
       rewardType: this.rewardTypeFormControl,
       lore: this.loreFormControl,
       influence: this.influenceFormControl,
-      language: new FormControl('')
+      language: new FormControl(''),
+      ingredient: new FormControl('')
     });
   }
 
   ngOnInit() {
     this.rewardTypeFormControl.valueChanges.subscribe(val => {
       this.loreSelected = (val === 'Lore');
+      this.ingredientSelected = (val === 'Ingredient');
       this.influenceSelected = (val === 'Influence');
       this.languageSelected = (val === 'Language');
 
@@ -71,6 +78,19 @@ export class AddRewardMansusDialogComponent implements OnInit {
         this.form.get('language').setValidators(Validators.required);
       } else {
         this.form.get('language').setValidators(null);
+      }
+      if (this.ingredientSelected) {
+        const ingredientFC = this.form.get('ingredient') as FormControl;
+        ingredientFC.setValidators(Validators.required);
+        this.service.getIngredients().then(ingredientList => this.ingredients = ingredientList)
+                                     .then(x => {
+                                        this.filteredIngredients = ingredientFC.valueChanges.pipe(
+                                          startWith(''),
+                                          map(value => filterOptions(this.ingredients, value))
+                                        );
+                                     });
+      } else {
+        this.form.get('ingredient').setValidators(null);
       }
     });
 

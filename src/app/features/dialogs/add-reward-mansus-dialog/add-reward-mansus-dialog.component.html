@@ -37,6 +37,14 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
+
+  <mat-form-field *ngIf="ingredientSelected">
+    <mat-select placeholder="Select ingredient" formControlName="ingredient">
+      <mat-option *ngFor="let option of filteredIngredients | async" [value]="option">
+        {{option}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
 </mat-dialog-content>
 
 <mat-dialog-actions>
