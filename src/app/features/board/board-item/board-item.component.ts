@@ -89,7 +89,7 @@ export class BoardItemComponent implements OnInit {
     }
     if (this.item.label === 'Location') {
       this.service.getLocation(this.item.name).then(locations => locations[0]).then(location => {
-        const { vault, histories, obstacles } = location;
+        const { vault, histories, obstacles, bookRewards, influenceRewards, ingredientRewards, toolRewards } = location;
         this.vaultLocation = vault;
         if (histories.length > 0) {
           this.entities.push({
@@ -109,6 +109,14 @@ export class BoardItemComponent implements OnInit {
                 aspects: defeatedWith.map(item => item.name)
               };
             })
+          });
+        }
+        if (bookRewards.length || influenceRewards.length || ingredientRewards.length || toolRewards.length) {
+          const rewards = [...bookRewards, ...influenceRewards, ...ingredientRewards, ...toolRewards];
+          const groupItems = rewards.map(item => this.convertToGroupItem(item));
+          this.entities.push({
+            label: 'Rewards',
+            entities: groupItems
           });
         }
       });

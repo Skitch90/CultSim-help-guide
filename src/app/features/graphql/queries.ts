@@ -174,6 +174,43 @@ export const GET_LOCATION_QUERY = gql`
           name
         }
       }
+      bookRewards {
+        _id
+        name
+      }
+      influenceRewards {
+        _id
+        name
+        aspects {
+          Aspect {
+            _id
+            name
+          }
+          quantity
+        }
+      }
+      ingredientRewards{
+        _id
+        name
+        aspects {
+          Aspect {
+            _id
+            name
+          }
+          quantity
+        }
+      }
+      toolRewards {
+        _id
+        name
+        aspects {
+          Aspect {
+            _id
+            name
+          }
+          quantity
+        }
+      }
     }
   }
 `;

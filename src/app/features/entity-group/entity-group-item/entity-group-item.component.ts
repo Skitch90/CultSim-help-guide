@@ -55,6 +55,10 @@ export class EntityGroupItemComponent implements OnInit, AfterViewInit {
         return this.nameAndAspectNumTemplate;
       } else if (itemType === 'ExpeditionObstacle') {
         return this.nameListAspectsTemplate;
+      } else if (itemType === 'Book') {
+        return this.nameAndTypeTemplate;
+      } else if (itemType === 'Influence' || itemType === 'Ingredient' || itemType === 'Tool') {
+        return this.nameTypeAspectTemplate;
       }
     }
     return this.onlyNameTemplate;

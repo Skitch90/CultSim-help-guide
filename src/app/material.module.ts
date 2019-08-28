@@ -17,6 +17,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatListModule } from '@angular/material/list';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
   declarations: [],
@@ -36,7 +37,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     MatCheckboxModule,
     MatExpansionModule,
     MatListModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    ScrollingModule
   ],
   exports: [
     DragDropModule,
@@ -53,7 +55,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     MatCheckboxModule,
     MatExpansionModule,
     MatListModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    ScrollingModule
   ]
 })
 export class MaterialModule { }

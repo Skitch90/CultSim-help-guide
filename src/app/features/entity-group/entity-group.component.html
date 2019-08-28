@@ -1,6 +1,6 @@
 <mat-expansion-panel>
   <mat-expansion-panel-header>{{ group.label | outputLabel }}</mat-expansion-panel-header>
-  <mat-list>
+  <mat-list id="entities-list">
     <app-entity-group-item *ngFor="let entity of group.entities" [groupType]="type" [item]="entity">
     </app-entity-group-item>
   </mat-list>

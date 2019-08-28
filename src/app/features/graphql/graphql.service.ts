@@ -432,6 +432,20 @@ export class GraphqlService {
 
     private async executeSaveLocationReward(reward: Reward, location: string, chance: boolean, mutation: any, refetchQuery?: any) {
         const name = reward.name;
+        const refetchQueries: any[] = [{
+            query: GET_LOCATION_QUERY,
+            variables: {
+                location
+            }
+        }];
+        if (refetchQuery) {
+            refetchQueries.push({
+                query: refetchQuery,
+                variables: {
+                    name
+                }
+            });
+        }
         await this.apollo.mutate({
             mutation,
             variables: {
@@ -439,12 +453,7 @@ export class GraphqlService {
                 location,
                 chance
             },
-            refetchQueries: refetchQuery ? [{
-                query: refetchQuery,
-                variables: {
-                    name
-                }
-            }] : []
+            refetchQueries
         }).toPromise();
     }
 
