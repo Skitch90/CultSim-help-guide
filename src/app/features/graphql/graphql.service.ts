@@ -73,26 +73,12 @@ export class GraphqlService {
         return result;
     }
 
-    async getEntitiesByAspect(aspect: string) {
-        const { data } = await this.apollo.query<any>({
+    getEntitiesByAspect(aspect: string) {
+        return this.apollo.watchQuery<any>({
             query: GET_ENTITY_WITH_ASPECT_QUERY,
             variables: {
                 aspect
             }
-        }).toPromise();
-
-        return data.entityWithAspect.map(entityGroup => {
-            return {
-                label: entityGroup.label,
-                entities: entityGroup.entities.map(entity => {
-                    return {
-                        id: entity._id,
-                        name: entity.name,
-                        label: entity.type,
-                        aspectQuantity: entity.aspectQuantity
-                    };
-                })
-            };
         });
     }
 
@@ -111,14 +97,13 @@ export class GraphqlService {
         return data.Location;
     }
 
-    async getLocation(name: string) {
-        const { data } = await this.apollo.query<any>({
+    getLocation(name: string) {
+        return this.apollo.watchQuery<any>({
             query: GET_LOCATION_QUERY,
             variables: {
                 location: name
             }
-        }).toPromise();
-        return data.Location;
+        });
     }
 
     async getLores() {
@@ -126,14 +111,13 @@ export class GraphqlService {
         return data.Lore.map(item => item.name);
     }
 
-    async getLore(name: string) {
-        const { data } = await this.apollo.query<any>({
+    getLore(name: string) {
+        return this.apollo.watchQuery<any>({
             query: GET_LORE_QUERY,
             variables: {
                 name
             }
-        }).toPromise();
-        return data.Lore;
+        });
     }
 
     async getAspects() {
@@ -149,14 +133,13 @@ export class GraphqlService {
         return data.Book.map(item => item.name);
     }
 
-    async getBook(title: string) {
-        const { data } = await this.apollo.query<any>({
+    getBook(title: string) {
+        return this.apollo.watchQuery<any>({
             query: GET_BOOK_QUERY,
             variables: {
                 name: title
             }
-        }).toPromise();
-        return data.Book;
+        });
     }
 
     getInfluences = async () => {
@@ -380,7 +363,21 @@ export class GraphqlService {
                 variables: {
                     lore: history,
                     location
-                }
+                },
+                refetchQueries: [
+                    {
+                        query: GET_LOCATION_QUERY,
+                        variables: {
+                            location
+                        }
+                    },
+                    {
+                        query: GET_LORE_QUERY,
+                        variables: {
+                            name: history
+                        }
+                    }
+                ]
             }).toPromise();
         } catch (err) {
             console.error(err);
