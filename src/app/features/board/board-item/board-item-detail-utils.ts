@@ -1,15 +1,19 @@
 import { EntitiesGroup, EntitiesGroupItem } from 'src/app/shared/model';
 
 const convertToGroupItem = (item): EntitiesGroupItem => {
-    const { aspects } = item;
+    const { aspects, door } = item;
     const aspect = (aspects && aspects.length === 1) ? aspects[0] : null;
-    return {
+    const groupItem: EntitiesGroupItem = {
         id: item._id,
         name: item.name,
         label: item.__typename,
         aspect: (aspect && aspect.Aspect) ? aspect.Aspect.name : null,
         aspectQuantity: aspect !== null ? aspect.quantity : null
     };
+    if (door) {
+        groupItem.mansusDoor = door.name;
+    }
+    return groupItem;
 };
 
 const createAspectGroupItem = (aspectItem): EntitiesGroupItem => {
@@ -136,4 +140,37 @@ export const getGroupsFromEntities = (entityGroups: any[]): EntitiesGroup[] => {
             })
         };
     });
+};
+
+export const getGroupsFromInfluence = (influence: any): EntitiesGroup[] => {
+    const groups: EntitiesGroup[] = [];
+    const { aspects, foundInLocation, fromDreamingIn, fromBook, decaysTo, decaysFrom } = influence;
+    if (aspects.length > 0) {
+        groups.push({
+            label: 'Aspects',
+            entities: aspects.map(aspect => createAspectGroupItem(aspect))
+        });
+    }
+    if (foundInLocation.length || fromDreamingIn.length || fromBook.length) {
+        const locations = foundInLocation.map(location => convertToGroupItem(location.Location));
+        const fromDreaming = fromDreamingIn.map(location => convertToGroupItem(location));
+        const books = fromBook.map(book => convertToGroupItem(book));
+        groups.push({
+            label: 'Found From',
+            entities: [ ...locations, ...fromDreaming, ...books ]
+        });
+    }
+    if (decaysTo) {
+        groups.push({
+            label: 'Decays to',
+            entities: [ convertToGroupItem(decaysTo) ]
+        });
+    }
+    if (decaysFrom.length) {
+        groups.push({
+            label: 'Decays from',
+            entities: decaysFrom.map(influenceOrig => convertToGroupItem(influenceOrig))
+        });
+    }
+    return groups;
 };

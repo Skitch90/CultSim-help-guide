@@ -19,6 +19,7 @@ export class EntityGroupItemComponent implements OnInit, AfterViewInit {
   @ViewChild('nameTypeAspect', { static: false }) nameTypeAspectTemplate: TemplateRef<any>;
   @ViewChild('nameListAspects', { static: false }) nameListAspectsTemplate: TemplateRef<any>;
   @ViewChild('aspectQuantity', { static: false }) aspectQuantityTemplate: TemplateRef<any>;
+  @ViewChild('mansusOption', { static: false }) mansusOptionTemplate: TemplateRef<any>;
 
   constructor(
     private cd: ChangeDetectorRef,
@@ -59,6 +60,14 @@ export class EntityGroupItemComponent implements OnInit, AfterViewInit {
       } else if (itemType === 'Book') {
         return this.nameAndTypeTemplate;
       } else if (itemType === 'Influence' || itemType === 'Ingredient' || itemType === 'Tool') {
+        return this.nameTypeAspectTemplate;
+      }
+    } else if (this.groupType === 'Influence') {
+      if (itemType === 'Location' || itemType === 'Book') {
+        return this.nameAndTypeTemplate;
+      } else if (itemType === 'MansusDoorOption') {
+        return this.mansusOptionTemplate;
+      } else if (itemType === 'Influence') {
         return this.nameTypeAspectTemplate;
       }
     }

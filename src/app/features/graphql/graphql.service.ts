@@ -7,7 +7,8 @@ import {
 } from './queries/book-queries';
 import { GET_ENTITY, GET_ENTITY_WITH_ASPECT } from './queries/entity-queries';
 import {
-    GET_INFLUENCES, CREATE_INFLUENCE, SET_INFLUENCE_ASPECT, SET_INFLUENCE_DECAY, SET_INFLUENCE_LOCATION, SET_INFLUENCE_DREAMING_RESULT
+    GET_INFLUENCES, CREATE_INFLUENCE, SET_INFLUENCE_ASPECT, SET_INFLUENCE_DECAY, SET_INFLUENCE_LOCATION,
+    SET_INFLUENCE_DREAMING_RESULT, GET_INFLUENCE
 } from './queries/influence-queries';
 import {
     GET_INGREDIENTS, CREATE_INGREDIENT, SET_INGREDIENT_ASPECT, SET_INGREDIENT_LOCATION, SET_INGREDIENT_DREAMING_RESULT
@@ -130,6 +131,15 @@ export class GraphqlService {
     getInfluences = async () => {
         const { data } = await this.apollo.query<any>({ query: GET_INFLUENCES }).toPromise();
         return data.Influence.map(item => item.name);
+    }
+
+    getInfluence(influence: string) {
+        return this.apollo.watchQuery<any>({
+            query: GET_INFLUENCE,
+            variables: {
+                name: influence
+            }
+        });
     }
 
     getIngredients = async () => {
@@ -256,12 +266,14 @@ export class GraphqlService {
                             aspect,
                             quantity: +quantity
                         },
-                        refetchQueries: [{
-                            query: GET_ENTITY_WITH_ASPECT,
-                            variables: {
-                                aspect
+                        refetchQueries: [
+                            {
+                                query: GET_ENTITY_WITH_ASPECT,
+                                variables: {
+                                    aspect
+                                }
                             }
-                        }]
+                        ]
                     }).toPromise();
                 });
             } else if (itemType === 'Tool') {
@@ -311,7 +323,21 @@ export class GraphqlService {
                 variables: {
                     originInfluence,
                     influence
-                }
+                },
+                refetchQueries: [
+                    {
+                        query: GET_INFLUENCE,
+                        variables: {
+                            name: originInfluence
+                        }
+                    },
+                    {
+                        query: GET_INFLUENCE,
+                        variables: {
+                            name: influence
+                        }
+                    }
+                ]
             }).toPromise();
         } catch (err) {
             console.error(err);
@@ -454,12 +480,20 @@ export class GraphqlService {
                                 title: book,
                                 influence: name
                             },
-                            refetchQueries: [{
-                                query: GET_BOOK,
-                                variables: {
-                                    name: book
+                            refetchQueries: [
+                                {
+                                    query: GET_BOOK,
+                                    variables: {
+                                        name: book
+                                    }
+                                },
+                                {
+                                    query: GET_INFLUENCE,
+                                    variables: {
+                                        name
+                                    }
                                 }
-                            }]
+                            ]
                         }).toPromise();
                         break;
                     }
@@ -531,7 +565,15 @@ export class GraphqlService {
                     variables: {
                         door,
                         influence
-                    }
+                    },
+                    refetchQueries: [
+                        {
+                            query: GET_INFLUENCE,
+                            variables: {
+                                name: influence
+                            }
+                        }
+                    ]
                 }).toPromise();
             } else if (rewardType === 'Ingredient') {
                 await this.apollo.mutate({

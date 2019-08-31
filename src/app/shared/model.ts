@@ -25,4 +25,5 @@ export class EntitiesGroupItem {
   aspect?: string;
   aspectQuantity?: number;
   aspects?: string[];
+  mansusDoor?: string;
 }

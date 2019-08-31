@@ -8,8 +8,10 @@ export const GET_INFLUENCES = gql`
   }
 `;
 
-const INFLUENCE_ASPECT_FRAGMENT = gql`
-  fragment InfluenceAspects on Influence {
+const INFLUENCE_FRAGMENT = gql`
+  fragment CommonInfluenceData on Influence {
+    _id
+    name
     aspects {
       Aspect {
         _id
@@ -23,9 +25,7 @@ const INFLUENCE_ASPECT_FRAGMENT = gql`
 export const GET_INFLUENCE = gql`
   query getInfluence($name: String!) {
     Influence(name: $name) {
-      _id
-      name
-      ...InfluenceAspects
+      ...CommonInfluenceData
   		foundInLocation {
         Location {
           _id
@@ -35,15 +35,23 @@ export const GET_INFLUENCE = gql`
       fromDreamingIn {
         _id
         name
+        door {
+          name
+        }
       }
-      decaysTo {
+      fromBook {
         _id
         name
-        ...InfluenceAspects
+      }
+      decaysTo {
+        ...CommonInfluenceData
+      }
+      decaysFrom {
+        ...CommonInfluenceData
       }
     }
   }
-  ${INFLUENCE_ASPECT_FRAGMENT}
+  ${INFLUENCE_FRAGMENT}
 `;
 
 export const CREATE_INFLUENCE = gql`

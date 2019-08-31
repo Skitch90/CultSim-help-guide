@@ -11,7 +11,9 @@ import { BoardService } from '../board.service';
 import { AddLocationDialogComponent } from '../../dialogs/add-location-dialog/add-location-dialog.component';
 import { AddObstacleLocationDialogComponent } from '../../dialogs/add-obstacle-location-dialog/add-obstacle-location-dialog.component';
 import { map, tap } from 'rxjs/operators';
-import { getGroupsFromLocation, getGroupsFromLore, getGroupsFromBook, getGroupsFromEntities } from './board-item-detail-utils';
+import {
+  getGroupsFromLocation, getGroupsFromLore, getGroupsFromBook, getGroupsFromEntities, getGroupsFromInfluence
+} from './board-item-detail-utils';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -29,23 +31,23 @@ export class BoardItemComponent implements OnInit {
   constructor(private dialog: MatDialog, private service: GraphqlService, private boardService: BoardService) { }
 
   ngOnInit() {
-    if (this.item.label === 'Aspect') {
-      this.entities = this.service.getEntitiesByAspect(this.item.name).valueChanges.pipe(
+    const { name, label } = this.item;
+    if (label === 'Aspect') {
+      this.entities = this.service.getEntitiesByAspect(name).valueChanges.pipe(
         map(result => result.data.entityWithAspect),
         map(groups => getGroupsFromEntities(groups))
       );
     }
-    if (this.item.label === 'Book') {
-      this.entities = this.service.getBook(this.item.name).valueChanges.pipe(
+    if (label === 'Book') {
+      this.entities = this.service.getBook(name).valueChanges.pipe(
         map(result => result.data.Book[0]),
         map(book => getGroupsFromBook(book))
       );
     }
-    if (this.item.label === 'Lore') {
-      this.entities = this.service.getLore(this.item.name).valueChanges.pipe(
-        map(result => result.data.Lore[0]),
-        tap(lore => this.secretHistoriesLore = lore.aspects.some(aspect => aspect.Aspect.name === 'Secret Histories')),
-        map(val => getGroupsFromLore(val))
+    if (label === 'Influence') {
+      this.entities = this.service.getInfluence(name).valueChanges.pipe(
+        map(result => result.data.Influence[0]),
+        map(influence => getGroupsFromInfluence(influence))
       );
     }
     if (this.item.label === 'Location') {
@@ -53,6 +55,13 @@ export class BoardItemComponent implements OnInit {
         map(result => result.data.Location[0]),
         tap(location => this.vaultLocation = location.vault),
         map(val => getGroupsFromLocation(val))
+      );
+    }
+    if (this.item.label === 'Lore') {
+      this.entities = this.service.getLore(this.item.name).valueChanges.pipe(
+        map(result => result.data.Lore[0]),
+        tap(lore => this.secretHistoriesLore = lore.aspects.some(aspect => aspect.Aspect.name === 'Secret Histories')),
+        map(val => getGroupsFromLore(val))
       );
     }
   }
