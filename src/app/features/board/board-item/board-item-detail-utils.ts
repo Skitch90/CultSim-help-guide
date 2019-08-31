@@ -2,13 +2,24 @@ import { EntitiesGroup, EntitiesGroupItem } from 'src/app/shared/model';
 
 const convertToGroupItem = (item): EntitiesGroupItem => {
     const { aspects } = item;
-    const aspect = (aspects !== undefined && aspects.length === 1) ? aspects[0] : null;
+    const aspect = (aspects && aspects.length === 1) ? aspects[0] : null;
     return {
         id: item._id,
         name: item.name,
         label: item.__typename,
         aspect: (aspect && aspect.Aspect) ? aspect.Aspect.name : null,
         aspectQuantity: aspect !== null ? aspect.quantity : null
+    };
+};
+
+const createAspectGroupItem = (aspectItem): EntitiesGroupItem => {
+    const { Aspect, quantity } = aspectItem;
+    const { _id, name, __typename } = Aspect;
+    return {
+        id: _id,
+        name,
+        label: __typename,
+        aspectQuantity: quantity
     };
 };
 
@@ -48,7 +59,13 @@ export const getGroupsFromLocation = (location: any): EntitiesGroup[] => {
 
 export const getGroupsFromLore = (lore: any): EntitiesGroup[] => {
     const groups: EntitiesGroup[] = [];
-    const { exploreResults } = lore;
+    const { aspects, exploreResults } = lore;
+    if (aspects.length > 0) {
+        groups.push({
+            label: 'Aspects',
+            entities: aspects.map(aspect => createAspectGroupItem(aspect))
+        });
+    }
     if (exploreResults.length > 0) {
         groups.push({
             label: 'Vaults',

@@ -18,6 +18,7 @@ export class EntityGroupItemComponent implements OnInit, AfterViewInit {
   @ViewChild('nameAndType', { static: false }) nameAndTypeTemplate: TemplateRef<any>;
   @ViewChild('nameTypeAspect', { static: false }) nameTypeAspectTemplate: TemplateRef<any>;
   @ViewChild('nameListAspects', { static: false }) nameListAspectsTemplate: TemplateRef<any>;
+  @ViewChild('aspectQuantity', { static: false }) aspectQuantityTemplate: TemplateRef<any>;
 
   constructor(
     private cd: ChangeDetectorRef,
@@ -60,6 +61,9 @@ export class EntityGroupItemComponent implements OnInit, AfterViewInit {
       } else if (itemType === 'Influence' || itemType === 'Ingredient' || itemType === 'Tool') {
         return this.nameTypeAspectTemplate;
       }
+    }
+    if (itemType === 'Aspect') {
+      return this.aspectQuantityTemplate;
     }
     return this.onlyNameTemplate;
   }

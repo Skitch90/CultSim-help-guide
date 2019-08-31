@@ -51,6 +51,7 @@ export const GET_LORE_QUERY = gql`
       name
       aspects {
         Aspect {
+          _id
           name
         }
         quantity

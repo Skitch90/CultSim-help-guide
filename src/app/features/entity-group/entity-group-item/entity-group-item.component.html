@@ -19,3 +19,7 @@
 <ng-template #nameListAspects>
     <mat-list-item (click)="addToBoard(item)">{{ item.name }} ({{ item.aspects.join('/') }})</mat-list-item>
 </ng-template>
+
+<ng-template #aspectQuantity>
+    <mat-list-item (click)="addToBoard(item)">{{ item.name }} {{ item.aspectQuantity }}</mat-list-item>
+</ng-template>
