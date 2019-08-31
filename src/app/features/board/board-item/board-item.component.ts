@@ -12,7 +12,7 @@ import { AddLocationDialogComponent } from '../../dialogs/add-location-dialog/ad
 import { AddObstacleLocationDialogComponent } from '../../dialogs/add-obstacle-location-dialog/add-obstacle-location-dialog.component';
 import { map, tap } from 'rxjs/operators';
 import {
-  getGroupsFromLocation, getGroupsFromLore, getGroupsFromBook, getGroupsFromEntities, getGroupsFromInfluence
+  getGroupsFromLocation, getGroupsFromLore, getGroupsFromBook, getGroupsFromEntities, getGroupsFromInfluence, getGroupsFromTool
 } from './board-item-detail-utils';
 import { Observable } from 'rxjs';
 
@@ -62,6 +62,12 @@ export class BoardItemComponent implements OnInit {
         map(result => result.data.Lore[0]),
         tap(lore => this.secretHistoriesLore = lore.aspects.some(aspect => aspect.Aspect.name === 'Secret Histories')),
         map(val => getGroupsFromLore(val))
+      );
+    }
+    if (label === 'Tool') {
+      this.entities = this.service.getTool(name).valueChanges.pipe(
+        map(result => result.data.Tool[0]),
+        map(tool => getGroupsFromTool(tool))
       );
     }
   }

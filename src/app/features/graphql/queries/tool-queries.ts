@@ -8,6 +8,26 @@ export const GET_TOOLS = gql`
   }
 `;
 
+export const GET_TOOL = gql`
+  query getTool($name: String!) {
+    Tool(name: $name) {
+      name
+      aspects {
+        Aspect {
+          name
+        }
+        quantity
+      }
+      foundInLocation {
+        Location {
+          name
+        }
+        chance
+      }
+    }
+  }
+`;
+
 export const CREATE_TOOL = gql`
   mutation saveTool($name: String!) {
     CreateTool(name: $name) {

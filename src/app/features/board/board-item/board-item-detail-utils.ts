@@ -174,3 +174,21 @@ export const getGroupsFromInfluence = (influence: any): EntitiesGroup[] => {
     }
     return groups;
 };
+
+export const getGroupsFromTool = (tool: any): EntitiesGroup[] => {
+    const groups: EntitiesGroup[] = [];
+    const { aspects, foundInLocation } = tool;
+    if (aspects.length > 0) {
+        groups.push({
+            label: 'Aspects',
+            entities: aspects.map(aspect => createAspectGroupItem(aspect))
+        });
+    }
+    if (foundInLocation.length) {
+        groups.push({
+            label: 'Found From',
+            entities: foundInLocation.map(location => convertToGroupItem(location.Location))
+        });
+    }
+    return groups;
+};

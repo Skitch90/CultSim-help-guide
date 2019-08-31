@@ -22,7 +22,7 @@ import {
     GET_LORES, GET_LORE, CREATE_LORE, SET_LORE_ASPECT, SET_LORE_EXPLORING_LOCATION, SET_LORE_DREAMING_RESULT
 } from './queries/lore-queries';
 import { CREATE_MANSUS_DOOR, CREATE_MANSUS_DOOR_OPTION, SET_MANSUS_DOOR_OPTION } from './queries/mansus-door-queries';
-import { CREATE_TOOL, GET_TOOLS, SET_TOOL_ASPECT, SET_TOOL_LOCATION } from './queries/tool-queries';
+import { CREATE_TOOL, GET_TOOLS, SET_TOOL_ASPECT, SET_TOOL_LOCATION, GET_TOOL } from './queries/tool-queries';
 import { SaveLocationRewardInput, SaveItemInput, SaveMansusDoorOptionInput, Reward } from './graphql.types';
 import { Entity } from 'src/app/shared/model';
 
@@ -155,6 +155,15 @@ export class GraphqlService {
     getTools = async () => {
         const { data } = await this.apollo.query<any>({ query: GET_TOOLS }).toPromise();
         return data.Tool.map(item => item.name);
+    }
+
+    getTool(name: string) {
+        return this.apollo.watchQuery<any>({
+            query: GET_TOOL,
+            variables: {
+                name
+            }
+        });
     }
 
     async saveItem(params: SaveItemInput) {
@@ -429,9 +438,9 @@ export class GraphqlService {
                 } else if (type === 'Ingredient') {
                     this.executeSaveLocationReward(reward, location, chance, SET_INGREDIENT_LOCATION);
                 } else if (type === 'Influence') {
-                    this.executeSaveLocationReward(reward, location, chance, SET_INFLUENCE_LOCATION);
+                    this.executeSaveLocationReward(reward, location, chance, SET_INFLUENCE_LOCATION, GET_INFLUENCE);
                 } else if (type === 'Tool') {
-                    this.executeSaveLocationReward(reward, location, chance, SET_TOOL_LOCATION);
+                    this.executeSaveLocationReward(reward, location, chance, SET_TOOL_LOCATION, GET_TOOL);
                 }
             });
         } catch (err) {
