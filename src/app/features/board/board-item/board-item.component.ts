@@ -12,7 +12,8 @@ import { AddLocationDialogComponent } from '../../dialogs/add-location-dialog/ad
 import { AddObstacleLocationDialogComponent } from '../../dialogs/add-obstacle-location-dialog/add-obstacle-location-dialog.component';
 import { map, tap } from 'rxjs/operators';
 import {
-  getGroupsFromLocation, getGroupsFromLore, getGroupsFromBook, getGroupsFromEntities, getGroupsFromInfluence, getGroupsFromTool
+  getGroupsFromLocation, getGroupsFromLore, getGroupsFromBook, getGroupsFromEntities, getGroupsFromInfluence,
+  getGroupsFromTool, getGroupsFromIngredient
 } from './board-item-detail-utils';
 import { Observable } from 'rxjs';
 
@@ -48,6 +49,12 @@ export class BoardItemComponent implements OnInit {
       this.entities = this.service.getInfluence(name).valueChanges.pipe(
         map(result => result.data.Influence[0]),
         map(influence => getGroupsFromInfluence(influence))
+      );
+    }
+    if (label === 'Ingredient') {
+      this.entities = this.service.getIngredient(name).valueChanges.pipe(
+        map(result => result.data.Ingredient[0]),
+        map(ingredient => getGroupsFromIngredient(ingredient))
       );
     }
     if (this.item.label === 'Location') {

@@ -70,6 +70,16 @@ export class EntityGroupItemComponent implements OnInit, AfterViewInit {
       } else if (itemType === 'Influence') {
         return this.nameTypeAspectTemplate;
       }
+    } else if (this.groupType === 'Ingredient') {
+      if (itemType === 'Location') {
+        return this.nameAndTypeTemplate;
+      } else if (itemType === 'MansusDoorOption') {
+        return this.mansusOptionTemplate;
+      }
+    } else if (this.groupType === 'Tool') {
+      if (itemType === 'Location') {
+        return this.nameAndTypeTemplate;
+      }
     }
     if (itemType === 'Aspect') {
       return this.aspectQuantityTemplate;

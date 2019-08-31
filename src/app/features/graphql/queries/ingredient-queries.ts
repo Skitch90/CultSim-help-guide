@@ -8,6 +8,32 @@ export const GET_INGREDIENTS = gql`
   }
 `;
 
+export const GET_INGREDIENT = gql`
+  query getIngredient($name: String!) {
+    Ingredient(name: $name) {
+      name
+      aspects {
+        Aspect {
+          name
+        }
+        quantity
+      }
+      foundInLocation {
+        Location {
+          name
+        }
+        chance
+      }
+      fromDreamingIn {
+        name
+        door {
+  				name
+        }
+      }
+    }
+  }
+`;
+
 export const CREATE_INGREDIENT = gql`
   mutation saveIngredient($name: String!) {
     CreateIngredient(name: $name) {

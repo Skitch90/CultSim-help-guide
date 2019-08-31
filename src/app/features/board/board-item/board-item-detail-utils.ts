@@ -175,6 +175,26 @@ export const getGroupsFromInfluence = (influence: any): EntitiesGroup[] => {
     return groups;
 };
 
+export const getGroupsFromIngredient = (ingredient: any): EntitiesGroup[] => {
+    const groups: EntitiesGroup[] = [];
+    const { aspects, foundInLocation, fromDreamingIn } = ingredient;
+    if (aspects.length > 0) {
+        groups.push({
+            label: 'Aspects',
+            entities: aspects.map(aspect => createAspectGroupItem(aspect))
+        });
+    }
+    if (foundInLocation.length || fromDreamingIn.length) {
+        const locations = foundInLocation.map(location => convertToGroupItem(location.Location));
+        const fromDreaming = fromDreamingIn.map(location => convertToGroupItem(location));
+        groups.push({
+            label: 'Found From',
+            entities: [ ...locations, ...fromDreaming ]
+        });
+    }
+    return groups;
+};
+
 export const getGroupsFromTool = (tool: any): EntitiesGroup[] => {
     const groups: EntitiesGroup[] = [];
     const { aspects, foundInLocation } = tool;

@@ -11,7 +11,7 @@ import {
     SET_INFLUENCE_DREAMING_RESULT, GET_INFLUENCE
 } from './queries/influence-queries';
 import {
-    GET_INGREDIENTS, CREATE_INGREDIENT, SET_INGREDIENT_ASPECT, SET_INGREDIENT_LOCATION, SET_INGREDIENT_DREAMING_RESULT
+    GET_INGREDIENTS, CREATE_INGREDIENT, SET_INGREDIENT_ASPECT, SET_INGREDIENT_LOCATION, SET_INGREDIENT_DREAMING_RESULT, GET_INGREDIENT
 } from './queries/ingredient-queries';
 import { GET_LANGUAGES, CREATE_LANGUAGE, SET_LANGUAGE_DREAMING_RESULT } from './queries/language-queries';
 import {
@@ -145,6 +145,13 @@ export class GraphqlService {
     getIngredients = async () => {
         const { data } = await this.apollo.query<any>({ query: GET_INGREDIENTS }).toPromise();
         return data.Ingredient.map(item => item.name);
+    }
+
+    getIngredient(name: string) {
+        return this.apollo.watchQuery<any>({
+            query: GET_INGREDIENT,
+            variables: { name }
+        });
     }
 
     async getLocationObstacles() {
@@ -436,7 +443,7 @@ export class GraphqlService {
                 if (type === 'Book') {
                     this.executeSaveLocationReward(reward, location, chance, SET_BOOK_LOCATION, GET_BOOK);
                 } else if (type === 'Ingredient') {
-                    this.executeSaveLocationReward(reward, location, chance, SET_INGREDIENT_LOCATION);
+                    this.executeSaveLocationReward(reward, location, chance, SET_INGREDIENT_LOCATION, GET_INGREDIENT);
                 } else if (type === 'Influence') {
                     this.executeSaveLocationReward(reward, location, chance, SET_INFLUENCE_LOCATION, GET_INFLUENCE);
                 } else if (type === 'Tool') {
@@ -590,7 +597,13 @@ export class GraphqlService {
                     variables: {
                         door,
                         ingredient
-                    }
+                    },
+                    refetchQueries: [
+                        {
+                            query: GET_INGREDIENT,
+                            variables: { name: ingredient }
+                        }
+                    ]
                 }).toPromise();
             } else {
                 console.error('Unmanaged rewardType', rewardType);
