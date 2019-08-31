@@ -9,11 +9,11 @@
 </ng-template>
 
 <ng-template #nameAndType>
-    <mat-list-item (click)="addToBoard(item)">{{ item.name }} ({{ item.label }})</mat-list-item>
+    <mat-list-item (click)="addToBoard(item)">{{ item.name }} ({{ item.label | outputLabel }})</mat-list-item>
 </ng-template>
 
 <ng-template #nameTypeAspect>
-    <mat-list-item (click)="addToBoard(item)">{{ item.name }} ({{ item.label }} {{ item.aspect }} {{ item.aspectQuantity }})</mat-list-item>
+    <mat-list-item (click)="addToBoard(item)">{{ item.name }} ({{ item.label | outputLabel }} {{ item.aspect }} {{ item.aspectQuantity }})</mat-list-item>
 </ng-template>
 
 <ng-template #nameListAspects>
