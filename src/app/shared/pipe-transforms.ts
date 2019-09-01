@@ -13,5 +13,26 @@ export class OutputLabelPipe implements PipeTransform {
             return label;
         }
     }
+}
 
+@Pipe({ name: 'labelIcon' })
+export class IconLabelPipe implements PipeTransform {
+    iconsConf = {
+        Aspect: 'category',
+        Book: 'book',
+        Follower: 'person',
+        Location: 'location_on',
+        Lore: 'local_library',
+        MansusDoor: 'cloud_upload',
+        MansusDoorOption: 'cloud',
+    };
+
+    transform(label: string) {
+        const icon = this.iconsConf[label];
+        if (icon) {
+            return icon;
+        }
+
+        return 'extension';
+    }
 }

@@ -11,11 +11,7 @@
       <mat-icon matSuffix (click)="addItemToBoard()" matTooltip="Add the item to the board">add</mat-icon>
       <mat-autocomplete id="searchResults" #auto="matAutocomplete" [displayWith]="displayFn">
         <mat-option *ngFor="let item of searchResults | async" [value]="item">
-          <mat-icon *ngIf="item.label === 'Lore'" matTooltip="Lore">local_library</mat-icon>
-          <mat-icon *ngIf="item.label === 'Book'" matTooltip="Book">book</mat-icon>
-          <mat-icon *ngIf="item.label === 'Follower'" matTooltip="Follower">person</mat-icon>
-          <mat-icon *ngIf="item.label === 'Aspect'" matTooltip="Aspect">category</mat-icon>
-          <mat-icon *ngIf="item.label === 'Location'" matTooltip="Location">location_on</mat-icon>
+          <mat-icon matTooltip={{item.label|outputLabel}}>{{item.label|labelIcon}}</mat-icon>
           <span matTooltip={{item.name}}>{{item.name}}</span>
         </mat-option>
       </mat-autocomplete>

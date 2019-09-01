@@ -18,7 +18,7 @@ import { AddRewardMansusDialogComponent } from './features/dialogs/add-reward-ma
 import { AddInfluenceDecayDialogComponent } from './features/dialogs/add-influence-decay-dialog/add-influence-decay-dialog.component';
 import { BoardItemComponent } from './features/board/board-item/board-item.component';
 import { EntityGroupComponent } from './features/entity-group/entity-group.component';
-import { OutputLabelPipe } from './shared/OutputLabelPipe';
+import { OutputLabelPipe, IconLabelPipe } from './shared/pipe-transforms';
 import { AddLocationDialogComponent } from './features/dialogs/add-location-dialog/add-location-dialog.component';
 import { EntityGroupItemComponent } from './features/entity-group/entity-group-item/entity-group-item.component';
 import { AddObstacleLocationDialogComponent } from './features/dialogs/add-obstacle-location-dialog/add-obstacle-location-dialog.component';
@@ -27,6 +27,7 @@ import { AddObstacleLocationDialogComponent } from './features/dialogs/add-obsta
   declarations: [
     AppComponent,
     OutputLabelPipe,
+    IconLabelPipe,
     BoardComponent,
     AddRewardLocationDialogComponent,
     AddItemDialogComponent,
