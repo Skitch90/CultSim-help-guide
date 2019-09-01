@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import { INFLUENCE_FRAGMENT, INGREDIENT_FRAGMENT } from './fragments';
 
 export const GET_LOCATIONS = gql`
   query getLocations {
@@ -34,26 +35,10 @@ export const GET_LOCATION = gql`
         name
       }
       influenceRewards {
-        _id
-        name
-        aspects {
-          Aspect {
-            _id
-            name
-          }
-          quantity
-        }
+        ...CommonInfluenceData
       }
       ingredientRewards{
-        _id
-        name
-        aspects {
-          Aspect {
-            _id
-            name
-          }
-          quantity
-        }
+        ...CommonIngredientData
       }
       toolRewards {
         _id
@@ -68,6 +53,8 @@ export const GET_LOCATION = gql`
       }
     }
   }
+  ${INFLUENCE_FRAGMENT}
+  ${INGREDIENT_FRAGMENT}
 `;
 
 export const CREATE_LOCATION = gql`

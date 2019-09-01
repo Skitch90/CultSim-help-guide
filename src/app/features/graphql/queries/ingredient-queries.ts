@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import { INGREDIENT_FRAGMENT } from './fragments';
 
 export const GET_INGREDIENTS = gql`
   query getIngredients {
@@ -11,13 +12,7 @@ export const GET_INGREDIENTS = gql`
 export const GET_INGREDIENT = gql`
   query getIngredient($name: String!) {
     Ingredient(name: $name) {
-      name
-      aspects {
-        Aspect {
-          name
-        }
-        quantity
-      }
+      ...CommonIngredientData
       foundInLocation {
         Location {
           name
@@ -32,6 +27,7 @@ export const GET_INGREDIENT = gql`
       }
     }
   }
+  ${INGREDIENT_FRAGMENT}
 `;
 
 export const CREATE_INGREDIENT = gql`

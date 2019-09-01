@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import { LORE_FRAGMENT } from './fragments';
 
 export const GET_LORES = gql`
   query getLores {
@@ -11,14 +12,7 @@ export const GET_LORES = gql`
 export const GET_LORE = gql`
   query getLore($name: String!) {
     Lore(name: $name) {
-      _id
-      name
-      aspects {
-        Aspect {
-          name
-        }
-        quantity
-      }
+      ...CommonLoreData
       exploreResults {
         _id
         name
@@ -34,17 +28,11 @@ export const GET_LORE = gql`
         }
       }
       upgradesTo {
-        _id
-		  	name
-        aspects {
-          Aspect {
-            name
-          }
-          quantity
-        }
+        ...CommonLoreData
       }
     }
   }
+  ${LORE_FRAGMENT}
 `;
 
 export const CREATE_LORE = gql`

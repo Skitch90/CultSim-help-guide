@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import { INFLUENCE_FRAGMENT, LORE_FRAGMENT } from './fragments';
 
 export const GET_BOOK = gql`
   query getBook($name: String!) {
@@ -17,15 +18,7 @@ export const GET_BOOK = gql`
         name
       }
       studiedIntoLore{
-        _id
-        name
-        aspects {
-          Aspect {
-            _id
-            name
-          }
-          quantity
-        }
+        ...CommonLoreData
       }
       teachesRitual {
         _id
@@ -36,18 +29,12 @@ export const GET_BOOK = gql`
         name
       }
       resultsInInfluence {
-        _id
-        name
-        aspects {
-          Aspect {
-            _id
-            name
-          }
-          quantity
-        }
+        ...CommonInfluenceData
       }
     }
   }
+  ${INFLUENCE_FRAGMENT}
+  ${LORE_FRAGMENT}
 `;
 
 export const GET_BOOKS = gql`

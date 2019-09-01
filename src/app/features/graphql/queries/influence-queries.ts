@@ -1,23 +1,10 @@
 import gql from 'graphql-tag';
+import { INFLUENCE_FRAGMENT } from './fragments';
 
 export const GET_INFLUENCES = gql`
   query getInfluences {
     Influence(orderBy: name_asc) {
       name
-    }
-  }
-`;
-
-const INFLUENCE_FRAGMENT = gql`
-  fragment CommonInfluenceData on Influence {
-    _id
-    name
-    aspects {
-      Aspect {
-        _id
-        name
-      }
-      quantity
     }
   }
 `;
