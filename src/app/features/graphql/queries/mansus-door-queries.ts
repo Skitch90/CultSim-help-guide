@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import { INFLUENCE_FRAGMENT, INGREDIENT_FRAGMENT, LORE_FRAGMENT } from './fragments';
 
 export const CREATE_MANSUS_DOOR = gql`
   mutation createMansusDoor($door: String!) {
@@ -18,6 +19,34 @@ export const GET_MANSUS_DOOR = gql`
       }
     }
   }
+`;
+
+export const GET_MANSUS_DOOR_OPTION = gql`
+  query getMansusDoorOption($name: String!) {
+    MansusDoorOption(name: $name) {
+      name
+      door {
+        _id
+        name
+      }
+      influenceRewards {
+        ...CommonInfluenceData
+      }
+      ingredientRewards {
+        ...CommonIngredientData
+      }
+      languageRewards {
+        _id
+        name
+      }
+      loreRewards {
+        ...CommonLoreData
+      }
+    }
+  }
+  ${INFLUENCE_FRAGMENT}
+  ${INGREDIENT_FRAGMENT}
+  ${LORE_FRAGMENT}
 `;
 
 export const CREATE_MANSUS_DOOR_OPTION = gql`

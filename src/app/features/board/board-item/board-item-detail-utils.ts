@@ -112,7 +112,7 @@ export const getGroupsFromBook = (book: any): EntitiesGroup[] => {
     if (teachesLanguage !== null) {
         groups.push({
             label: 'Rewards',
-            entities: [this.convertToGroupItem(teachesLanguage)]
+            entities: [ convertToGroupItem(teachesLanguage) ]
         });
     } else {
         const loreRewards = studiedIntoLore.map(lore => {
@@ -215,6 +215,25 @@ export const getGroupsFromMansusDoor = (door: any): EntitiesGroup[] => {
         groups.push({
             label: 'Options',
             entities: options.map(option => convertToGroupItem(option))
+        });
+    }
+    return groups;
+};
+
+export const getGroupsFromMansusDoorOption = (doorOption: any): EntitiesGroup[] => {
+    const groups: EntitiesGroup[] = [];
+    const { door, influenceRewards, ingredientRewards, languageRewards, loreRewards } = doorOption;
+    if (door) {
+        groups.push({
+            label: 'Door',
+            entities: [ convertToGroupItem(door) ]
+        });
+    }
+    if (influenceRewards.length || ingredientRewards.length || languageRewards.length || loreRewards.length) {
+        const rewards = [ ...influenceRewards, ...ingredientRewards, ...languageRewards, ...loreRewards ];
+        groups.push({
+            label: 'Rewards',
+            entities: rewards.map(reward => convertToGroupItem(reward))
         });
     }
     return groups;

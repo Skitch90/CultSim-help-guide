@@ -21,7 +21,9 @@ import {
 import {
     GET_LORES, GET_LORE, CREATE_LORE, SET_LORE_ASPECT, SET_LORE_EXPLORING_LOCATION, SET_LORE_DREAMING_RESULT
 } from './queries/lore-queries';
-import { CREATE_MANSUS_DOOR, CREATE_MANSUS_DOOR_OPTION, SET_MANSUS_DOOR_OPTION, GET_MANSUS_DOOR } from './queries/mansus-door-queries';
+import {
+    CREATE_MANSUS_DOOR, CREATE_MANSUS_DOOR_OPTION, SET_MANSUS_DOOR_OPTION, GET_MANSUS_DOOR, GET_MANSUS_DOOR_OPTION
+} from './queries/mansus-door-queries';
 import { CREATE_TOOL, GET_TOOLS, SET_TOOL_ASPECT, SET_TOOL_LOCATION, GET_TOOL } from './queries/tool-queries';
 import { SaveLocationRewardInput, SaveItemInput, SaveMansusDoorOptionInput, Reward } from './graphql.types';
 import { Entity } from 'src/app/shared/model';
@@ -167,6 +169,13 @@ export class GraphqlService {
     getMansusDoor(name: string) {
         return this.apollo.watchQuery<any>({
             query: GET_MANSUS_DOOR,
+            variables: { name }
+        });
+    }
+
+    getMansusDoorOption(name: string) {
+        return this.apollo.watchQuery<any>({
+            query: GET_MANSUS_DOOR_OPTION,
             variables: { name }
         });
     }
@@ -387,6 +396,10 @@ export class GraphqlService {
                     {
                         query: GET_MANSUS_DOOR,
                         variables: { name: door }
+                    },
+                    {
+                        query: GET_MANSUS_DOOR_OPTION,
+                        variables: { name: option }
                     }
                 ]
             }).toPromise();
@@ -499,6 +512,10 @@ export class GraphqlService {
         try {
             const book = params.book;
             const rewards = params.rewards as any[];
+            const getBookQuery = {
+                query: GET_BOOK,
+                variables: { name: book }
+            };
             rewards.forEach(async reward => {
                 const { type, name } = reward;
                 switch (type) {
@@ -510,12 +527,7 @@ export class GraphqlService {
                                 influence: name
                             },
                             refetchQueries: [
-                                {
-                                    query: GET_BOOK,
-                                    variables: {
-                                        name: book
-                                    }
-                                },
+                                getBookQuery,
                                 {
                                     query: GET_INFLUENCE,
                                     variables: {
@@ -533,12 +545,9 @@ export class GraphqlService {
                                 title: book,
                                 language: name
                             },
-                            refetchQueries: [{
-                                query: GET_BOOK,
-                                variables: {
-                                    name: book
-                                }
-                            }]
+                            refetchQueries: [
+                                getBookQuery
+                            ]
                         }).toPromise();
                         break;
                     }
@@ -549,12 +558,13 @@ export class GraphqlService {
                                 title: book,
                                 lore: name
                             },
-                            refetchQueries: [{
-                                query: GET_BOOK,
-                                variables: {
-                                    name: book
+                            refetchQueries: [
+                                getBookQuery,
+                                {
+                                    query: GET_LORE,
+                                    variables: { name }
                                 }
-                            }]
+                            ]
                         }).toPromise();
                         break;
                     }
@@ -572,13 +582,20 @@ export class GraphqlService {
     async saveMansusReward(params) {
         try {
             const { door, rewardType, lore, influence, language, ingredient } = params;
+            const getMansusDoorOptionQuery = {
+                query: GET_MANSUS_DOOR_OPTION,
+                variables: { name: door }
+            };
             if (rewardType === 'Language') {
                 await this.apollo.mutate({
                     mutation: SET_LANGUAGE_DREAMING_RESULT,
                     variables: {
                         door,
                         language
-                    }
+                    },
+                    refetchQueries: [
+                        getMansusDoorOptionQuery
+                    ]
                 }).toPromise();
             } else if (rewardType === 'Lore') {
                 await this.apollo.mutate({
@@ -586,7 +603,14 @@ export class GraphqlService {
                     variables: {
                         door,
                         lore
-                    }
+                    },
+                    refetchQueries: [
+                        getMansusDoorOptionQuery,
+                        {
+                            query: GET_LORE,
+                            variables: { name: lore }
+                        }
+                    ]
                 }).toPromise();
             } else if (rewardType === 'Influence') {
                 await this.apollo.mutate({
@@ -596,6 +620,7 @@ export class GraphqlService {
                         influence
                     },
                     refetchQueries: [
+                        getMansusDoorOptionQuery,
                         {
                             query: GET_INFLUENCE,
                             variables: {
@@ -612,6 +637,7 @@ export class GraphqlService {
                         ingredient
                     },
                     refetchQueries: [
+                        getMansusDoorOptionQuery,
                         {
                             query: GET_INGREDIENT,
                             variables: { name: ingredient }
