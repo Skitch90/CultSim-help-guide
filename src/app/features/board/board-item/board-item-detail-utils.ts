@@ -63,11 +63,24 @@ export const getGroupsFromLocation = (location: any): EntitiesGroup[] => {
 
 export const getGroupsFromLore = (lore: any): EntitiesGroup[] => {
     const groups: EntitiesGroup[] = [];
-    const { aspects, exploreResults } = lore;
+    const { aspects, exploreResults, fromBook, fromDreamingIn, upgradesTo } = lore;
     if (aspects.length > 0) {
         groups.push({
             label: 'Aspects',
             entities: aspects.map(aspect => createAspectGroupItem(aspect))
+        });
+    }
+    if (fromBook.length || fromDreamingIn.length) {
+        const sources = [ ...fromBook, ...fromDreamingIn ];
+        groups.push({
+            label: 'Found From',
+            entities: sources.map(source => convertToGroupItem(source))
+        });
+    }
+    if (upgradesTo) {
+        groups.push({
+            label: 'Upgrades to',
+            entities: [ convertToGroupItem(upgradesTo) ]
         });
     }
     if (exploreResults.length > 0) {

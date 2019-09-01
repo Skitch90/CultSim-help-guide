@@ -15,7 +15,6 @@ export const GET_LORE = gql`
       name
       aspects {
         Aspect {
-          _id
           name
         }
         quantity
@@ -23,6 +22,26 @@ export const GET_LORE = gql`
       exploreResults {
         _id
         name
+      }
+      fromBook {
+        _id
+        name
+      }
+      fromDreamingIn {
+        name
+        door {
+          name
+        }
+      }
+      upgradesTo {
+        _id
+		  	name
+        aspects {
+          Aspect {
+            name
+          }
+          quantity
+        }
       }
     }
   }

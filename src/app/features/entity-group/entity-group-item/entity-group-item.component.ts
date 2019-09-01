@@ -52,16 +52,6 @@ export class EntityGroupItemComponent implements OnInit, AfterViewInit {
           return this.nameAndTypeTemplate;
         }
       }
-    } else if (this.groupType === 'Location') {
-      if (itemType === 'Lore') {
-        return this.nameAndAspectNumTemplate;
-      } else if (itemType === 'ExpeditionObstacle') {
-        return this.nameListAspectsTemplate;
-      } else if (itemType === 'Book') {
-        return this.nameAndTypeTemplate;
-      } else if (itemType === 'Influence' || itemType === 'Ingredient' || itemType === 'Tool') {
-        return this.nameTypeAspectTemplate;
-      }
     } else if (this.groupType === 'Influence') {
       if (itemType === 'Location' || itemType === 'Book') {
         return this.nameAndTypeTemplate;
@@ -72,6 +62,22 @@ export class EntityGroupItemComponent implements OnInit, AfterViewInit {
       }
     } else if (this.groupType === 'Ingredient') {
       if (itemType === 'Location') {
+        return this.nameAndTypeTemplate;
+      } else if (itemType === 'MansusDoorOption') {
+        return this.mansusOptionTemplate;
+      }
+    } else if (this.groupType === 'Location') {
+      if (itemType === 'Lore') {
+        return this.nameAndAspectNumTemplate;
+      } else if (itemType === 'ExpeditionObstacle') {
+        return this.nameListAspectsTemplate;
+      } else if (itemType === 'Book') {
+        return this.nameAndTypeTemplate;
+      } else if (itemType === 'Influence' || itemType === 'Ingredient' || itemType === 'Tool') {
+        return this.nameTypeAspectTemplate;
+      }
+    } else if (this.groupType === 'Lore') {
+      if (itemType === 'Book') {
         return this.nameAndTypeTemplate;
       } else if (itemType === 'MansusDoorOption') {
         return this.mansusOptionTemplate;
@@ -89,7 +95,7 @@ export class EntityGroupItemComponent implements OnInit, AfterViewInit {
 
   addToBoard(entity: EntitiesGroupItem) {
     this.graphql.getEntities(entity.name).then(result => {
-      const itemToAdd = result.find(item => item.name === entity.name);
+      const itemToAdd = result.find(item => item.name === entity.name && item.label === entity.label);
       if (itemToAdd !== undefined) {
         this.boardService.addBoardItem(itemToAdd);
       } else {
