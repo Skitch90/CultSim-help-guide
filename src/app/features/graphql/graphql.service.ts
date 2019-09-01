@@ -21,7 +21,7 @@ import {
 import {
     GET_LORES, GET_LORE, CREATE_LORE, SET_LORE_ASPECT, SET_LORE_EXPLORING_LOCATION, SET_LORE_DREAMING_RESULT
 } from './queries/lore-queries';
-import { CREATE_MANSUS_DOOR, CREATE_MANSUS_DOOR_OPTION, SET_MANSUS_DOOR_OPTION } from './queries/mansus-door-queries';
+import { CREATE_MANSUS_DOOR, CREATE_MANSUS_DOOR_OPTION, SET_MANSUS_DOOR_OPTION, GET_MANSUS_DOOR } from './queries/mansus-door-queries';
 import { CREATE_TOOL, GET_TOOLS, SET_TOOL_ASPECT, SET_TOOL_LOCATION, GET_TOOL } from './queries/tool-queries';
 import { SaveLocationRewardInput, SaveItemInput, SaveMansusDoorOptionInput, Reward } from './graphql.types';
 import { Entity } from 'src/app/shared/model';
@@ -162,6 +162,13 @@ export class GraphqlService {
     getTools = async () => {
         const { data } = await this.apollo.query<any>({ query: GET_TOOLS }).toPromise();
         return data.Tool.map(item => item.name);
+    }
+
+    getMansusDoor(name: string) {
+        return this.apollo.watchQuery<any>({
+            query: GET_MANSUS_DOOR,
+            variables: { name }
+        });
     }
 
     getTool(name: string) {
@@ -375,7 +382,13 @@ export class GraphqlService {
                 variables: {
                     door,
                     option
-                }
+                },
+                refetchQueries: [
+                    {
+                        query: GET_MANSUS_DOOR,
+                        variables: { name: door }
+                    }
+                ]
             }).toPromise();
         } catch (err) {
             console.error(err);

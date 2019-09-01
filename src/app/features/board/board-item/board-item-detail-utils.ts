@@ -208,6 +208,18 @@ export const getGroupsFromIngredient = (ingredient: any): EntitiesGroup[] => {
     return groups;
 };
 
+export const getGroupsFromMansusDoor = (door: any): EntitiesGroup[] => {
+    const groups: EntitiesGroup[] = [];
+    const { options } = door;
+    if (options.length) {
+        groups.push({
+            label: 'Options',
+            entities: options.map(option => convertToGroupItem(option))
+        });
+    }
+    return groups;
+};
+
 export const getGroupsFromTool = (tool: any): EntitiesGroup[] => {
     const groups: EntitiesGroup[] = [];
     const { aspects, foundInLocation } = tool;

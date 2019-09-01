@@ -13,7 +13,7 @@ import { AddObstacleLocationDialogComponent } from '../../dialogs/add-obstacle-l
 import { map, tap } from 'rxjs/operators';
 import {
   getGroupsFromLocation, getGroupsFromLore, getGroupsFromBook, getGroupsFromEntities, getGroupsFromInfluence,
-  getGroupsFromTool, getGroupsFromIngredient
+  getGroupsFromTool, getGroupsFromIngredient, getGroupsFromMansusDoor
 } from './board-item-detail-utils';
 import { Observable } from 'rxjs';
 
@@ -69,6 +69,12 @@ export class BoardItemComponent implements OnInit {
         map(result => result.data.Lore[0]),
         tap(lore => this.secretHistoriesLore = lore.aspects.some(aspect => aspect.Aspect.name === 'Secret Histories')),
         map(val => getGroupsFromLore(val))
+      );
+    }
+    if (label === 'MansusDoor') {
+      this.entities = this.service.getMansusDoor(name).valueChanges.pipe(
+        map(result => result.data.MansusDoor[0]),
+        map(door => getGroupsFromMansusDoor(door))
       );
     }
     if (label === 'Tool') {
