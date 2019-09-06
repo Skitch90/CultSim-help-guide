@@ -94,7 +94,7 @@ export const getGroupsFromLore = (lore: any): EntitiesGroup[] => {
 
 export const getGroupsFromBook = (book: any): EntitiesGroup[] => {
     const groups: EntitiesGroup[] = [];
-    const { foundInLocation, language, teachesLanguage, studiedIntoLore, teachesRitual, resultsInInfluence } = book;
+    const { foundInLocation, language, teachesLanguage, studiedIntoLore, teachesRite, resultsInInfluence } = book;
     if (foundInLocation.length > 0) {
         groups.push({
             label: 'Found In',
@@ -118,7 +118,7 @@ export const getGroupsFromBook = (book: any): EntitiesGroup[] => {
         const loreRewards = studiedIntoLore.map(lore => {
             return convertToGroupItem(lore);
         });
-        const riteReward = (teachesRitual !== null) ? [convertToGroupItem(teachesRitual)] : [];
+        const riteReward = (teachesRite !== null) ? [convertToGroupItem(teachesRite)] : [];
         const influenceRewards = resultsInInfluence.map(influnce => {
             return convertToGroupItem(influnce);
         });

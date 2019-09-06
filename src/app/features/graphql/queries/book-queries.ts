@@ -20,7 +20,7 @@ export const GET_BOOK = gql`
       studiedIntoLore{
         ...CommonLoreData
       }
-      teachesRitual {
+      teachesRite {
         _id
         name
       }
