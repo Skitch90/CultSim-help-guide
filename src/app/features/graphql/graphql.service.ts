@@ -189,7 +189,7 @@ export class GraphqlService {
         });
     }
 
-    async saveItem(params: SaveItemInput) {
+    saveItem = async (params: SaveItemInput) => {
         try {
             const { name, itemType, aspects, language, vault } = params;
 
@@ -408,7 +408,7 @@ export class GraphqlService {
         }
     }
 
-    async saveSecretHistoryLocation(params) {
+    saveSecretHistoryLocation = async (params) => {
         const { history, location } = params;
         try {
             await this.apollo.mutate({
@@ -437,7 +437,7 @@ export class GraphqlService {
         }
     }
 
-    async saveLocationObstacle(params) {
+    saveLocationObstacle = async (params) => {
         try {
             const { location } = params;
             const obstacles = new Set(params.obstacles.map(item => item.obstacle));
@@ -461,7 +461,7 @@ export class GraphqlService {
         }
     }
 
-    async saveLocationReward(params: SaveLocationRewardInput) {
+    saveLocationReward = (params: SaveLocationRewardInput) => {
         try {
             const { location, rewards, chance } = params;
             rewards.forEach(async reward => {
@@ -508,64 +508,23 @@ export class GraphqlService {
         }).toPromise();
     }
 
-    async saveBookReward(params) {
+    saveBookReward = (params) => {
         try {
             const book = params.book;
             const rewards = params.rewards as any[];
-            const getBookQuery = {
-                query: GET_BOOK,
-                variables: { name: book }
-            };
             rewards.forEach(async reward => {
                 const { type, name } = reward;
                 switch (type) {
                     case 'Influence': {
-                        await this.apollo.mutate({
-                            mutation: SET_BOOK_INFLUENCE_RESULT,
-                            variables: {
-                                title: book,
-                                influence: name
-                            },
-                            refetchQueries: [
-                                getBookQuery,
-                                {
-                                    query: GET_INFLUENCE,
-                                    variables: {
-                                        name
-                                    }
-                                }
-                            ]
-                        }).toPromise();
+                        this.executeSaveBookReward(SET_BOOK_INFLUENCE_RESULT, book, name, GET_INFLUENCE);
                         break;
                     }
                     case 'Language': {
-                        await this.apollo.mutate({
-                            mutation: SET_BOOK_LANGUAGE_RESULT,
-                            variables: {
-                                title: book,
-                                language: name
-                            },
-                            refetchQueries: [
-                                getBookQuery
-                            ]
-                        }).toPromise();
+                        this.executeSaveBookReward(SET_BOOK_LANGUAGE_RESULT, book, name);
                         break;
                     }
                     case 'Lore': {
-                        await this.apollo.mutate({
-                            mutation: SET_BOOK_LORE_RESULT,
-                            variables: {
-                                title: book,
-                                lore: name
-                            },
-                            refetchQueries: [
-                                getBookQuery,
-                                {
-                                    query: GET_LORE,
-                                    variables: { name }
-                                }
-                            ]
-                        }).toPromise();
+                        this.executeSaveBookReward(SET_BOOK_LORE_RESULT, book, name, GET_LORE);
                         break;
                     }
                     // <mat-option value="Ritual">Ritual</mat-option>
@@ -577,6 +536,28 @@ export class GraphqlService {
         } catch (err) {
             console.error(err);
         }
+    }
+
+    private async executeSaveBookReward(mutation: any, bookTitle: string, rewardName: string, refetchQuery?: any) {
+        const refetchQueries = [{
+            query: GET_BOOK,
+            variables: { name: bookTitle }
+        }];
+        if (refetchQuery) {
+            refetchQueries.push({
+                query: refetchQuery,
+                variables: { name: rewardName }
+            });
+        }
+
+        await this.apollo.mutate({
+            mutation,
+            variables: {
+                book: bookTitle,
+                name: rewardName
+            },
+            refetchQueries
+        }).toPromise();
     }
 
     async saveMansusReward(params) {

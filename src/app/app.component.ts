@@ -1,13 +1,13 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Entity } from './shared/model';
 
 import { debounceTime, tap, switchMap, filter, finalize, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { GraphqlService } from './features/graphql/graphql.service';
-import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
 import { AddItemDialogComponent } from './features/dialogs/add-item-dialog/add-item-dialog.component';
 import { BoardService } from './features/board/board.service';
+import { DialogService } from './features/dialogs/dialog.service';
 
 @Component({
   selector: 'app-root',
@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
   searchResults: Observable<Entity[]>;
   isLoading = false;
 
-  constructor(private dialog: MatDialog,
+  constructor(private dialogService: DialogService,
               private service: GraphqlService,
               private boardService: BoardService) { }
 
@@ -61,23 +61,6 @@ export class AppComponent implements OnInit {
   }
 
   saveItem() {
-    const dialogConfig = new MatDialogConfig();
-
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-    dialogConfig.width = '400px';
-
-    const dialogRef = this.dialog.open(AddItemDialogComponent,
-      dialogConfig);
-
-
-    dialogRef.afterClosed().subscribe(
-      val => {
-        if (val) {
-          this.service.saveItem(val);
-        }
-      }
-
-    );
+    this.dialogService.openDialog(AddItemDialogComponent, this.service.saveItem);
   }
 }

@@ -105,31 +105,9 @@ export class BoardItemComponent implements OnInit {
     dialogConfig.width = '400px';
 
     if (itemLabel === 'Location') {
-      dialogConfig.data = {
-        locationName: itemName
-      };
-
-      const dialogRef = this.dialog.open(AddRewardLocationDialogComponent,
-        dialogConfig);
-
-
-      dialogRef.afterClosed().subscribe(
-        val => {
-          if (val) {
-            this.service.saveLocationReward(val);
-          }
-        });
+      this.dialogService.openDialog(AddRewardLocationDialogComponent, this.service.saveLocationReward, { locationName: itemName });
     } else if (itemLabel === 'Book') {
-      dialogConfig.data = {
-        bookTitle: itemName
-      };
-      const dialogRef = this.dialog.open(AddRewardBookDialogComponent, dialogConfig);
-
-      dialogRef.afterClosed().subscribe(val => {
-        if (val) {
-          this.service.saveBookReward(val);
-        }
-      });
+      this.dialogService.openDialog(AddRewardBookDialogComponent, this.service.saveBookReward, { bookTitle: itemName });
     } else if (itemLabel === 'MansusDoorOption') {
       dialogConfig.data = {
         mansusDoorOption: itemName
@@ -147,8 +125,8 @@ export class BoardItemComponent implements OnInit {
 
   openAddOptionDialog(itemName) {
     this.dialogService.openDialog(AddMansusDoorOptionDialogComponent,
-                                  { mansusDoor: itemName },
-                                  this.service.saveMansusDoorOption);
+                                  this.service.saveMansusDoorOption,
+                                  { mansusDoor: itemName });
   }
 
   openAddInfluenceDecay(influence) {
@@ -169,36 +147,10 @@ export class BoardItemComponent implements OnInit {
   }
 
   openAddLocationDialog(itemName) {
-    const dialogConfig = new MatDialogConfig();
-
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-    dialogConfig.width = '400px';
-    dialogConfig.data = {
-      secretHistory: itemName
-    };
-    const dialogRef = this.dialog.open(AddLocationDialogComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe(val => {
-      if (val) {
-        this.service.saveSecretHistoryLocation(val);
-      }
-    });
-  }
+    this.dialogService.openDialog(AddLocationDialogComponent, this.service.saveSecretHistoryLocation, { secretHistory: itemName });
+   }
 
   openAddObstaclesDialog(itemName: string) {
-    const dialogConfig = new MatDialogConfig();
-
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-    dialogConfig.width = '400px';
-    dialogConfig.data = {
-      vault: itemName
-    };
-    const dialogRef = this.dialog.open(AddObstacleLocationDialogComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe(val => {
-      if (val) {
-        this.service.saveLocationObstacle(val);
-      }
-    });
+    this.dialogService.openDialog(AddObstacleLocationDialogComponent, this.service.saveLocationObstacle, { vault: itemName });
   }
 }

@@ -9,13 +9,15 @@ export class DialogService {
 
   constructor(public dialog: MatDialog) { }
 
-  openDialog<T>(dialogComponent: ComponentType<T> | TemplateRef<T>, dialogData: any, onCloseFunction: any) {
+  openDialog<T>(dialogComponent: ComponentType<T> | TemplateRef<T>, onCloseFunction: any, dialogData?: any) {
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.width = '400px';
-    dialogConfig.data = dialogData;
+    if (dialogData) {
+      dialogConfig.data = dialogData;
+    }
     const dialogRef = this.dialog.open(dialogComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(val => {
       if (val) {
