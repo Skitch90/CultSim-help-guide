@@ -376,7 +376,7 @@ export class GraphqlService {
         }
     }
 
-    async saveMansusDoorOption(params: SaveMansusDoorOptionInput) {
+     saveMansusDoorOption = async (params: SaveMansusDoorOptionInput) => {
         try {
             const { door, option } = params;
 

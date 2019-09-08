@@ -16,6 +16,7 @@ import {
   getGroupsFromTool, getGroupsFromIngredient, getGroupsFromMansusDoor, getGroupsFromMansusDoorOption
 } from './board-item-detail-utils';
 import { Observable } from 'rxjs';
+import { DialogService } from '../../dialogs/dialog.service';
 
 @Component({
   selector: 'app-board-item',
@@ -29,7 +30,8 @@ export class BoardItemComponent implements OnInit {
   secretHistoriesLore = false;
   vaultLocation = false;
 
-  constructor(private dialog: MatDialog, private service: GraphqlService, private boardService: BoardService) { }
+  constructor(private dialogService: DialogService, private dialog: MatDialog,
+              private service: GraphqlService, private boardService: BoardService) { }
 
   ngOnInit() {
     const { name, label } = this.item;
@@ -144,20 +146,9 @@ export class BoardItemComponent implements OnInit {
   }
 
   openAddOptionDialog(itemName) {
-    const dialogConfig = new MatDialogConfig();
-
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-    dialogConfig.width = '400px';
-    dialogConfig.data = {
-      mansusDoor: itemName
-    };
-    const dialogRef = this.dialog.open(AddMansusDoorOptionDialogComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe(val => {
-      if (val) {
-        this.service.saveMansusDoorOption(val);
-      }
-    });
+    this.dialogService.openDialog(AddMansusDoorOptionDialogComponent,
+                                  { mansusDoor: itemName },
+                                  this.service.saveMansusDoorOption);
   }
 
   openAddInfluenceDecay(influence) {
