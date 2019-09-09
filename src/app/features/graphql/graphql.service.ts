@@ -13,7 +13,7 @@ import {
 import {
     GET_INGREDIENTS, CREATE_INGREDIENT, SET_INGREDIENT_ASPECT, SET_INGREDIENT_LOCATION, SET_INGREDIENT_DREAMING_RESULT, GET_INGREDIENT
 } from './queries/ingredient-queries';
-import { GET_LANGUAGES, CREATE_LANGUAGE, SET_LANGUAGE_DREAMING_RESULT } from './queries/language-queries';
+import { GET_LANGUAGES, CREATE_LANGUAGE, SET_LANGUAGE_DREAMING_RESULT, SET_LANGUAGE_REQUIRES } from './queries/language-queries';
 import {
     GET_LOCATIONS, GET_LOCATION, CREATE_LOCATION, SET_LOCATION_OBSTACLE,
     GET_OBSTACLES, CREATE_OBSTACLE, SET_OBSTACLE_ASPECT
@@ -508,7 +508,7 @@ export class GraphqlService {
         }).toPromise();
     }
 
-    saveBookReward = (params) => {
+    saveBookReward = async (params) => {
         try {
             const book = params.book;
             const rewards = params.rewards as any[];
@@ -520,7 +520,15 @@ export class GraphqlService {
                         break;
                     }
                     case 'Language': {
-                        this.executeSaveBookReward(SET_BOOK_LANGUAGE_RESULT, book, name);
+                        const saveResult = await this.executeSaveBookReward(SET_BOOK_LANGUAGE_RESULT, book, name);
+                        const requiredLang = saveResult.data.AddBookTeachesLanguage.from.language.name;
+                        await this.apollo.mutate({
+                            mutation: SET_LANGUAGE_REQUIRES,
+                            variables: {
+                                language: name,
+                                requiredLanguage: requiredLang
+                            }
+                        }).toPromise();
                         break;
                     }
                     case 'Lore': {
@@ -550,7 +558,7 @@ export class GraphqlService {
             });
         }
 
-        await this.apollo.mutate({
+        return await this.apollo.mutate({
             mutation,
             variables: {
                 book: bookTitle,

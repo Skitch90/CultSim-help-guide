@@ -29,3 +29,11 @@ export const SET_LANGUAGE_DREAMING_RESULT = gql`
   }
 `;
 
+export const SET_LANGUAGE_REQUIRES = gql`
+  mutation setLanguageRequires($language: String!, $requiredLanguage: String!) {
+    setLanguageRequires(language: $language, requiredLanguage: $requiredLanguage) {
+      language
+      requiredLanguage
+    }
+  }
+`;

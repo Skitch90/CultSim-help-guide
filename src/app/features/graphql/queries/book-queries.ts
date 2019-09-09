@@ -98,6 +98,9 @@ export const SET_BOOK_LANGUAGE_RESULT = gql`
     AddBookTeachesLanguage(from: { name: $book }, to: { name: $name }) {
       from {
         name
+        language {
+          name
+        }
       }
       to {
         name
