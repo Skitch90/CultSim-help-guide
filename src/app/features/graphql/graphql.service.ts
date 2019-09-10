@@ -19,7 +19,7 @@ import {
     GET_OBSTACLES, CREATE_OBSTACLE, SET_OBSTACLE_ASPECT
 } from './queries/location-queries';
 import {
-    GET_LORES, GET_LORE, CREATE_LORE, SET_LORE_ASPECT, SET_LORE_EXPLORING_LOCATION, SET_LORE_DREAMING_RESULT
+    GET_LORES, GET_LORE, CREATE_LORE, SET_LORE_ASPECT, SET_LORE_EXPLORING_LOCATION, SET_LORE_DREAMING_RESULT, SET_LORE_UPGRADE
 } from './queries/lore-queries';
 import {
     CREATE_MANSUS_DOOR, CREATE_MANSUS_DOOR_OPTION, SET_MANSUS_DOOR_OPTION, GET_MANSUS_DOOR, GET_MANSUS_DOOR_OPTION
@@ -373,6 +373,31 @@ export class GraphqlService {
             }).toPromise();
         } catch (err) {
             console.error(err);
+        }
+    }
+
+    setLoreUpgrade = async (params) => {
+        try {
+            const { startLore, lore } = params;
+            await this.apollo.mutate({
+                mutation: SET_LORE_UPGRADE,
+                variables: {
+                    startLore,
+                    lore
+                },
+                refetchQueries: [
+                    {
+                        query: GET_LORE,
+                        variables: { name: startLore }
+                    },
+                    {
+                        query: GET_LORE,
+                        variables: { name: lore }
+                    }
+                ]
+            }).toPromise();
+        } catch (error) {
+            console.error(error);
         }
     }
 

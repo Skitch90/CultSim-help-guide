@@ -22,6 +22,7 @@ import { OutputLabelPipe, IconLabelPipe } from './shared/pipe-transforms';
 import { AddLocationDialogComponent } from './features/dialogs/add-location-dialog/add-location-dialog.component';
 import { EntityGroupItemComponent } from './features/entity-group/entity-group-item/entity-group-item.component';
 import { AddObstacleLocationDialogComponent } from './features/dialogs/add-obstacle-location-dialog/add-obstacle-location-dialog.component';
+import { AddLoreUpgradeDialogComponent } from './features/dialogs/add-lore-upgrade-dialog/add-lore-upgrade-dialog.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { AddObstacleLocationDialogComponent } from './features/dialogs/add-obsta
     EntityGroupComponent,
     AddLocationDialogComponent,
     EntityGroupItemComponent,
-    AddObstacleLocationDialogComponent
+    AddObstacleLocationDialogComponent,
+    AddLoreUpgradeDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -60,7 +62,8 @@ import { AddObstacleLocationDialogComponent } from './features/dialogs/add-obsta
     AddRewardMansusDialogComponent,
     AddInfluenceDecayDialogComponent,
     AddLocationDialogComponent,
-    AddObstacleLocationDialogComponent
+    AddObstacleLocationDialogComponent,
+    AddLoreUpgradeDialogComponent
   ],
   bootstrap: [AppComponent]
 })

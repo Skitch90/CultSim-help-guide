@@ -1,0 +1,22 @@
+<h2 mat-dialog-title>Add lore upgrade</h2>
+
+<mat-dialog-content [formGroup]="form">
+    <mat-form-field>
+        <input matInput placeholder="Start lore" readonly formControlName="startLore">
+    </mat-form-field>
+
+    <mat-form-field>
+        <input type="text" placeholder="Select lore" matInput formControlName="lore"
+            [matAutocomplete]="autoLore">
+        <mat-autocomplete #autoLore="matAutocomplete">
+            <mat-option *ngFor="let option of filteredLores | async" [value]="option">
+                {{option}}
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button class="mat-raised-button" (click)="close()">Close</button>
+  <button class="mat-raised-button mat-primary" (click)="save()">Save</button>
+</mat-dialog-actions>

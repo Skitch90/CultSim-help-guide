@@ -17,6 +17,7 @@ import {
 } from './board-item-detail-utils';
 import { Observable } from 'rxjs';
 import { DialogService } from '../../dialogs/dialog.service';
+import { AddLoreUpgradeDialogComponent } from '../../dialogs/add-lore-upgrade-dialog/add-lore-upgrade-dialog.component';
 
 @Component({
   selector: 'app-board-item',
@@ -152,5 +153,9 @@ export class BoardItemComponent implements OnInit {
 
   openAddObstaclesDialog(itemName: string) {
     this.dialogService.openDialog(AddObstacleLocationDialogComponent, this.service.saveLocationObstacle, { vault: itemName });
+  }
+
+  openAddUpgradeDialog(itemName: string) {
+    this.dialogService.openDialog(AddLoreUpgradeDialogComponent, this.service.setLoreUpgrade, { lore: itemName });
   }
 }

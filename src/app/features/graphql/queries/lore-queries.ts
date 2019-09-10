@@ -76,3 +76,16 @@ export const SET_LORE_DREAMING_RESULT = gql`
     }
   }
 `;
+
+export const SET_LORE_UPGRADE = gql`
+  mutation setLoreUpgrade($startLore: String!, $lore: String!) {
+    AddLoreUpgradesTo(from: { name: $startLore }, to: { name: $lore }) {
+      from {
+        name
+      }
+      to {
+        name
+      }
+    }
+  }
+`;
