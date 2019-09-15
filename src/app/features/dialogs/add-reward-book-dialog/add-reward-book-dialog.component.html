@@ -16,10 +16,7 @@
     <div [formGroupName]="i">
       <mat-form-field class="type-field">
         <mat-select placeholder="Select type" formControlName="type">
-          <mat-option value="Influence">Influence</mat-option>
-          <mat-option value="Language">Language</mat-option>
-          <mat-option value="Lore">Lore</mat-option>
-          <mat-option value="Ritual">Ritual</mat-option>
+          <mat-option *ngFor="let type of rewardTypes" value={{type}}>{{type}}</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field class="item-field">

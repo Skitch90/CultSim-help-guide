@@ -3,7 +3,7 @@ import { Apollo } from 'apollo-angular';
 import { GET_ASPECTS, CREATE_ASPECT } from './queries/aspect-queries';
 import {
     GET_BOOKS, GET_BOOK, CREATE_BOOK, SET_BOOK_LANGUAGE, SET_BOOK_LOCATION,
-    SET_BOOK_INFLUENCE_RESULT, SET_BOOK_LANGUAGE_RESULT, SET_BOOK_LORE_RESULT
+    SET_BOOK_INFLUENCE_RESULT, SET_BOOK_LANGUAGE_RESULT, SET_BOOK_LORE_RESULT, SET_BOOK_RITE_RESULT
 } from './queries/book-queries';
 import { GET_ENTITY, GET_ENTITY_WITH_ASPECT } from './queries/entity-queries';
 import {
@@ -27,6 +27,7 @@ import {
 import { CREATE_TOOL, GET_TOOLS, SET_TOOL_ASPECT, SET_TOOL_LOCATION, GET_TOOL } from './queries/tool-queries';
 import { SaveLocationRewardInput, SaveItemInput, SaveMansusDoorOptionInput, Reward } from './graphql.types';
 import { Entity } from 'src/app/shared/model';
+import { GET_RITES, CREATE_RITE } from './queries/rite-queries';
 
 @Injectable({
     providedIn: 'root'
@@ -159,6 +160,11 @@ export class GraphqlService {
     async getLocationObstacles() {
         const { data } = await this.apollo.query<any>({ query: GET_OBSTACLES }).toPromise();
         return data.ExpeditionObstacle.map(item => item.name);
+    }
+
+    getRites = async () => {
+        const { data } = await this.apollo.query<any>({ query: GET_RITES }).toPromise();
+        return data.Rite.map(item => item.name);
     }
 
     getTools = async () => {
@@ -308,6 +314,8 @@ export class GraphqlService {
                         ]
                     }).toPromise();
                 });
+            } else if (itemType === 'Rite') {
+                this.saveItem_(params, CREATE_RITE, GET_RITES);
             } else if (itemType === 'Tool') {
                 this.saveItemWithAspects(params, CREATE_TOOL, GET_TOOLS, SET_TOOL_ASPECT);
             }
@@ -316,7 +324,20 @@ export class GraphqlService {
         }
     }
 
-    async saveItemWithAspects(data: SaveItemInput, createMutation, createRefetchQuery, setAspectMutation) {
+    private async saveItem_(data: SaveItemInput, createMutation, createRefetchQuery) {
+        const { name } = data;
+        await this.apollo.mutate({
+            mutation: createMutation,
+            variables: {
+                name
+            },
+            refetchQueries: [{
+                query: createRefetchQuery
+            }]
+        }).toPromise();
+    }
+
+    private async saveItemWithAspects(data: SaveItemInput, createMutation, createRefetchQuery, setAspectMutation) {
         const { name, aspects } = data;
         await this.apollo.mutate({
             mutation: createMutation,
@@ -560,7 +581,10 @@ export class GraphqlService {
                         this.executeSaveBookReward(SET_BOOK_LORE_RESULT, book, name, GET_LORE);
                         break;
                     }
-                    // <mat-option value="Ritual">Ritual</mat-option>
+                    case 'Rite': {
+                        this.executeSaveBookReward(SET_BOOK_RITE_RESULT, book, name);
+                        break;
+                    }
                     default: {
                         console.error('Book reward type', type, 'not managed');
                     }

@@ -121,3 +121,16 @@ export const SET_BOOK_INFLUENCE_RESULT = gql`
     }
   }
 `;
+
+export const SET_BOOK_RITE_RESULT = gql`
+  mutation setBookRiteResult($book: String!, $name: String!) {
+    AddBookTeachesRite(from: { name: $book }, to: { name: $name }) {
+      from {
+        name
+      }
+      to {
+        name
+      }
+    }
+  }
+`;

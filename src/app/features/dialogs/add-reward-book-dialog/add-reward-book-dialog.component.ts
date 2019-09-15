@@ -1,9 +1,10 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { GraphqlService } from '../../graphql/graphql.service';
-import { FormBuilder, FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, Validators, FormArray, AbstractControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable, of } from 'rxjs';
 import { startWith, map, tap } from 'rxjs/operators';
+import { filterOptions } from 'src/app/shared/utils';
 
 @Component({
     selector: 'app-add-reward-book-dialog',
@@ -11,6 +12,7 @@ import { startWith, map, tap } from 'rxjs/operators';
     styleUrls: ['./add-reward-book-dialog.component.scss']
 })
 export class AddRewardBookDialogComponent implements OnInit {
+    rewardTypes: string[] = [ 'Influence', 'Language', 'Lore', 'Rite' ];
     form: FormGroup;
     bookTitle: string;
 
@@ -55,38 +57,30 @@ export class AddRewardBookDialogComponent implements OnInit {
 
     private manageRewardControl(index: number) {
         const rewards = this.form.get('rewards') as FormArray;
+        const reward = rewards.at(index);
         rewards.at(index).get('type').valueChanges.subscribe(newVal => {
-            console.log('new type value', newVal, 'for reward at index ', index);
             if (newVal === 'Influence') {
-                this.service.getInfluences().then(influences => this.options[index] = influences);
+                this.manageAutoComplete(index, reward, this.service.getInfluences);
             } else if (newVal === 'Language') {
-                this.service.getLanguages().then(languages => this.options[index] = languages);
+                this.manageAutoComplete(index, reward, this.service.getLanguages);
             } else if (newVal === 'Lore') {
-                this.service.getLores().then(lores => this.options[index] = lores);
-            } else if (newVal === 'Ritual') {
-                // FIXME missing ritual management
-                // this.service.getr
-                this.options[index] = [];
+                this.manageAutoComplete(index, reward, this.service.getLores);
+            } else if (newVal === 'Rite') {
+                this.manageAutoComplete(index, reward, this.service.getRites);
             }
-            rewards.at(index).get('name').setValue('');
-            this.filteredOptions[index] = this.filteredOptions[index].pipe(startWith(this.options[index]));
         });
-        this.filteredOptions[index] = rewards.at(index).get('name').valueChanges.pipe(
-            startWith(''),
-            map(value => {
-                return this._filter(this.options[index], value);
-            })
-        );
     }
 
-    private _filter(options: string[], value: string): string[] {
-        if (options === undefined) {
-            return [];
-        }
-
-        const filterValue = value.toLowerCase();
-
-        return options.filter(option => option.toLowerCase().includes(filterValue));
+    private manageAutoComplete(index: number, reward: AbstractControl, listFunc: () => Promise<any>) {
+        listFunc().then(data => this.options[index] = data)
+                  .then(val => {
+                    this.filteredOptions[index] = reward.get('name').valueChanges.pipe(
+                        startWith(''),
+                        map(value => {
+                            return filterOptions(this.options[index], value);
+                        })
+                    );
+                  });
     }
 
     save() {

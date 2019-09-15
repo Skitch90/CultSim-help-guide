@@ -10,7 +10,7 @@ import { GraphqlService } from '../../graphql/graphql.service';
 })
 export class AddItemDialogComponent implements OnInit {
   itemTypes: string[] = [ 'Aspect', 'Book', 'ExpeditionObstacle', 'Influence', 'Ingredient',
-                          'Language', 'Location', 'Lore', 'MansusDoor', 'Tool' ];
+                          'Language', 'Location', 'Lore', 'MansusDoor', 'Rite', 'Tool' ];
   itemTypesWithAspects: string[] = [ 'Influence', 'Ingredient', 'Lore', 'Tool' ];
   multipleAspects = {
     Influence: true,
