@@ -241,6 +241,18 @@ export const getGroupsFromMansusDoorOption = (doorOption: any): EntitiesGroup[] 
     return groups;
 };
 
+export const getGroupsFromRite = (rite: any): EntitiesGroup[] => {
+    const groups: EntitiesGroup[] = [];
+    const { fromBook } = rite;
+    if (fromBook.length) {
+        groups.push({
+            label: 'From book',
+            entities: fromBook.map(book => convertToGroupItem(book))
+        });
+    }
+    return groups;
+};
+
 export const getGroupsFromTool = (tool: any): EntitiesGroup[] => {
     const groups: EntitiesGroup[] = [];
     const { aspects, foundInLocation, fromBook } = tool;

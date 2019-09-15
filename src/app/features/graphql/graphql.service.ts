@@ -27,7 +27,7 @@ import {
 import { CREATE_TOOL, GET_TOOLS, SET_TOOL_ASPECT, SET_TOOL_LOCATION, GET_TOOL } from './queries/tool-queries';
 import { SaveLocationRewardInput, SaveItemInput, SaveMansusDoorOptionInput, Reward } from './graphql.types';
 import { Entity } from 'src/app/shared/model';
-import { GET_RITES, CREATE_RITE } from './queries/rite-queries';
+import { GET_RITES, CREATE_RITE, GET_RITE } from './queries/rite-queries';
 
 @Injectable({
     providedIn: 'root'
@@ -167,9 +167,25 @@ export class GraphqlService {
         return data.Rite.map(item => item.name);
     }
 
+    getRite(name: string) {
+        return this.apollo.watchQuery<any>({
+            query: GET_RITE,
+            variables: { name }
+        });
+    }
+
     getTools = async () => {
         const { data } = await this.apollo.query<any>({ query: GET_TOOLS }).toPromise();
         return data.Tool.map(item => item.name);
+    }
+
+    getTool(name: string) {
+        return this.apollo.watchQuery<any>({
+            query: GET_TOOL,
+            variables: {
+                name
+            }
+        });
     }
 
     getMansusDoor(name: string) {
@@ -183,15 +199,6 @@ export class GraphqlService {
         return this.apollo.watchQuery<any>({
             query: GET_MANSUS_DOOR_OPTION,
             variables: { name }
-        });
-    }
-
-    getTool(name: string) {
-        return this.apollo.watchQuery<any>({
-            query: GET_TOOL,
-            variables: {
-                name
-            }
         });
     }
 
@@ -582,7 +589,7 @@ export class GraphqlService {
                         break;
                     }
                     case 'Rite': {
-                        this.executeSaveBookReward(SET_BOOK_RITE_RESULT, book, name);
+                        this.executeSaveBookReward(SET_BOOK_RITE_RESULT, book, name, GET_RITE);
                         break;
                     }
                     case 'Tool': {
