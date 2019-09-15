@@ -41,3 +41,17 @@ export const LORE_FRAGMENT = gql`
     }
   }
 `;
+
+export const TOOL_FRAGMENT = gql`
+  fragment CommonToolData on Tool {
+    _id
+    name
+    aspects {
+      Aspect {
+        _id
+        name
+      }
+      quantity
+    }
+  }
+`;

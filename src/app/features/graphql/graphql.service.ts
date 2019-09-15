@@ -3,7 +3,7 @@ import { Apollo } from 'apollo-angular';
 import { GET_ASPECTS, CREATE_ASPECT } from './queries/aspect-queries';
 import {
     GET_BOOKS, GET_BOOK, CREATE_BOOK, SET_BOOK_LANGUAGE, SET_BOOK_LOCATION,
-    SET_BOOK_INFLUENCE_RESULT, SET_BOOK_LANGUAGE_RESULT, SET_BOOK_LORE_RESULT, SET_BOOK_RITE_RESULT
+    SET_BOOK_INFLUENCE_RESULT, SET_BOOK_LANGUAGE_RESULT, SET_BOOK_LORE_RESULT, SET_BOOK_RITE_RESULT, SET_BOOK_TOOL_RESULT
 } from './queries/book-queries';
 import { GET_ENTITY, GET_ENTITY_WITH_ASPECT } from './queries/entity-queries';
 import {
@@ -583,6 +583,10 @@ export class GraphqlService {
                     }
                     case 'Rite': {
                         this.executeSaveBookReward(SET_BOOK_RITE_RESULT, book, name);
+                        break;
+                    }
+                    case 'Tool': {
+                        this.executeSaveBookReward(SET_BOOK_TOOL_RESULT, book, name, GET_TOOL);
                         break;
                     }
                     default: {

@@ -89,7 +89,7 @@ export class EntityGroupItemComponent implements OnInit, AfterViewInit {
         return this.nameAndTypeTemplate;
       }
     } else if (this.groupType === 'Tool') {
-      if (itemType === 'Location') {
+      if (itemType === 'Location' || itemType === 'Book') {
         return this.nameAndTypeTemplate;
       }
     }

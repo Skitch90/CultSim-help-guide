@@ -12,7 +12,7 @@ import { filterOptions } from 'src/app/shared/utils';
     styleUrls: ['./add-reward-book-dialog.component.scss']
 })
 export class AddRewardBookDialogComponent implements OnInit {
-    rewardTypes: string[] = [ 'Influence', 'Language', 'Lore', 'Rite' ];
+    rewardTypes: string[] = [ 'Influence', 'Language', 'Lore', 'Rite', 'Tool' ];
     form: FormGroup;
     bookTitle: string;
 
@@ -67,6 +67,8 @@ export class AddRewardBookDialogComponent implements OnInit {
                 this.manageAutoComplete(index, reward, this.service.getLores);
             } else if (newVal === 'Rite') {
                 this.manageAutoComplete(index, reward, this.service.getRites);
+            } else if (newVal === 'Tool') {
+                this.manageAutoComplete(index, reward, this.service.getTools);
             }
         });
     }

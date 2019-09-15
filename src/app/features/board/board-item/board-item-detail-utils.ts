@@ -94,7 +94,7 @@ export const getGroupsFromLore = (lore: any): EntitiesGroup[] => {
 
 export const getGroupsFromBook = (book: any): EntitiesGroup[] => {
     const groups: EntitiesGroup[] = [];
-    const { foundInLocation, language, teachesLanguage, studiedIntoLore, teachesRite, resultsInInfluence } = book;
+    const { foundInLocation, language, teachesLanguage, studiedIntoLore, teachesRite, resultsInInfluence, resultsInTool } = book;
     if (foundInLocation.length > 0) {
         groups.push({
             label: 'Found In',
@@ -122,10 +122,12 @@ export const getGroupsFromBook = (book: any): EntitiesGroup[] => {
         const influenceRewards = resultsInInfluence.map(influnce => {
             return convertToGroupItem(influnce);
         });
+        const toolReward = (resultsInTool) ? [ convertToGroupItem(resultsInTool) ] : [];
         const rewards = [
             ...loreRewards,
+            ...influenceRewards,
             ...riteReward,
-            ...influenceRewards
+            ...toolReward
         ];
         if (rewards.length > 0) {
             groups.push({
@@ -241,17 +243,20 @@ export const getGroupsFromMansusDoorOption = (doorOption: any): EntitiesGroup[] 
 
 export const getGroupsFromTool = (tool: any): EntitiesGroup[] => {
     const groups: EntitiesGroup[] = [];
-    const { aspects, foundInLocation } = tool;
+    const { aspects, foundInLocation, fromBook } = tool;
     if (aspects.length > 0) {
         groups.push({
             label: 'Aspects',
             entities: aspects.map(aspect => createAspectGroupItem(aspect))
         });
     }
-    if (foundInLocation.length) {
+    if (foundInLocation.length || fromBook.length) {
         groups.push({
             label: 'Found From',
-            entities: foundInLocation.map(location => convertToGroupItem(location.Location))
+            entities: [
+                ...foundInLocation.map(location => convertToGroupItem(location.Location)),
+                ...fromBook.map(book => convertToGroupItem(book))
+            ]
         });
     }
     return groups;

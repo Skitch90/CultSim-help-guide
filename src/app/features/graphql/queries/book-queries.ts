@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { INFLUENCE_FRAGMENT, LORE_FRAGMENT } from './fragments';
+import { INFLUENCE_FRAGMENT, LORE_FRAGMENT, TOOL_FRAGMENT } from './fragments';
 
 export const GET_BOOK = gql`
   query getBook($name: String!) {
@@ -31,10 +31,14 @@ export const GET_BOOK = gql`
       resultsInInfluence {
         ...CommonInfluenceData
       }
+      resultsInTool {
+        ...CommonToolData
+      }
     }
   }
   ${INFLUENCE_FRAGMENT}
   ${LORE_FRAGMENT}
+  ${TOOL_FRAGMENT}
 `;
 
 export const GET_BOOKS = gql`
@@ -125,6 +129,19 @@ export const SET_BOOK_INFLUENCE_RESULT = gql`
 export const SET_BOOK_RITE_RESULT = gql`
   mutation setBookRiteResult($book: String!, $name: String!) {
     AddBookTeachesRite(from: { name: $book }, to: { name: $name }) {
+      from {
+        name
+      }
+      to {
+        name
+      }
+    }
+  }
+`;
+
+export const SET_BOOK_TOOL_RESULT = gql`
+  mutation setBookToolResult($book: String!, $name: String!) {
+    AddBookResultsInTool(from: { name: $book }, to: { name: $name }) {
       from {
         name
       }
