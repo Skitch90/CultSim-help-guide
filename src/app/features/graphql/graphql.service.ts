@@ -71,7 +71,7 @@ export class GraphqlService {
         });
     }
 
-    async getLanguages() {
+    getLanguages = async () => {
         const { data } = await this.apollo.query<any>({
             query: GET_LANGUAGES
         }).toPromise();
@@ -95,7 +95,7 @@ export class GraphqlService {
         });
     }
 
-    async getLores() {
+    getLores = async () => {
         const { data } = await this.apollo.query<any>({ query: GET_LORES }).toPromise();
         return data.Lore.map(item => item.name);
     }
