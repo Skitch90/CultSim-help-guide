@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import { MANSUS_DOOR_OPTION_FRAGMENT } from './fragments';
 
 export const GET_LANGUAGES = gql`
   query getLanguages {
@@ -6,6 +7,26 @@ export const GET_LANGUAGES = gql`
       name
     }
   }
+`;
+
+export const GET_LANGUAGE = gql`
+  query getLanguage($name: String!) {
+    Language(name: $name) {
+      name
+      requires {
+        _id
+        name
+      }
+      fromBook {
+        _id
+        name
+      }
+      fromDreamingIn {
+        ...CommonMansusOptionData
+      }
+    }
+  }
+  ${MANSUS_DOOR_OPTION_FRAGMENT}
 `;
 
 export const CREATE_LANGUAGE = gql`

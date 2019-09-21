@@ -13,7 +13,8 @@ import { AddObstacleLocationDialogComponent } from '../../dialogs/add-obstacle-l
 import { map, tap } from 'rxjs/operators';
 import {
   getGroupsFromLocation, getGroupsFromLore, getGroupsFromBook, getGroupsFromEntities, getGroupsFromInfluence,
-  getGroupsFromTool, getGroupsFromIngredient, getGroupsFromMansusDoor, getGroupsFromMansusDoorOption, getGroupsFromRite
+  getGroupsFromTool, getGroupsFromIngredient, getGroupsFromMansusDoor, getGroupsFromMansusDoorOption, getGroupsFromRite,
+  getGroupsFromLanguage
 } from './board-item-detail-utils';
 import { Observable } from 'rxjs';
 import { DialogService } from '../../dialogs/dialog.service';
@@ -58,6 +59,12 @@ export class BoardItemComponent implements OnInit {
       this.entities = this.service.getIngredient(name).valueChanges.pipe(
         map(result => result.data.Ingredient[0]),
         map(ingredient => getGroupsFromIngredient(ingredient))
+      );
+    }
+    if (label === 'Language') {
+      this.entities = this.service.getLanguage(name).valueChanges.pipe(
+        map(result => result.data.Language[0]),
+        map(language => getGroupsFromLanguage(language))
       );
     }
     if (this.item.label === 'Location') {

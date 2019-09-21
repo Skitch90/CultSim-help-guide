@@ -13,7 +13,9 @@ import {
 import {
     GET_INGREDIENTS, CREATE_INGREDIENT, SET_INGREDIENT_ASPECT, SET_INGREDIENT_LOCATION, SET_INGREDIENT_DREAMING_RESULT, GET_INGREDIENT
 } from './queries/ingredient-queries';
-import { GET_LANGUAGES, CREATE_LANGUAGE, SET_LANGUAGE_DREAMING_RESULT, SET_LANGUAGE_REQUIRES } from './queries/language-queries';
+import {
+    GET_LANGUAGES, CREATE_LANGUAGE, SET_LANGUAGE_DREAMING_RESULT, SET_LANGUAGE_REQUIRES, GET_LANGUAGE
+} from './queries/language-queries';
 import {
     GET_LOCATIONS, GET_LOCATION, CREATE_LOCATION, SET_LOCATION_OBSTACLE,
     GET_OBSTACLES, CREATE_OBSTACLE, SET_OBSTACLE_ASPECT
@@ -77,6 +79,13 @@ export class GraphqlService {
         }).toPromise();
 
         return data.Language.map(item => item.name);
+    }
+
+    getLanguage(name: string) {
+        return this.apollo.watchQuery<any>({
+            query: GET_LANGUAGE,
+            variables: { name }
+        });
     }
 
     async getLocations() {
@@ -573,14 +582,20 @@ export class GraphqlService {
                         break;
                     }
                     case 'Language': {
-                        const saveResult = await this.executeSaveBookReward(SET_BOOK_LANGUAGE_RESULT, book, name);
+                        const saveResult = await this.executeSaveBookReward(SET_BOOK_LANGUAGE_RESULT, book, name, GET_LANGUAGE);
                         const requiredLang = saveResult.data.AddBookTeachesLanguage.from.language.name;
                         await this.apollo.mutate({
                             mutation: SET_LANGUAGE_REQUIRES,
                             variables: {
                                 language: name,
                                 requiredLanguage: requiredLang
-                            }
+                            },
+                            refetchQueries: [
+                                {
+                                    query: GET_LANGUAGE,
+                                    variables: { name }
+                                }
+                            ]
                         }).toPromise();
                         break;
                     }
@@ -643,7 +658,11 @@ export class GraphqlService {
                         language
                     },
                     refetchQueries: [
-                        getMansusDoorOptionQuery
+                        getMansusDoorOptionQuery,
+                        {
+                            query: GET_LANGUAGE,
+                            variables: { name: language }
+                        }
                     ]
                 }).toPromise();
             } else if (rewardType === 'Lore') {
