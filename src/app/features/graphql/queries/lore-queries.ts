@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { LORE_FRAGMENT } from './fragments';
+import { LORE_FRAGMENT, MANSUS_DOOR_OPTION_FRAGMENT } from './fragments';
 
 export const GET_LORES = gql`
   query getLores {
@@ -22,10 +22,7 @@ export const GET_LORE = gql`
         name
       }
       fromDreamingIn {
-        name
-        door {
-          name
-        }
+        ...CommonMansusOptionData
       }
       upgradesTo {
         ...CommonLoreData
@@ -33,6 +30,7 @@ export const GET_LORE = gql`
     }
   }
   ${LORE_FRAGMENT}
+  ${MANSUS_DOOR_OPTION_FRAGMENT}
 `;
 
 export const CREATE_LORE = gql`

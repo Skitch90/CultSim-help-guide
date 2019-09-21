@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { INFLUENCE_FRAGMENT } from './fragments';
+import { INFLUENCE_FRAGMENT, MANSUS_DOOR_OPTION_FRAGMENT } from './fragments';
 
 export const GET_INFLUENCES = gql`
   query getInfluences {
@@ -20,11 +20,7 @@ export const GET_INFLUENCE = gql`
         }
       }
       fromDreamingIn {
-        _id
-        name
-        door {
-          name
-        }
+        ...CommonMansusOptionData
       }
       fromBook {
         _id
@@ -39,6 +35,7 @@ export const GET_INFLUENCE = gql`
     }
   }
   ${INFLUENCE_FRAGMENT}
+  ${MANSUS_DOOR_OPTION_FRAGMENT}
 `;
 
 export const CREATE_INFLUENCE = gql`

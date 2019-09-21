@@ -42,6 +42,17 @@ export const LORE_FRAGMENT = gql`
   }
 `;
 
+export const MANSUS_DOOR_OPTION_FRAGMENT = gql`
+  fragment CommonMansusOptionData on MansusDoorOption {
+    _id
+    name
+    door {
+      _id
+      name
+    }
+  }
+`;
+
 export const TOOL_FRAGMENT = gql`
   fragment CommonToolData on Tool {
     _id

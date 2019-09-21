@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { INGREDIENT_FRAGMENT } from './fragments';
+import { INGREDIENT_FRAGMENT, MANSUS_DOOR_OPTION_FRAGMENT } from './fragments';
 
 export const GET_INGREDIENTS = gql`
   query getIngredients {
@@ -20,14 +20,12 @@ export const GET_INGREDIENT = gql`
         chance
       }
       fromDreamingIn {
-        name
-        door {
-  				name
-        }
+        ...CommonMansusOptionData
       }
     }
   }
   ${INGREDIENT_FRAGMENT}
+  ${MANSUS_DOOR_OPTION_FRAGMENT}
 `;
 
 export const CREATE_INGREDIENT = gql`
