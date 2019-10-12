@@ -88,7 +88,7 @@ export const getGroupsFromLocation = (location: any): EntitiesGroup[] => {
 
 export const getGroupsFromLore = (lore: any): EntitiesGroup[] => {
     const groups: EntitiesGroup[] = [];
-    const { aspects, exploreResults, fromBook, fromDreamingIn, upgradesTo } = lore;
+    const { aspects, exploreResults, fromBook, fromDreamingIn, upgradesTo, upgradedFrom } = lore;
     if (aspects.length > 0) {
         groups.push({
             label: 'Aspects',
@@ -106,6 +106,12 @@ export const getGroupsFromLore = (lore: any): EntitiesGroup[] => {
         groups.push({
             label: 'Upgrades to',
             entities: [ convertToGroupItem(upgradesTo) ]
+        });
+    }
+    if (upgradedFrom) {
+        groups.push({
+            label: 'Upgraded from',
+            entities: [ convertToGroupItem(upgradedFrom) ]
         });
     }
     if (exploreResults.length > 0) {

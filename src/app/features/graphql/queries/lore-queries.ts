@@ -27,6 +27,9 @@ export const GET_LORE = gql`
       upgradesTo {
         ...CommonLoreData
       }
+      upgradedFrom {
+        ...CommonLoreData
+      }
     }
   }
   ${LORE_FRAGMENT}
