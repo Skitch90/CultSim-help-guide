@@ -9,7 +9,7 @@ import { GraphqlService } from '../../graphql/graphql.service';
   styleUrls: ['./add-item-dialog.component.scss']
 })
 export class AddItemDialogComponent implements OnInit {
-  itemTypes: string[] = [ 'Aspect', 'Book', 'ExpeditionObstacle', 'Influence', 'Ingredient',
+  itemTypes: string[] = [ 'Aspect', 'Book', 'Desire', 'ExpeditionObstacle', 'Influence', 'Ingredient',
                           'Language', 'Location', 'Lore', 'MansusDoor', 'Rite', 'Tool' ];
   itemTypesWithAspects: string[] = [ 'Influence', 'Ingredient', 'Lore', 'Tool' ];
   multipleAspects = {

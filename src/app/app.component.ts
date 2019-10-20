@@ -8,6 +8,7 @@ import { GraphqlService } from './features/graphql/graphql.service';
 import { AddItemDialogComponent } from './features/dialogs/add-item-dialog/add-item-dialog.component';
 import { BoardService } from './features/board/board.service';
 import { DialogService } from './features/dialogs/dialog.service';
+import { isEntity } from './shared/utils';
 
 @Component({
   selector: 'app-root',
@@ -27,7 +28,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.searchResults = this.myControl.valueChanges.pipe(
-      filter(value => !this.isEntity(value)),
+      filter(value => !isEntity(value)),
       debounceTime(500),
       tap(() => {
         this.isLoading = true;
@@ -39,9 +40,7 @@ export class AppComponent implements OnInit {
     );
   }
 
-  isEntity(item: string | Entity): item is Entity {
-    return (item as Entity).name !== undefined;
-  }
+
 
   onKey(event): void {
     if (event.key === 'Enter') {
@@ -51,7 +50,7 @@ export class AppComponent implements OnInit {
 
   addItemToBoard() {
     const value = this.myControl.value;
-    if (this.isEntity(value)) {
+    if (isEntity(value)) {
       this.boardService.addBoardItem(value);
     }
   }

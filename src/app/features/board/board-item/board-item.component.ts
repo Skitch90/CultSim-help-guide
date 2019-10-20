@@ -19,6 +19,7 @@ import {
 import { Observable } from 'rxjs';
 import { DialogService } from '../../dialogs/dialog.service';
 import { AddLoreUpgradeDialogComponent } from '../../dialogs/add-lore-upgrade-dialog/add-lore-upgrade-dialog.component';
+import { AddDesireChangeDialogComponent } from '../../dialogs/add-desire-change-dialog/add-desire-change-dialog.component';
 
 @Component({
   selector: 'app-board-item',
@@ -141,6 +142,12 @@ export class BoardItemComponent implements OnInit {
     this.dialogService.openDialog(AddMansusDoorOptionDialogComponent,
                                   this.service.saveMansusDoorOption,
                                   { mansusDoor: itemName });
+  }
+
+  openAddDesireChangeDialog(itemName: string) {
+    this.dialogService.openDialog(AddDesireChangeDialogComponent,
+                                  this.service.saveDesireChange,
+                                  { desire: itemName});
   }
 
   openAddInfluenceDecay(influence) {

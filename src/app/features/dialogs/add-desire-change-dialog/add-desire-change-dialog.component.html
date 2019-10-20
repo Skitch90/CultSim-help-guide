@@ -1,0 +1,42 @@
+<h2 mat-dialog-title>Save desire change</h2>
+
+<mat-dialog-content [formGroup]="form">
+    <mat-form-field>
+        <input matInput placeholder="Start desire" readonly formControlName="startDesire">
+    </mat-form-field>
+
+    <mat-form-field>
+        <input type="text" placeholder="Select desire" matInput formControlName="desire"
+            [matAutocomplete]="autoDesire">
+        <mat-autocomplete #autoDesire="matAutocomplete">
+            <mat-option *ngFor="let option of filteredDesires | async" [value]="option">
+                {{option}}
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field>
+        <input type="text" placeholder="Select first ingredient" matInput formControlName="ingredient1"
+            [matAutocomplete]="autoIngr1">
+        <mat-autocomplete #autoIngr1="matAutocomplete" [displayWith]="displayFn">
+            <mat-option *ngFor="let option of filteredIngr1 | async" [value]="option">
+                <span matTooltip={{option.name}}>{{option.name}}</span>
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field>
+        <input type="text" placeholder="Select second ingredient" matInput formControlName="ingredient2"
+            [matAutocomplete]="autoIngr2">
+        <mat-autocomplete #autoIngr2="matAutocomplete" [displayWith]="displayFn">
+            <mat-option *ngFor="let option of filteredIngr2 | async" [value]="option">
+                <span matTooltip={{option.name}}>{{option.name}}</span>
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button class="mat-raised-button" (click)="close()">Close</button>
+    <button class="mat-raised-button mat-primary" (click)="save()">Save</button>
+</mat-dialog-actions>

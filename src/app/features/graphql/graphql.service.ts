@@ -30,6 +30,8 @@ import { CREATE_TOOL, GET_TOOLS, SET_TOOL_ASPECT, SET_TOOL_LOCATION, GET_TOOL } 
 import { SaveLocationRewardInput, SaveItemInput, SaveMansusDoorOptionInput, Reward } from './graphql.types';
 import { Entity } from 'src/app/shared/model';
 import { GET_RITES, CREATE_RITE, GET_RITE } from './queries/rite-queries';
+import { CREATE_DESIRE, GET_DESIRES, ADD_DESIRE_CHANGE } from './queries/desire-queries';
+import { async } from '@angular/core/testing';
 
 @Injectable({
     providedIn: 'root'
@@ -73,20 +75,16 @@ export class GraphqlService {
         });
     }
 
-    getLanguages = async () => {
-        const { data } = await this.apollo.query<any>({
-            query: GET_LANGUAGES
-        }).toPromise();
-
-        return data.Language.map(item => item.name);
+    private getObjects = async (query, getListFunc) => {
+        const { data } = await this.apollo.query<any>({ query }).toPromise();
+        return getListFunc(data).map(item => item.name);
     }
 
-    getLanguage(name: string) {
-        return this.apollo.watchQuery<any>({
-            query: GET_LANGUAGE,
-            variables: { name }
-        });
-    }
+    private getObject = (name: string, query) => this.apollo.watchQuery<any>({ query, variables: { name } });
+
+    getLanguages = () => this.getObjects(GET_LANGUAGES, data => data.Language);
+
+    getLanguage = (name: string) => this.getObject(name, GET_LANGUAGE);
 
     async getLocations() {
         const { data } = await this.apollo.query<any>({
@@ -104,112 +102,39 @@ export class GraphqlService {
         });
     }
 
-    getLores = async () => {
-        const { data } = await this.apollo.query<any>({ query: GET_LORES }).toPromise();
-        return data.Lore.map(item => item.name);
-    }
+    getLores = () => this.getObjects(GET_LORES, data => data.Lore);
 
-    getLore(name: string) {
-        return this.apollo.watchQuery<any>({
-            query: GET_LORE,
-            variables: {
-                name
-            }
-        });
-    }
+    getLore = (name: string) => this.getObject(name, GET_LORE);
 
-    async getAspects() {
-        const { data } = await this.apollo.query<any>({
-            query: GET_ASPECTS
-        }).toPromise();
+    getAspects = () => this.getObjects(GET_ASPECTS, data => data.Aspect);
 
-        return data.Aspect.map(item => item.name);
-    }
+    getBooks = () => this.getObjects(GET_BOOKS, data => data.Book);
 
-    getBooks = async () => {
-        const { data } = await this.apollo.query<any>({ query: GET_BOOKS }).toPromise();
-        return data.Book.map(item => item.name);
-    }
+    getBook = (title: string) => this.getObject(title, GET_BOOK);
 
-    getBook(title: string) {
-        return this.apollo.watchQuery<any>({
-            query: GET_BOOK,
-            variables: {
-                name: title
-            }
-        });
-    }
+    getDesires = () => this.getObjects(GET_DESIRES, data => data.Desire);
 
-    getInfluences = async () => {
-        const { data } = await this.apollo.query<any>({ query: GET_INFLUENCES }).toPromise();
-        return data.Influence.map(item => item.name);
-    }
+    getInfluences = () => this.getObjects(GET_INFLUENCES, data => data.Influence);
 
-    getInfluence(influence: string) {
-        return this.apollo.watchQuery<any>({
-            query: GET_INFLUENCE,
-            variables: {
-                name: influence
-            }
-        });
-    }
+    getInfluence = (influence: string) => this.getObject(influence, GET_INFLUENCE);
 
-    getIngredients = async () => {
-        const { data } = await this.apollo.query<any>({ query: GET_INGREDIENTS }).toPromise();
-        return data.Ingredient.map(item => item.name);
-    }
+    getIngredients = () => this.getObjects(GET_INGREDIENTS, data => data.Ingredient);
 
-    getIngredient(name: string) {
-        return this.apollo.watchQuery<any>({
-            query: GET_INGREDIENT,
-            variables: { name }
-        });
-    }
+    getIngredient = (name: string) => this.getObject(name, GET_INGREDIENT);
 
-    async getLocationObstacles() {
-        const { data } = await this.apollo.query<any>({ query: GET_OBSTACLES }).toPromise();
-        return data.ExpeditionObstacle.map(item => item.name);
-    }
+    getLocationObstacles = () => this.getObjects(GET_OBSTACLES, data => data.ExpeditionObstacle);
 
-    getRites = async () => {
-        const { data } = await this.apollo.query<any>({ query: GET_RITES }).toPromise();
-        return data.Rite.map(item => item.name);
-    }
+    getRites = () => this.getObjects(GET_RITES, data => data.Rite);
 
-    getRite(name: string) {
-        return this.apollo.watchQuery<any>({
-            query: GET_RITE,
-            variables: { name }
-        });
-    }
+    getRite = (name: string) => this.getObject(name, GET_RITE);
 
-    getTools = async () => {
-        const { data } = await this.apollo.query<any>({ query: GET_TOOLS }).toPromise();
-        return data.Tool.map(item => item.name);
-    }
+    getTools = () => this.getObjects(GET_TOOLS, data => data.Tool);
 
-    getTool(name: string) {
-        return this.apollo.watchQuery<any>({
-            query: GET_TOOL,
-            variables: {
-                name
-            }
-        });
-    }
+    getTool = (name: string) => this.getObject(name, GET_TOOL);
 
-    getMansusDoor(name: string) {
-        return this.apollo.watchQuery<any>({
-            query: GET_MANSUS_DOOR,
-            variables: { name }
-        });
-    }
+    getMansusDoor = (name: string) => this.getObject(name, GET_MANSUS_DOOR);
 
-    getMansusDoorOption(name: string) {
-        return this.apollo.watchQuery<any>({
-            query: GET_MANSUS_DOOR_OPTION,
-            variables: { name }
-        });
-    }
+    getMansusDoorOption = (name: string) => this.getObject(name, GET_MANSUS_DOOR_OPTION);
 
     saveItem = async (params: SaveItemInput) => {
         try {
@@ -245,6 +170,8 @@ export class GraphqlService {
                         }
                     }).toPromise();
                 }
+            } else if (itemType === 'Desire') {
+                this.saveItem_(params, CREATE_DESIRE, GET_DESIRES);
             } else if (itemType === 'ExpeditionObstacle') {
                 const obstacleAspects = new Set(params.obstacleAspects.map(item => item.obstacleAspect));
                 await this.apollo.mutate({
@@ -718,6 +645,23 @@ export class GraphqlService {
         } catch (err) {
             console.error(err);
 
+        }
+    }
+
+    saveDesireChange = async (params) => {
+        try {
+            const { startDesire, desire, ingredient1, ingredient2 } = params;
+            await this.apollo.mutate({
+                mutation: ADD_DESIRE_CHANGE,
+                variables: {
+                    fromDesire: startDesire,
+                    toDesire: desire,
+                    ingredient1: ingredient1.name,
+                    ingredient2: ((ingredient2) ? ingredient2.name : '')
+                }
+            }).toPromise();
+        } catch (err) {
+            console.error(err);
         }
     }
 }

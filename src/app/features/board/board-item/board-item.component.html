@@ -29,6 +29,9 @@
         <button mat-button *ngIf="secretHistoriesLore" (click)="openAddLocationDialog(item.name)">
             ADD LOCATION
         </button>
+        <button mat-button *ngIf="item.label === 'Desire'" (click)="openAddDesireChangeDialog(item.name)">
+            ADD CHANGE
+        </button>
         <button mat-button (click)="removeFromBoard(item)">REMOVE</button>
     </mat-card-actions>
 </mat-card>

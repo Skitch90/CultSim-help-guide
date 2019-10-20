@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { GraphqlService } from '../../graphql/graphql.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { startWith, map } from 'rxjs/operators';
+import { filterOptions } from 'src/app/shared/utils';
 
 @Component({
   selector: 'app-add-influence-decay-dialog',
@@ -11,17 +12,17 @@ import { startWith, map } from 'rxjs/operators';
   styleUrls: ['./add-influence-decay-dialog.component.scss']
 })
 export class AddInfluenceDecayDialogComponent implements OnInit {
-  influence: String;
+  influence: string;
   form: FormGroup;
 
-  influences: String[] = [];
-  filteredInfluences: Observable<String[]>;
+  influences: string[] = [];
+  filteredInfluences: Observable<string[]>;
   influenceFormControl = new FormControl('', Validators.required);
 
   constructor(private service: GraphqlService,
-    private fb: FormBuilder,
-    private dialogRef: MatDialogRef<AddInfluenceDecayDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) { influence }) {
+              private fb: FormBuilder,
+              private dialogRef: MatDialogRef<AddInfluenceDecayDialogComponent>,
+              @Inject(MAT_DIALOG_DATA) { influence }) {
       this.influence = influence;
 
       this.form = fb.group({
@@ -31,17 +32,16 @@ export class AddInfluenceDecayDialogComponent implements OnInit {
     }
 
   ngOnInit() {
-    this.service.getInfluences().then(val => this.influences = val);
-    this.filteredInfluences = this.influenceFormControl.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filter(this.influences, value))
-    );
-  }
-
-  private _filter(options: String[], value: String): String[] {
-    const filterValue = value.toLowerCase();
-
-    return options.filter(option => option.toLowerCase().includes(filterValue));
+    this.service.getInfluences()
+                .then(queryResult => {
+                  const resultArray = queryResult as string[];
+                  this.influences = resultArray.filter(item => item !== this.influence);
+                }).then(val => {
+                  this.filteredInfluences = this.form.get('influence').valueChanges.pipe(
+                    startWith(''),
+                    map(newVal => filterOptions(this.influences, newVal))
+                  );
+                });
   }
 
   save() {

@@ -23,6 +23,7 @@ import { AddLocationDialogComponent } from './features/dialogs/add-location-dial
 import { EntityGroupItemComponent } from './features/entity-group/entity-group-item/entity-group-item.component';
 import { AddObstacleLocationDialogComponent } from './features/dialogs/add-obstacle-location-dialog/add-obstacle-location-dialog.component';
 import { AddLoreUpgradeDialogComponent } from './features/dialogs/add-lore-upgrade-dialog/add-lore-upgrade-dialog.component';
+import { AddDesireChangeDialogComponent } from './features/dialogs/add-desire-change-dialog/add-desire-change-dialog.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { AddLoreUpgradeDialogComponent } from './features/dialogs/add-lore-upgra
     AddLocationDialogComponent,
     EntityGroupItemComponent,
     AddObstacleLocationDialogComponent,
-    AddLoreUpgradeDialogComponent
+    AddLoreUpgradeDialogComponent,
+    AddDesireChangeDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -63,7 +65,8 @@ import { AddLoreUpgradeDialogComponent } from './features/dialogs/add-lore-upgra
     AddInfluenceDecayDialogComponent,
     AddLocationDialogComponent,
     AddObstacleLocationDialogComponent,
-    AddLoreUpgradeDialogComponent
+    AddLoreUpgradeDialogComponent,
+    AddDesireChangeDialogComponent
   ],
   bootstrap: [AppComponent]
 })
