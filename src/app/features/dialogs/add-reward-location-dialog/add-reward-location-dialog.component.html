@@ -12,7 +12,7 @@
 
 <mat-slide-toggle class="chance-toggle" formControlName="chance">Chance to get rewards</mat-slide-toggle>
 
-<div class="reward-data" formArrayName="rewards" *ngFor="let item of form.get('rewards').controls; let i = index;">
+<div class="reward-data" formArrayName="rewards" *ngFor="let item of form.get('rewards')['controls']; let i = index;">
     <div [formGroupName]="i">
         <mat-form-field class="type-field">
         <mat-select placeholder="Select type" formControlName="type">

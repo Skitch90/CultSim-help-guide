@@ -11,7 +11,7 @@
     <mat-icon matTooltip="Add new obstacle" class="reward-add-icon" (click)="addObstacle()">add_circle_outline</mat-icon>
   </div>
 
-  <div class="reward-data" formArrayName="obstacles" *ngFor="let item of form.get('obstacles').controls; let i = index;">
+  <div class="reward-data" formArrayName="obstacles" *ngFor="let item of form.get('obstacles')['controls']; let i = index;">
     <div [formGroupName]="i">
       <mat-form-field class="item-field">
         <mat-select placeholder="Select obstacle" formControlName="obstacle">

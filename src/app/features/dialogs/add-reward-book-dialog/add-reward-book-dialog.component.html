@@ -12,7 +12,7 @@
     <mat-icon matTooltip="Add new reward" class="reward-add-icon" (click)="addReward()">add_circle_outline</mat-icon>
   </div>
 
-  <div class="reward-data" formArrayName="rewards" *ngFor="let item of form.get('rewards').controls; let i = index;">
+  <div class="reward-data" formArrayName="rewards" *ngFor="let item of form.get('rewards')['controls']; let i = index;">
     <div [formGroupName]="i">
       <mat-form-field class="type-field">
         <mat-select placeholder="Select type" formControlName="type">

@@ -21,7 +21,7 @@
       <mat-icon matTooltip="Add new apsect" class="reward-add-icon" (click)="addAspect()">add_circle_outline</mat-icon>
     </div>
 
-    <div class="reward-data" formArrayName="aspects" *ngFor="let item of form.get('aspects').controls; let i = index;">
+    <div class="reward-data" formArrayName="aspects" *ngFor="let item of form.get('aspects')['controls']; let i = index;">
       <div [formGroupName]="i">
         <mat-form-field class="type-field">
           <mat-select placeholder="Select aspect" formControlName="aspect">
@@ -48,7 +48,7 @@
   </ng-container>
 
   <ng-container *ngIf="itemTypeFormControl.value === 'ExpeditionObstacle'">
-    <div class="reward-source" formArrayName="obstacleAspects" *ngFor="let item of form.get('obstacleAspects').controls; let i = index;">
+    <div class="reward-source" formArrayName="obstacleAspects" *ngFor="let item of form.get('obstacleAspects')['controls']; let i = index;">
       <div [formGroupName]="i">
           <mat-form-field class="reward-source">
               <mat-select placeholder="Select aspect" formControlName="obstacleAspect">

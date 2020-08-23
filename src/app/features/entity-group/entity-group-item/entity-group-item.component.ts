@@ -13,13 +13,13 @@ export class EntityGroupItemComponent implements OnInit, AfterViewInit {
   @Input() item: EntitiesGroupItem;
 
   // Templates
-  @ViewChild('onlyName', { static: false }) onlyNameTemplate: TemplateRef<any>;
-  @ViewChild('nameAndAspectNum', { static: false }) nameAndAspectNumTemplate: TemplateRef<any>;
-  @ViewChild('nameAndType', { static: false }) nameAndTypeTemplate: TemplateRef<any>;
-  @ViewChild('nameTypeAspect', { static: false }) nameTypeAspectTemplate: TemplateRef<any>;
-  @ViewChild('nameListAspects', { static: false }) nameListAspectsTemplate: TemplateRef<any>;
-  @ViewChild('aspectQuantity', { static: false }) aspectQuantityTemplate: TemplateRef<any>;
-  @ViewChild('mansusOption', { static: false }) mansusOptionTemplate: TemplateRef<any>;
+  @ViewChild('onlyName') onlyNameTemplate: TemplateRef<any>;
+  @ViewChild('nameAndAspectNum') nameAndAspectNumTemplate: TemplateRef<any>;
+  @ViewChild('nameAndType') nameAndTypeTemplate: TemplateRef<any>;
+  @ViewChild('nameTypeAspect') nameTypeAspectTemplate: TemplateRef<any>;
+  @ViewChild('nameListAspects') nameListAspectsTemplate: TemplateRef<any>;
+  @ViewChild('aspectQuantity') aspectQuantityTemplate: TemplateRef<any>;
+  @ViewChild('mansusOption') mansusOptionTemplate: TemplateRef<any>;
 
   constructor(
     private cd: ChangeDetectorRef,

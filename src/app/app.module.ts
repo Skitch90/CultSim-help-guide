@@ -55,19 +55,6 @@ import { AddDesireChangeDialogComponent } from './features/dialogs/add-desire-ch
     HttpClientModule
   ],
   providers: [GraphqlService],
-  entryComponents: [
-    BoardComponent,
-    AddRewardLocationDialogComponent,
-    AddItemDialogComponent,
-    AddRewardBookDialogComponent,
-    AddMansusDoorOptionDialogComponent,
-    AddRewardMansusDialogComponent,
-    AddInfluenceDecayDialogComponent,
-    AddLocationDialogComponent,
-    AddObstacleLocationDialogComponent,
-    AddLoreUpgradeDialogComponent,
-    AddDesireChangeDialogComponent
-  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

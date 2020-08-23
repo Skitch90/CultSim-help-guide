@@ -27,7 +27,7 @@ export class AddItemDialogComponent implements OnInit {
 
   form: FormGroup;
 
-  private itemTypeFormControl = new FormControl('', [Validators.required]);
+  readonly itemTypeFormControl = new FormControl('', [Validators.required]);
 
   loreSelected = false;
   influenceSelected = false;

@@ -560,7 +560,7 @@ export class GraphqlService {
             });
         }
 
-        return await this.apollo.mutate({
+        return await this.apollo.mutate<any>({
             mutation,
             variables: {
                 book: bookTitle,
