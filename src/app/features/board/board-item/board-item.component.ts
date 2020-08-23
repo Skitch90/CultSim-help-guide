@@ -5,7 +5,7 @@ import { AddRewardLocationDialogComponent } from '../../dialogs/add-reward-locat
 import { GraphqlService } from '../../graphql/graphql.service';
 import { AddRewardBookDialogComponent } from '../../dialogs/add-reward-book-dialog/add-reward-book-dialog.component';
 import { AddRewardMansusDialogComponent } from '../../dialogs/add-reward-mansus-dialog/add-reward-mansus-dialog.component';
-import { AddMansusDoorOptionDialogComponent } from '../../dialogs/add-mansus-door-option-dialog/add-mansus-door-option-dialog.component';
+import { AddDoorOptionDialogComponent } from '../../dialogs/add-door-option-dialog/add-door-option-dialog.component';
 import { AddInfluenceDecayDialogComponent } from '../../dialogs/add-influence-decay-dialog/add-influence-decay-dialog.component';
 import { BoardService } from '../board.service';
 import { AddLocationDialogComponent } from '../../dialogs/add-location-dialog/add-location-dialog.component';
@@ -139,7 +139,7 @@ export class BoardItemComponent implements OnInit {
   }
 
   openAddOptionDialog(itemName) {
-    this.dialogService.openDialog(AddMansusDoorOptionDialogComponent,
+    this.dialogService.openDialog(AddDoorOptionDialogComponent,
                                   this.service.saveMansusDoorOption,
                                   { mansusDoor: itemName });
   }

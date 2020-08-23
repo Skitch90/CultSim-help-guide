@@ -13,7 +13,7 @@ import { GraphqlService } from './features/graphql/graphql.service';
 import { AddItemDialogComponent } from './features/dialogs/add-item-dialog/add-item-dialog.component';
 import { AddRewardBookDialogComponent } from './features/dialogs/add-reward-book-dialog/add-reward-book-dialog.component';
 import { AddRewardLocationDialogComponent } from './features/dialogs/add-reward-location-dialog/add-reward-location-dialog.component';
-import { AddMansusDoorOptionDialogComponent } from './features/dialogs/add-mansus-door-option-dialog/add-mansus-door-option-dialog.component';
+import { AddDoorOptionDialogComponent } from './features/dialogs/add-door-option-dialog/add-door-option-dialog.component';
 import { AddRewardMansusDialogComponent } from './features/dialogs/add-reward-mansus-dialog/add-reward-mansus-dialog.component';
 import { AddInfluenceDecayDialogComponent } from './features/dialogs/add-influence-decay-dialog/add-influence-decay-dialog.component';
 import { BoardItemComponent } from './features/board/board-item/board-item.component';
@@ -34,7 +34,6 @@ import { AddDesireChangeDialogComponent } from './features/dialogs/add-desire-ch
     AddRewardLocationDialogComponent,
     AddItemDialogComponent,
     AddRewardBookDialogComponent,
-    AddMansusDoorOptionDialogComponent,
     AddRewardMansusDialogComponent,
     AddInfluenceDecayDialogComponent,
     BoardItemComponent,
@@ -43,7 +42,8 @@ import { AddDesireChangeDialogComponent } from './features/dialogs/add-desire-ch
     EntityGroupItemComponent,
     AddObstacleLocationDialogComponent,
     AddLoreUpgradeDialogComponent,
-    AddDesireChangeDialogComponent
+    AddDesireChangeDialogComponent,
+    AddDoorOptionDialogComponent
   ],
   imports: [
     BrowserModule,

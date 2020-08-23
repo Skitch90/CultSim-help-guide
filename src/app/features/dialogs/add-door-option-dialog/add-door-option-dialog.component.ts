@@ -3,18 +3,18 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'app-add-mansus-door-option-dialog',
-  templateUrl: './add-mansus-door-option-dialog.component.html',
-  styleUrls: ['./add-mansus-door-option-dialog.component.scss']
+  selector: 'app-add-door-option-dialog',
+  templateUrl: './add-door-option-dialog.component.html',
+  styleUrls: ['./add-door-option-dialog.component.scss']
 })
-export class AddMansusDoorOptionDialogComponent implements OnInit {
+export class AddDoorOptionDialogComponent implements OnInit {
   form: FormGroup;
-  mansusDoor: String;
+  mansusDoor: string;
 
   constructor(
-    private dialogRef: MatDialogRef<AddMansusDoorOptionDialogComponent>,
+    private dialogRef: MatDialogRef<AddDoorOptionDialogComponent>,
     private fb: FormBuilder,
-    @Inject(MAT_DIALOG_DATA) { mansusDoor }) { 
+    @Inject(MAT_DIALOG_DATA) { mansusDoor }) {
       this.mansusDoor = mansusDoor;
 
       this.form = fb.group({
