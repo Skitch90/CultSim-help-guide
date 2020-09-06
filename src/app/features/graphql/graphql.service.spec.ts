@@ -6,7 +6,7 @@ describe('GraphqlService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: GraphqlService = TestBed.get(GraphqlService);
+    const service: GraphqlService = TestBed.inject(GraphqlService);
     expect(service).toBeTruthy();
   });
 });

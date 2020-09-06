@@ -1,4 +1,4 @@
-import gql from 'graphql-tag';
+import {gql} from 'apollo-angular';
 import { INFLUENCE_FRAGMENT, INGREDIENT_FRAGMENT } from './fragments';
 
 export const GET_LOCATIONS = gql`
