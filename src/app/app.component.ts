@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Injector, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Entity } from './shared/model';
 
@@ -8,6 +8,8 @@ import { GraphqlService } from './features/graphql/graphql.service';
 import { AddItemDialogComponent } from './features/dialogs/add-item-dialog/add-item-dialog.component';
 import { BoardService } from './features/board/board.service';
 import { DialogService } from './features/dialogs/dialog.service';
+import { ItemCreatorService } from './features/graphql/item-creator/item-creator.service';
+import { FollowerCreator } from './features/graphql/item-creator/item-creator';
 import { isEntity } from './shared/utils';
 
 @Component({
@@ -23,7 +25,11 @@ export class AppComponent implements OnInit {
 
   constructor(private dialogService: DialogService,
               private service: GraphqlService,
-              private boardService: BoardService) { }
+              private injector: Injector,
+              private boardService: BoardService,
+              private itemCreatorService: ItemCreatorService) {
+    itemCreatorService.addItemCreator('Follower', new FollowerCreator(this.injector));
+  }
 
 
   ngOnInit(): void {
@@ -60,6 +66,6 @@ export class AppComponent implements OnInit {
   }
 
   saveItem() {
-    this.dialogService.openDialog(AddItemDialogComponent, this.service.saveItem);
+    this.dialogService.openDialog(AddItemDialogComponent, this.itemCreatorService.createItem);
   }
 }

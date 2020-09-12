@@ -58,6 +58,14 @@
       </div>
     </div>
   </ng-container>
+
+  <ng-container *ngIf="itemTypeFormControl.value === 'Follower'">
+    <mat-form-field class="reward-source">
+      <mat-select placeholder="Select aspect" formControlName="followerAspect">
+        <mat-option *ngFor="let item of aspects" value={{item}}>{{item}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </ng-container>
 </mat-dialog-content>
 
 <mat-dialog-actions>

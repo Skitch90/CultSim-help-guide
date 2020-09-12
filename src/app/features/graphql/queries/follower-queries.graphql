@@ -1,0 +1,13 @@
+mutation createFollower($name: String!) {
+  CreateFollower(name: $name) {
+    name
+  }
+}
+
+mutation addAspectToFollower($name: String!, $aspect: String!){
+  AddFollowerAspects(from: {name: $name}, to: {name: $aspect}) {
+    from {
+      name
+    }
+  }
+}

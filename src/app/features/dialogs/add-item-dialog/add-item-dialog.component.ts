@@ -1,8 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, Validators, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl, Validators, FormArray, ValidatorFn } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { GraphqlService } from '../../graphql/graphql.service';
 import { GetAspectsGQL } from '../../graphql/model';
+
+const followerAspectRequiredValidator: ValidatorFn = (fg: FormGroup) => {
+  const itemType = fg.get('itemType').value;
+  if (itemType === 'Follower') {
+    return Validators.required(fg.get('followerAspect'));
+  } else {
+    return null;
+  }
+};
 
 @Component({
   selector: 'app-add-item-dialog',
@@ -10,7 +19,7 @@ import { GetAspectsGQL } from '../../graphql/model';
   styleUrls: ['./add-item-dialog.component.scss']
 })
 export class AddItemDialogComponent implements OnInit {
-  itemTypes: string[] = [ 'Aspect', 'Book', 'Desire', 'ExpeditionObstacle', 'Influence', 'Ingredient',
+  itemTypes: string[] = [ 'Aspect', 'Book', 'Desire', 'ExpeditionObstacle', 'Follower', 'Influence', 'Ingredient',
                           'Language', 'Location', 'Lore', 'MansusDoor', 'Rite', 'Tool' ];
   itemTypesWithAspects: string[] = [ 'Influence', 'Ingredient', 'Lore', 'Tool' ];
   multipleAspects = {
@@ -47,8 +56,9 @@ export class AddItemDialogComponent implements OnInit {
       aspects: fb.array([]),
       language: new FormControl(''),
       vault: new FormControl(false),
-      obstacleAspects: fb.array([ this.createObstacleAspect(), this.createObstacleAspect(), this.createObstacleAspect() ])
-    });
+      obstacleAspects: fb.array([ this.createObstacleAspect(), this.createObstacleAspect(), this.createObstacleAspect() ]),
+      followerAspect: new FormControl('')
+    }, {validators: [ followerAspectRequiredValidator ]});
   }
 
   createObstacleAspect(): FormGroup {
@@ -73,7 +83,7 @@ export class AddItemDialogComponent implements OnInit {
       if (this.bookSelected) {
         this.service.getLanguages().then(list => this.languages = list);
       }
-      if (typeVal === 'ExpeditionObstacle') {
+      if (typeVal === 'ExpeditionObstacle' || typeVal === 'Follower') {
         this.populateAspects();
       }
     });
