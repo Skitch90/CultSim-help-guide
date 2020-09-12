@@ -1,0 +1,11 @@
+query getAspects {
+  Aspect(orderBy: name_asc) {
+    name
+  }
+}
+
+mutation saveAspect($name: String!) {
+  CreateAspect(name: $name) {
+    name
+  }
+}

@@ -106,8 +106,6 @@ export class GraphqlService {
 
     getLore = (name: string) => this.getObject(name, GET_LORE);
 
-    getAspects = () => this.getObjects(GET_ASPECTS, data => data.Aspect);
-
     getBooks = () => this.getObjects(GET_BOOKS, data => data.Book);
 
     getBook = (title: string) => this.getObject(title, GET_BOOK);

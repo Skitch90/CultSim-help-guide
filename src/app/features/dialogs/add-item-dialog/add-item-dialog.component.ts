@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators, FormArray } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { GraphqlService } from '../../graphql/graphql.service';
+import { GetAspectsGQL } from '../../graphql/model';
 
 @Component({
   selector: 'app-add-item-dialog',
@@ -32,11 +33,12 @@ export class AddItemDialogComponent implements OnInit {
   loreSelected = false;
   influenceSelected = false;
   bookSelected = false;
-  aspects = [];
+  aspects: string[] = [];
   languages = [];
 
   constructor(
     private service: GraphqlService,
+    private getAspectsGQL: GetAspectsGQL,
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<AddItemDialogComponent>) {
     this.form = fb.group({
@@ -61,10 +63,10 @@ export class AddItemDialogComponent implements OnInit {
       this.influenceSelected = (typeVal === 'Influence');
       this.bookSelected = (typeVal === 'Book');
 
-      const rewards = this.form.get('aspects') as FormArray;
-      rewards.clear();
+      const aspectsFormArray = this.form.get('aspects') as FormArray;
+      aspectsFormArray.clear();
       if (this.hasAspects(typeVal)) {
-        this.service.getAspects().then(val => this.aspects = val);
+        this.populateAspects();
         this.addAspect();
       }
 
@@ -72,9 +74,14 @@ export class AddItemDialogComponent implements OnInit {
         this.service.getLanguages().then(list => this.languages = list);
       }
       if (typeVal === 'ExpeditionObstacle') {
-        this.service.getAspects().then(val => this.aspects = val);
+        this.populateAspects();
       }
     });
+  }
+
+  private async populateAspects() {
+    const queryResult = await this.getAspectsGQL.fetch().toPromise();
+    this.aspects = queryResult.data.Aspect.map(aspect => aspect.name);
   }
 
   hasAspects(itemType: string): boolean {
