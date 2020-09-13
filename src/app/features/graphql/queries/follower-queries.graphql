@@ -1,4 +1,4 @@
-mutation createFollower($name: String!) {
+mutation saveFollower($name: String!) {
   CreateFollower(name: $name) {
     name
   }

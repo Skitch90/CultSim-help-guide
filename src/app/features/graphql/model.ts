@@ -3789,12 +3789,12 @@ export type GetEntitiesByAspectQuery = (
   }
 );
 
-export type CreateFollowerMutationVariables = Exact<{
+export type SaveFollowerMutationVariables = Exact<{
   name: Scalars['String'];
 }>;
 
 
-export type CreateFollowerMutation = (
+export type SaveFollowerMutation = (
   { __typename?: 'Mutation' }
   & {
     CreateFollower?: Maybe<(
@@ -3885,8 +3885,8 @@ export class GetEntitiesByAspectGQL extends Apollo.Query<GetEntitiesByAspectQuer
     super(apollo);
   }
 }
-export const CreateFollowerDocument = gql`
-    mutation createFollower($name: String!) {
+export const SaveFollowerDocument = gql`
+    mutation saveFollower($name: String!) {
   CreateFollower(name: $name) {
     name
   }
@@ -3896,8 +3896,8 @@ export const CreateFollowerDocument = gql`
 @Injectable({
   providedIn: 'root'
 })
-export class CreateFollowerGQL extends Apollo.Mutation<CreateFollowerMutation, CreateFollowerMutationVariables> {
-  document = CreateFollowerDocument;
+export class SaveFollowerGQL extends Apollo.Mutation<SaveFollowerMutation, SaveFollowerMutationVariables> {
+  document = SaveFollowerDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
