@@ -1,5 +1,5 @@
 import { SaveItemInput } from './item-creator.types';
-import { SaveFollowerGQL, AddAspectToFollowerGQL, GetEntitiesByAspectDocument } from '../model';
+import { SaveFollowerGQL, AddAspectToFollowerGQL, GetEntitiesByAspectDocument, SaveAspectGQL, GetAspectsDocument } from '../model';
 import { Injector } from '@angular/core';
 
 export interface ItemCreator {
@@ -15,16 +15,14 @@ export class FollowerCreator implements ItemCreator {
         this.addAspectToFollowerGQL = injector.get(AddAspectToFollowerGQL);
     }
 
-    createItem = async (input: SaveItemInput): Promise<void> => {
-        console.log(input);
-        const { name, followerAspect } = input;
+    createItem = async ({ name, followerAspect }: SaveItemInput): Promise<void> => {
         await this.saveFollowerGQL.mutate({
             name
         }).toPromise();
 
         await this.addAspectToFollowerGQL.mutate({
-                name,
-                aspect: followerAspect
+            name,
+            aspect: followerAspect
             },
             {
                 refetchQueries: [{
@@ -37,4 +35,19 @@ export class FollowerCreator implements ItemCreator {
         ).toPromise();
     }
 
+}
+
+export class AspectCreator implements ItemCreator {
+    private saveAspectGQL: SaveAspectGQL;
+
+    constructor(injector: Injector) {
+        this.saveAspectGQL = injector.get(SaveAspectGQL);
+    }
+
+    createItem = async ({ name }): Promise<void> => {
+        this.saveAspectGQL.mutate(
+            { name },
+            { refetchQueries: [{ query: GetAspectsDocument }] }
+        ).toPromise();
+    }
 }

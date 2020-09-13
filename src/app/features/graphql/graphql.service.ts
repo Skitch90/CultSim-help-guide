@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
-import { GET_ASPECTS, CREATE_ASPECT } from './queries/aspect-queries';
 import {
     GET_BOOKS, GET_BOOK, CREATE_BOOK, SET_BOOK_LANGUAGE, SET_BOOK_LOCATION,
     SET_BOOK_INFLUENCE_RESULT, SET_BOOK_LANGUAGE_RESULT, SET_BOOK_LORE_RESULT, SET_BOOK_RITE_RESULT, SET_BOOK_TOOL_RESULT
@@ -31,7 +30,6 @@ import { SaveLocationRewardInput, SaveItemInput, SaveMansusDoorOptionInput, Rewa
 import { Entity } from 'src/app/shared/model';
 import { GET_RITES, CREATE_RITE, GET_RITE } from './queries/rite-queries';
 import { CREATE_DESIRE, GET_DESIRES, ADD_DESIRE_CHANGE } from './queries/desire-queries';
-import { async } from '@angular/core/testing';
 
 @Injectable({
     providedIn: 'root'
@@ -138,17 +136,7 @@ export class GraphqlService {
         try {
             const { name, itemType, aspects, language, vault } = params;
 
-            if (itemType === 'Aspect') {
-                await this.apollo.mutate({
-                    mutation: CREATE_ASPECT,
-                    variables: {
-                        name
-                    },
-                    refetchQueries: [{
-                        query: GET_ASPECTS
-                    }]
-                }).toPromise();
-            } else if (itemType === 'Book') {
+            if (itemType === 'Book') {
                 await this.apollo.mutate({
                     mutation: CREATE_BOOK,
                     variables: {
