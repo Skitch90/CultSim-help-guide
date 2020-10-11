@@ -1,0 +1,51 @@
+query getTools {
+  Tool(orderBy: name_asc) {
+    name
+  }
+}
+
+query getTool($name: String!) {
+  Tool(name: $name) {
+    name
+    aspects {
+      Aspect {
+        name
+      }
+      quantity
+    }
+    foundInLocation {
+      Location {
+        name
+      }
+      chance
+    }
+    fromBook {
+      _id
+      name
+    }
+  }
+}
+
+mutation saveTool($name: String!) {
+  CreateTool(name: $name) {
+    name
+  }
+}
+
+mutation setToolAspect($name: String!, $aspect: String!, $quantity: Int!) {
+  AddToolAspects(from: { name: $name }, to: { name: $aspect }, data: { quantity: $quantity }) {
+    quantity
+  }
+}
+
+mutation setToolLocation($name: String!, $location: String!, $chance: Boolean!) {
+  AddToolFoundInLocation(from: {name: $name}, to: {name: $location}, data: {chance: $chance}) {
+    from {
+      name
+    }
+    to {
+      name
+    }
+    chance
+  }
+}

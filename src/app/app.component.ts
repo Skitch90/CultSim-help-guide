@@ -9,7 +9,7 @@ import { AddItemDialogComponent } from './features/dialogs/add-item-dialog/add-i
 import { BoardService } from './features/board/board.service';
 import { DialogService } from './features/dialogs/dialog.service';
 import { ItemCreatorService } from './features/graphql/item-creator/item-creator.service';
-import { FollowerCreator, AspectCreator } from './features/graphql/item-creator/item-creator';
+import { FollowerCreator, AspectCreator, ToolCreator } from './features/graphql/item-creator/item-creator';
 import { isEntity } from './shared/utils';
 
 @Component({
@@ -30,6 +30,7 @@ export class AppComponent implements OnInit {
               private itemCreatorService: ItemCreatorService) {
     itemCreatorService.addItemCreator('Follower', new FollowerCreator(this.injector));
     itemCreatorService.addItemCreator('Aspect', new AspectCreator(injector));
+    itemCreatorService.addItemCreator('Tool', new ToolCreator(injector));
   }
 
 

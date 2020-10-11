@@ -3825,6 +3825,116 @@ export type AddAspectToFollowerMutation = (
   }
 );
 
+export type GetToolsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetToolsQuery = (
+  { __typename?: 'Query' }
+  & {
+    Tool?: Maybe<Array<Maybe<(
+      { __typename?: 'Tool' }
+      & Pick<Tool, 'name'>
+    )>>>
+  }
+);
+
+export type GetToolQueryVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+
+export type GetToolQuery = (
+  { __typename?: 'Query' }
+  & {
+    Tool?: Maybe<Array<Maybe<(
+      { __typename?: 'Tool' }
+      & Pick<Tool, 'name'>
+      & {
+        aspects?: Maybe<Array<Maybe<(
+          { __typename?: '_ToolAspects' }
+          & Pick<_ToolAspects, 'quantity'>
+          & {
+            Aspect?: Maybe<(
+              { __typename?: 'Aspect' }
+              & Pick<Aspect, 'name'>
+            )>
+          }
+        )>>>, foundInLocation?: Maybe<Array<Maybe<(
+          { __typename?: '_ToolFoundInLocation' }
+          & Pick<_ToolFoundInLocation, 'chance'>
+          & {
+            Location?: Maybe<(
+              { __typename?: 'Location' }
+              & Pick<Location, 'name'>
+            )>
+          }
+        )>>>, fromBook: Array<(
+          { __typename?: 'Book' }
+          & Pick<Book, '_id' | 'name'>
+        )>
+      }
+    )>>>
+  }
+);
+
+export type SaveToolMutationVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+
+export type SaveToolMutation = (
+  { __typename?: 'Mutation' }
+  & {
+    CreateTool?: Maybe<(
+      { __typename?: 'Tool' }
+      & Pick<Tool, 'name'>
+    )>
+  }
+);
+
+export type SetToolAspectMutationVariables = Exact<{
+  name: Scalars['String'];
+  aspect: Scalars['String'];
+  quantity: Scalars['Int'];
+}>;
+
+
+export type SetToolAspectMutation = (
+  { __typename?: 'Mutation' }
+  & {
+    AddToolAspects?: Maybe<(
+      { __typename?: '_AddToolAspectsPayload' }
+      & Pick<_AddToolAspectsPayload, 'quantity'>
+    )>
+  }
+);
+
+export type SetToolLocationMutationVariables = Exact<{
+  name: Scalars['String'];
+  location: Scalars['String'];
+  chance: Scalars['Boolean'];
+}>;
+
+
+export type SetToolLocationMutation = (
+  { __typename?: 'Mutation' }
+  & {
+    AddToolFoundInLocation?: Maybe<(
+      { __typename?: '_AddToolFoundInLocationPayload' }
+      & Pick<_AddToolFoundInLocationPayload, 'chance'>
+      & {
+        from?: Maybe<(
+          { __typename?: 'Tool' }
+          & Pick<Tool, 'name'>
+        )>, to?: Maybe<(
+          { __typename?: 'Location' }
+          & Pick<Location, 'name'>
+        )>
+      }
+    )>
+  }
+);
+
 export const GetAspectsDocument = gql`
     query getAspects {
   Aspect(orderBy: name_asc) {
@@ -3918,6 +4028,118 @@ export const AddAspectToFollowerDocument = gql`
 })
 export class AddAspectToFollowerGQL extends Apollo.Mutation<AddAspectToFollowerMutation, AddAspectToFollowerMutationVariables> {
   document = AddAspectToFollowerDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const GetToolsDocument = gql`
+    query getTools {
+  Tool(orderBy: name_asc) {
+    name
+  }
+}
+    `;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class GetToolsGQL extends Apollo.Query<GetToolsQuery, GetToolsQueryVariables> {
+  document = GetToolsDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const GetToolDocument = gql`
+    query getTool($name: String!) {
+  Tool(name: $name) {
+    name
+    aspects {
+      Aspect {
+        name
+      }
+      quantity
+    }
+    foundInLocation {
+      Location {
+        name
+      }
+      chance
+    }
+    fromBook {
+      _id
+      name
+    }
+  }
+}
+    `;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class GetToolGQL extends Apollo.Query<GetToolQuery, GetToolQueryVariables> {
+  document = GetToolDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const SaveToolDocument = gql`
+    mutation saveTool($name: String!) {
+  CreateTool(name: $name) {
+    name
+  }
+}
+    `;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SaveToolGQL extends Apollo.Mutation<SaveToolMutation, SaveToolMutationVariables> {
+  document = SaveToolDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const SetToolAspectDocument = gql`
+    mutation setToolAspect($name: String!, $aspect: String!, $quantity: Int!) {
+  AddToolAspects(from: {name: $name}, to: {name: $aspect}, data: {quantity: $quantity}) {
+    quantity
+  }
+}
+    `;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SetToolAspectGQL extends Apollo.Mutation<SetToolAspectMutation, SetToolAspectMutationVariables> {
+  document = SetToolAspectDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const SetToolLocationDocument = gql`
+    mutation setToolLocation($name: String!, $location: String!, $chance: Boolean!) {
+  AddToolFoundInLocation(from: {name: $name}, to: {name: $location}, data: {chance: $chance}) {
+    from {
+      name
+    }
+    to {
+      name
+    }
+    chance
+  }
+}
+    `;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SetToolLocationGQL extends Apollo.Mutation<SetToolLocationMutation, SetToolLocationMutationVariables> {
+  document = SetToolLocationDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
