@@ -1,0 +1,20 @@
+query getDesires {
+  Desire(orderBy: name_asc) {
+    name
+  }
+}
+
+mutation saveDesire($name: String!) {
+  CreateDesire(name: $name) {
+    name
+  }
+}
+
+mutation addDesireChange($fromDesire: String!, $toDesire: String!, $ingredient1: String!, $ingredient2: String!) {
+  AddDesireFromDesire(from: { name: $fromDesire },
+                      to: { name: $toDesire },
+                      data: { ingredient1: $ingredient1, ingredient2: $ingredient2 }) {
+    ingredient1
+    ingredient2
+  }
+}

@@ -25,11 +25,11 @@ import {
 import {
     CREATE_MANSUS_DOOR, CREATE_MANSUS_DOOR_OPTION, SET_MANSUS_DOOR_OPTION, GET_MANSUS_DOOR, GET_MANSUS_DOOR_OPTION
 } from './queries/mansus-door-queries';
-import { CREATE_TOOL, GET_TOOLS, SET_TOOL_ASPECT, SET_TOOL_LOCATION, GET_TOOL } from './queries/tool-queries';
+import { GET_TOOLS, SET_TOOL_LOCATION, GET_TOOL } from './queries/tool-queries';
 import { SaveLocationRewardInput, SaveItemInput, SaveMansusDoorOptionInput, Reward } from './graphql.types';
 import { Entity } from 'src/app/shared/model';
 import { GET_RITES, CREATE_RITE, GET_RITE } from './queries/rite-queries';
-import { CREATE_DESIRE, GET_DESIRES, ADD_DESIRE_CHANGE } from './queries/desire-queries';
+import { GET_DESIRES, ADD_DESIRE_CHANGE } from './queries/desire-queries';
 
 @Injectable({
     providedIn: 'root'
@@ -132,7 +132,7 @@ export class GraphqlService {
 
     getMansusDoorOption = (name: string) => this.getObject(name, GET_MANSUS_DOOR_OPTION);
 
-    saveItem = async (params: SaveItemInput) => {
+    private saveItem = async (params: SaveItemInput) => {
         try {
             const { name, itemType, aspects, language, vault } = params;
 
@@ -156,8 +156,6 @@ export class GraphqlService {
                         }
                     }).toPromise();
                 }
-            } else if (itemType === 'Desire') {
-                this.saveItem_(params, CREATE_DESIRE, GET_DESIRES);
             } else if (itemType === 'ExpeditionObstacle') {
                 const obstacleAspects = new Set(params.obstacleAspects.map(item => item.obstacleAspect));
                 await this.apollo.mutate({
@@ -245,8 +243,6 @@ export class GraphqlService {
                 });
             } else if (itemType === 'Rite') {
                 this.saveItem_(params, CREATE_RITE, GET_RITES);
-            } else if (itemType === 'Tool') {
-                this.saveItemWithAspects(params, CREATE_TOOL, GET_TOOLS, SET_TOOL_ASPECT);
             }
         } catch (err) {
             console.error(err);

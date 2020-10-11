@@ -8,14 +8,6 @@ export const GET_DESIRES = gql`
   }
 `;
 
-export const CREATE_DESIRE = gql`
-  mutation saveDesire($name: String!) {
-    CreateDesire(name: $name) {
-      name
-    }
-  }
-`;
-
 export const ADD_DESIRE_CHANGE = gql`
   mutation addDesireChange($fromDesire: String!, $toDesire: String!, $ingredient1: String!, $ingredient2: String!) {
     AddDesireFromDesire(from: { name: $fromDesire },

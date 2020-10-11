@@ -1,18 +1,22 @@
 import { SaveItemInput } from './item-creator.types';
 import { SaveFollowerGQL, AddAspectToFollowerGQL, GetEntitiesByAspectDocument, SaveAspectGQL, GetAspectsDocument,
-    SaveToolGQL, GetToolsDocument, SetToolAspectGQL } from '../model';
+    SaveToolGQL, GetToolsDocument, SetToolAspectGQL, SaveDesireGQL, GetDesiresDocument } from '../model';
 import { Injector } from '@angular/core';
 import { AspectInfo } from '../graphql.types';
 import { Mutation } from 'apollo-angular';
 import { DocumentNode } from 'graphql';
 
-const createItemWithAspects = async (
-        itemName: string, aspects: AspectInfo[], createMutation: Mutation, createRefetchQuery: DocumentNode, setAspectMutation: Mutation
-    ) => {
+const createItem = async (itemName: string, createMutation: Mutation, createRefetchQuery: DocumentNode) => {
     await createMutation.mutate(
         { name: itemName },
         { refetchQueries: [{ query: createRefetchQuery }] }
     ).toPromise();
+};
+
+const createItemWithAspects = async (
+        itemName: string, aspects: AspectInfo[], createMutation: Mutation, createRefetchQuery: DocumentNode, setAspectMutation: Mutation
+    ) => {
+    await createItem(itemName, createMutation, createRefetchQuery);
 
     aspects.forEach(async ({ aspect, quantity }: AspectInfo) => {
         await setAspectMutation.mutate(
@@ -71,12 +75,7 @@ export class AspectCreator implements ItemCreator {
         this.saveAspectGQL = injector.get(SaveAspectGQL);
     }
 
-    createItem = async ({ name }): Promise<void> => {
-        this.saveAspectGQL.mutate(
-            { name },
-            { refetchQueries: [{ query: GetAspectsDocument }] }
-        ).toPromise();
-    }
+    createItem = async ({ name }): Promise<void> => createItem(name, this.saveAspectGQL, GetAspectsDocument);
 }
 
 export class ToolCreator implements ItemCreator {
@@ -91,3 +90,14 @@ export class ToolCreator implements ItemCreator {
     createItem = async ({ name, aspects }: SaveItemInput): Promise<void> =>
         createItemWithAspects(name, aspects, this.saveToolGQL, GetToolsDocument, this.setToolAspectGQL)
 }
+
+export class DesireCreator implements ItemCreator {
+    private saveDesireGQL: SaveDesireGQL;
+
+    constructor(injector: Injector) {
+        this.saveDesireGQL = injector.get(SaveDesireGQL);
+    }
+
+    createItem = async ({ name }): Promise<void> => createItem(name, this.saveDesireGQL, GetDesiresDocument);
+}
+

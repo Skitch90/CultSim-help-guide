@@ -3768,6 +3768,52 @@ export type SaveAspectMutation = (
   }
 );
 
+export type GetDesiresQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetDesiresQuery = (
+  { __typename?: 'Query' }
+  & {
+    Desire?: Maybe<Array<Maybe<(
+      { __typename?: 'Desire' }
+      & Pick<Desire, 'name'>
+    )>>>
+  }
+);
+
+export type SaveDesireMutationVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+
+export type SaveDesireMutation = (
+  { __typename?: 'Mutation' }
+  & {
+    CreateDesire?: Maybe<(
+      { __typename?: 'Desire' }
+      & Pick<Desire, 'name'>
+    )>
+  }
+);
+
+export type AddDesireChangeMutationVariables = Exact<{
+  fromDesire: Scalars['String'];
+  toDesire: Scalars['String'];
+  ingredient1: Scalars['String'];
+  ingredient2: Scalars['String'];
+}>;
+
+
+export type AddDesireChangeMutation = (
+  { __typename?: 'Mutation' }
+  & {
+    AddDesireFromDesire?: Maybe<(
+      { __typename?: '_AddDesireFromDesirePayload' }
+      & Pick<_AddDesireFromDesirePayload, 'ingredient1' | 'ingredient2'>
+    )>
+  }
+);
+
 export type GetEntitiesByAspectQueryVariables = Exact<{
   aspect: Scalars['String'];
 }>;
@@ -3966,6 +4012,61 @@ export const SaveAspectDocument = gql`
 })
 export class SaveAspectGQL extends Apollo.Mutation<SaveAspectMutation, SaveAspectMutationVariables> {
   document = SaveAspectDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const GetDesiresDocument = gql`
+    query getDesires {
+  Desire(orderBy: name_asc) {
+    name
+  }
+}
+    `;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class GetDesiresGQL extends Apollo.Query<GetDesiresQuery, GetDesiresQueryVariables> {
+  document = GetDesiresDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const SaveDesireDocument = gql`
+    mutation saveDesire($name: String!) {
+  CreateDesire(name: $name) {
+    name
+  }
+}
+    `;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SaveDesireGQL extends Apollo.Mutation<SaveDesireMutation, SaveDesireMutationVariables> {
+  document = SaveDesireDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const AddDesireChangeDocument = gql`
+    mutation addDesireChange($fromDesire: String!, $toDesire: String!, $ingredient1: String!, $ingredient2: String!) {
+  AddDesireFromDesire(from: {name: $fromDesire}, to: {name: $toDesire}, data: {ingredient1: $ingredient1, ingredient2: $ingredient2}) {
+    ingredient1
+    ingredient2
+  }
+}
+    `;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AddDesireChangeGQL extends Apollo.Mutation<AddDesireChangeMutation, AddDesireChangeMutationVariables> {
+  document = AddDesireChangeDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);
