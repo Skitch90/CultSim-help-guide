@@ -1,6 +1,6 @@
 import { SaveItemInput } from './item-creator.types';
 import { SaveFollowerGQL, AddAspectToFollowerGQL, GetEntitiesByAspectDocument, SaveAspectGQL, GetAspectsDocument,
-    SaveToolGQL, GetToolsDocument, SetToolAspectGQL, SaveDesireGQL, GetDesiresDocument } from '../model';
+    SaveToolGQL, GetToolsDocument, SetToolAspectGQL, SaveDesireGQL, GetDesiresDocument, SaveChangeLessonGQL } from '../model';
 import { Injector } from '@angular/core';
 import { AspectInfo } from '../graphql.types';
 import { Mutation } from 'apollo-angular';
@@ -101,3 +101,14 @@ export class DesireCreator implements ItemCreator {
     createItem = async ({ name }): Promise<void> => createItem(name, this.saveDesireGQL, GetDesiresDocument);
 }
 
+export class ChangeLessonCreator implements ItemCreator {
+    private saveChangeLessonGQL: SaveChangeLessonGQL;
+
+    constructor(injector: Injector) {
+        this.saveChangeLessonGQL = injector.get(SaveChangeLessonGQL);
+    }
+
+    createItem = async ({ name }): Promise<void> => {
+        await this.saveChangeLessonGQL.mutate({ name }).toPromise();
+    }
+}

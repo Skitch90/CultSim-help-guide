@@ -2,16 +2,15 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({ name: 'outputLabel' })
 export class OutputLabelPipe implements PipeTransform {
+    outputLabelConf = {
+        ChangeLesson: 'Change Lesson',
+        ExpeditionObstacle: 'Expedition Obstacle',
+        MansusDoor: 'Mansus Door',
+        MansusDoorOption: 'Mansus Door Option'
+    };
+
     transform(label: string): string {
-        if (label === 'MansusDoor') {
-            return 'Mansus Door';
-        } else if (label === 'MansusDoorOption') {
-            return 'Mansus Door Option';
-        } else if (label === 'ExpeditionObstacle') {
-            return 'Expedition Obstacle';
-        } else {
-            return label;
-        }
+        return this.outputLabelConf[label] || label;
     }
 }
 

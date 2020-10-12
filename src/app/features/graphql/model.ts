@@ -28,6 +28,7 @@ export type Query = {
   Aspect?: Maybe<Array<Maybe<Aspect>>>;
   Follower?: Maybe<Array<Maybe<Follower>>>;
   Desire?: Maybe<Array<Maybe<Desire>>>;
+  ChangeLesson?: Maybe<Array<Maybe<ChangeLesson>>>;
   Lore?: Maybe<Array<Maybe<Lore>>>;
   Book?: Maybe<Array<Maybe<Book>>>;
   Location?: Maybe<Array<Maybe<Location>>>;
@@ -160,6 +161,16 @@ export type QueryDesireArgs = {
   offset?: Maybe<Scalars['Int']>;
   orderBy?: Maybe<Array<Maybe<_DesireOrdering>>>;
   filter?: Maybe<_DesireFilter>;
+};
+
+
+export type QueryChangeLessonArgs = {
+  name?: Maybe<Scalars['String']>;
+  _id?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<Maybe<_ChangeLessonOrdering>>>;
+  filter?: Maybe<_ChangeLessonFilter>;
 };
 
 
@@ -721,6 +732,34 @@ export type _DesireToDesire = {
   ingredient1: Scalars['String'];
   ingredient2?: Maybe<Scalars['String']>;
   Desire?: Maybe<Desire>;
+};
+
+export enum _ChangeLessonOrdering {
+  NameAsc = 'name_asc',
+  NameDesc = 'name_desc',
+  IdAsc = '_id_asc',
+  IdDesc = '_id_desc'
+}
+
+export type _ChangeLessonFilter = {
+  AND?: Maybe<Array<_ChangeLessonFilter>>;
+  OR?: Maybe<Array<_ChangeLessonFilter>>;
+  name?: Maybe<Scalars['String']>;
+  name_not?: Maybe<Scalars['String']>;
+  name_in?: Maybe<Array<Scalars['String']>>;
+  name_not_in?: Maybe<Array<Scalars['String']>>;
+  name_contains?: Maybe<Scalars['String']>;
+  name_not_contains?: Maybe<Scalars['String']>;
+  name_starts_with?: Maybe<Scalars['String']>;
+  name_not_starts_with?: Maybe<Scalars['String']>;
+  name_ends_with?: Maybe<Scalars['String']>;
+  name_not_ends_with?: Maybe<Scalars['String']>;
+};
+
+export type ChangeLesson = {
+  __typename?: 'ChangeLesson';
+  name: Scalars['String'];
+  _id?: Maybe<Scalars['String']>;
 };
 
 export enum _LoreOrdering {
@@ -1909,6 +1948,8 @@ export type Mutation = {
   RemoveDesireFromDesire?: Maybe<_RemoveDesireFromDesirePayload>;
   AddDesireToDesire?: Maybe<_AddDesireToDesirePayload>;
   RemoveDesireToDesire?: Maybe<_RemoveDesireToDesirePayload>;
+  CreateChangeLesson?: Maybe<ChangeLesson>;
+  DeleteChangeLesson?: Maybe<ChangeLesson>;
   CreateLore?: Maybe<Lore>;
   DeleteLore?: Maybe<Lore>;
   AddLoreAspects?: Maybe<_AddLoreAspectsPayload>;
@@ -2188,6 +2229,16 @@ export type MutationAddDesireToDesireArgs = {
 export type MutationRemoveDesireToDesireArgs = {
   from: _DesireInput;
   to: _DesireInput;
+};
+
+
+export type MutationCreateChangeLessonArgs = {
+  name: Scalars['String'];
+};
+
+
+export type MutationDeleteChangeLessonArgs = {
+  name: Scalars['String'];
 };
 
 
@@ -3736,6 +3787,10 @@ export type _VerbInput = {
   name: Scalars['String'];
 };
 
+export type _ChangeLessonInput = {
+  name: Scalars['String'];
+};
+
 export type _HowToObtainResultInput = {
   fromType: Scalars['String'];
 };
@@ -3810,6 +3865,21 @@ export type AddDesireChangeMutation = (
     AddDesireFromDesire?: Maybe<(
       { __typename?: '_AddDesireFromDesirePayload' }
       & Pick<_AddDesireFromDesirePayload, 'ingredient1' | 'ingredient2'>
+    )>
+  }
+);
+
+export type SaveChangeLessonMutationVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+
+export type SaveChangeLessonMutation = (
+  { __typename?: 'Mutation' }
+  & {
+    CreateChangeLesson?: Maybe<(
+      { __typename?: 'ChangeLesson' }
+      & Pick<ChangeLesson, 'name'>
     )>
   }
 );
@@ -4067,6 +4137,24 @@ export const AddDesireChangeDocument = gql`
 })
 export class AddDesireChangeGQL extends Apollo.Mutation<AddDesireChangeMutation, AddDesireChangeMutationVariables> {
   document = AddDesireChangeDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const SaveChangeLessonDocument = gql`
+    mutation saveChangeLesson($name: String!) {
+  CreateChangeLesson(name: $name) {
+    name
+  }
+}
+    `;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SaveChangeLessonGQL extends Apollo.Mutation<SaveChangeLessonMutation, SaveChangeLessonMutationVariables> {
+  document = SaveChangeLessonDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

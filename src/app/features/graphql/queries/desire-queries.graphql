@@ -18,3 +18,9 @@ mutation addDesireChange($fromDesire: String!, $toDesire: String!, $ingredient1:
     ingredient2
   }
 }
+
+mutation saveChangeLesson($name: String!) {
+  CreateChangeLesson(name: $name) {
+    name
+  }
+}
