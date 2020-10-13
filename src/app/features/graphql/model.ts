@@ -3941,6 +3941,250 @@ export type AddAspectToFollowerMutation = (
   }
 );
 
+export type CommonInfluenceDataFragment = (
+  { __typename?: 'Influence' }
+  & Pick<Influence, '_id' | 'name'>
+  & {
+    aspects?: Maybe<Array<Maybe<(
+      { __typename?: '_InfluenceAspects' }
+      & Pick<_InfluenceAspects, 'quantity'>
+      & {
+        Aspect?: Maybe<(
+          { __typename?: 'Aspect' }
+          & Pick<Aspect, '_id' | 'name'>
+        )>
+      }
+    )>>>
+  }
+);
+
+export type CommonIngredientDataFragment = (
+  { __typename?: 'Ingredient' }
+  & Pick<Ingredient, '_id' | 'name'>
+  & {
+    aspects?: Maybe<Array<Maybe<(
+      { __typename?: '_IngredientAspects' }
+      & Pick<_IngredientAspects, 'quantity'>
+      & {
+        Aspect?: Maybe<(
+          { __typename?: 'Aspect' }
+          & Pick<Aspect, '_id' | 'name'>
+        )>
+      }
+    )>>>
+  }
+);
+
+export type CommonLoreDataFragment = (
+  { __typename?: 'Lore' }
+  & Pick<Lore, '_id' | 'name'>
+  & {
+    aspects?: Maybe<Array<Maybe<(
+      { __typename?: '_LoreAspects' }
+      & Pick<_LoreAspects, 'quantity'>
+      & {
+        Aspect?: Maybe<(
+          { __typename?: 'Aspect' }
+          & Pick<Aspect, '_id' | 'name'>
+        )>
+      }
+    )>>>
+  }
+);
+
+export type CommonMansusOptionDataFragment = (
+  { __typename?: 'MansusDoorOption' }
+  & Pick<MansusDoorOption, '_id' | 'name'>
+  & {
+    door?: Maybe<(
+      { __typename?: 'MansusDoor' }
+      & Pick<MansusDoor, '_id' | 'name'>
+    )>
+  }
+);
+
+export type CommonToolDataFragment = (
+  { __typename?: 'Tool' }
+  & Pick<Tool, '_id' | 'name'>
+  & {
+    aspects?: Maybe<Array<Maybe<(
+      { __typename?: '_ToolAspects' }
+      & Pick<_ToolAspects, 'quantity'>
+      & {
+        Aspect?: Maybe<(
+          { __typename?: 'Aspect' }
+          & Pick<Aspect, '_id' | 'name'>
+        )>
+      }
+    )>>>
+  }
+);
+
+export type GetLocationsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetLocationsQuery = (
+  { __typename?: 'Query' }
+  & {
+    Location?: Maybe<Array<Maybe<(
+      { __typename?: 'Location' }
+      & Pick<Location, 'name' | 'vault'>
+    )>>>
+  }
+);
+
+export type GetLocationQueryVariables = Exact<{
+  location: Scalars['String'];
+}>;
+
+
+export type GetLocationQuery = (
+  { __typename?: 'Query' }
+  & {
+    Location?: Maybe<Array<Maybe<(
+      { __typename?: 'Location' }
+      & Pick<Location, '_id' | 'name' | 'vault'>
+      & {
+        histories: Array<(
+          { __typename?: 'Lore' }
+          & Pick<Lore, '_id' | 'name'>
+          & {
+            aspects?: Maybe<Array<Maybe<(
+              { __typename?: '_LoreAspects' }
+              & Pick<_LoreAspects, 'quantity'>
+            )>>>
+          }
+        )>, obstacles: Array<(
+          { __typename?: 'ExpeditionObstacle' }
+          & Pick<ExpeditionObstacle, '_id' | 'name'>
+          & {
+            defeatedWith: Array<(
+              { __typename?: 'Aspect' }
+              & Pick<Aspect, 'name'>
+            )>
+          }
+        )>, bookRewards: Array<(
+          { __typename?: 'Book' }
+          & Pick<Book, '_id' | 'name'>
+        )>, influenceRewards: Array<(
+          { __typename?: 'Influence' }
+          & CommonInfluenceDataFragment
+        )>, ingredientRewards: Array<(
+          { __typename?: 'Ingredient' }
+          & CommonIngredientDataFragment
+        )>, toolRewards: Array<(
+          { __typename?: 'Tool' }
+          & Pick<Tool, '_id' | 'name'>
+          & {
+            aspects?: Maybe<Array<Maybe<(
+              { __typename?: '_ToolAspects' }
+              & Pick<_ToolAspects, 'quantity'>
+              & {
+                Aspect?: Maybe<(
+                  { __typename?: 'Aspect' }
+                  & Pick<Aspect, '_id' | 'name'>
+                )>
+              }
+            )>>>
+          }
+        )>
+      }
+    )>>>
+  }
+);
+
+export type SaveLocationMutationVariables = Exact<{
+  location: Scalars['String'];
+  vault: Scalars['Boolean'];
+}>;
+
+
+export type SaveLocationMutation = (
+  { __typename?: 'Mutation' }
+  & {
+    CreateLocation?: Maybe<(
+      { __typename?: 'Location' }
+      & Pick<Location, 'name'>
+    )>
+  }
+);
+
+export type SetLocationObstacleMutationVariables = Exact<{
+  location: Scalars['String'];
+  obstacle: Scalars['String'];
+}>;
+
+
+export type SetLocationObstacleMutation = (
+  { __typename?: 'Mutation' }
+  & {
+    AddLocationObstacles?: Maybe<(
+      { __typename?: '_AddLocationObstaclesPayload' }
+      & {
+        from?: Maybe<(
+          { __typename?: 'Location' }
+          & Pick<Location, 'name'>
+        )>, to?: Maybe<(
+          { __typename?: 'ExpeditionObstacle' }
+          & Pick<ExpeditionObstacle, 'name'>
+        )>
+      }
+    )>
+  }
+);
+
+export type GetObstaclesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetObstaclesQuery = (
+  { __typename?: 'Query' }
+  & {
+    ExpeditionObstacle?: Maybe<Array<Maybe<(
+      { __typename?: 'ExpeditionObstacle' }
+      & Pick<ExpeditionObstacle, 'name'>
+    )>>>
+  }
+);
+
+export type SaveObstacleMutationVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+
+export type SaveObstacleMutation = (
+  { __typename?: 'Mutation' }
+  & {
+    CreateExpeditionObstacle?: Maybe<(
+      { __typename?: 'ExpeditionObstacle' }
+      & Pick<ExpeditionObstacle, 'name'>
+    )>
+  }
+);
+
+export type SetObstacleAspectMutationVariables = Exact<{
+  obstacle: Scalars['String'];
+  aspect: Scalars['String'];
+}>;
+
+
+export type SetObstacleAspectMutation = (
+  { __typename?: 'Mutation' }
+  & {
+    AddExpeditionObstacleDefeatedWith?: Maybe<(
+      { __typename?: '_AddExpeditionObstacleDefeatedWithPayload' }
+      & {
+        from?: Maybe<(
+          { __typename?: 'ExpeditionObstacle' }
+          & Pick<ExpeditionObstacle, 'name'>
+        )>, to?: Maybe<(
+          { __typename?: 'Aspect' }
+          & Pick<Aspect, 'name'>
+        )>
+      }
+    )>
+  }
+);
+
 export type GetToolsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -4051,6 +4295,68 @@ export type SetToolLocationMutation = (
   }
 );
 
+export const CommonInfluenceDataFragmentDoc = gql`
+    fragment CommonInfluenceData on Influence {
+  _id
+  name
+  aspects {
+    Aspect {
+      _id
+      name
+    }
+    quantity
+  }
+}
+    `;
+export const CommonIngredientDataFragmentDoc = gql`
+    fragment CommonIngredientData on Ingredient {
+  _id
+  name
+  aspects {
+    Aspect {
+      _id
+      name
+    }
+    quantity
+  }
+}
+    `;
+export const CommonLoreDataFragmentDoc = gql`
+    fragment CommonLoreData on Lore {
+  _id
+  name
+  aspects {
+    Aspect {
+      _id
+      name
+    }
+    quantity
+  }
+}
+    `;
+export const CommonMansusOptionDataFragmentDoc = gql`
+    fragment CommonMansusOptionData on MansusDoorOption {
+  _id
+  name
+  door {
+    _id
+    name
+  }
+}
+    `;
+export const CommonToolDataFragmentDoc = gql`
+    fragment CommonToolData on Tool {
+  _id
+  name
+  aspects {
+    Aspect {
+      _id
+      name
+    }
+    quantity
+  }
+}
+    `;
 export const GetAspectsDocument = gql`
     query getAspects {
   Aspect(orderBy: name_asc) {
@@ -4217,6 +4523,181 @@ export const AddAspectToFollowerDocument = gql`
 })
 export class AddAspectToFollowerGQL extends Apollo.Mutation<AddAspectToFollowerMutation, AddAspectToFollowerMutationVariables> {
   document = AddAspectToFollowerDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const GetLocationsDocument = gql`
+    query getLocations {
+  Location(orderBy: name_asc) {
+    name
+    vault
+  }
+}
+    `;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class GetLocationsGQL extends Apollo.Query<GetLocationsQuery, GetLocationsQueryVariables> {
+  document = GetLocationsDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const GetLocationDocument = gql`
+    query getLocation($location: String!) {
+  Location(name: $location) {
+    _id
+    name
+    vault
+    histories {
+      _id
+      name
+      aspects {
+        quantity
+      }
+    }
+    obstacles {
+      _id
+      name
+      defeatedWith {
+        name
+      }
+    }
+    bookRewards {
+      _id
+      name
+    }
+    influenceRewards {
+      ...CommonInfluenceData
+    }
+    ingredientRewards {
+      ...CommonIngredientData
+    }
+    toolRewards {
+      _id
+      name
+      aspects {
+        Aspect {
+          _id
+          name
+        }
+        quantity
+      }
+    }
+  }
+}
+    ${CommonInfluenceDataFragmentDoc}
+${CommonIngredientDataFragmentDoc}`;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class GetLocationGQL extends Apollo.Query<GetLocationQuery, GetLocationQueryVariables> {
+  document = GetLocationDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const SaveLocationDocument = gql`
+    mutation saveLocation($location: String!, $vault: Boolean!) {
+  CreateLocation(name: $location, vault: $vault) {
+    name
+  }
+}
+    `;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SaveLocationGQL extends Apollo.Mutation<SaveLocationMutation, SaveLocationMutationVariables> {
+  document = SaveLocationDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const SetLocationObstacleDocument = gql`
+    mutation setLocationObstacle($location: String!, $obstacle: String!) {
+  AddLocationObstacles(from: {name: $location}, to: {name: $obstacle}) {
+    from {
+      name
+    }
+    to {
+      name
+    }
+  }
+}
+    `;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SetLocationObstacleGQL extends Apollo.Mutation<SetLocationObstacleMutation, SetLocationObstacleMutationVariables> {
+  document = SetLocationObstacleDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const GetObstaclesDocument = gql`
+    query getObstacles {
+  ExpeditionObstacle(orderBy: name_asc) {
+    name
+  }
+}
+    `;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class GetObstaclesGQL extends Apollo.Query<GetObstaclesQuery, GetObstaclesQueryVariables> {
+  document = GetObstaclesDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const SaveObstacleDocument = gql`
+    mutation saveObstacle($name: String!) {
+  CreateExpeditionObstacle(name: $name) {
+    name
+  }
+}
+    `;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SaveObstacleGQL extends Apollo.Mutation<SaveObstacleMutation, SaveObstacleMutationVariables> {
+  document = SaveObstacleDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const SetObstacleAspectDocument = gql`
+    mutation setObstacleAspect($obstacle: String!, $aspect: String!) {
+  AddExpeditionObstacleDefeatedWith(from: {name: $obstacle}, to: {name: $aspect}) {
+    from {
+      name
+    }
+    to {
+      name
+    }
+  }
+}
+    `;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SetObstacleAspectGQL extends Apollo.Mutation<SetObstacleAspectMutation, SetObstacleAspectMutationVariables> {
+  document = SetObstacleAspectDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

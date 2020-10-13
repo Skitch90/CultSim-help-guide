@@ -1,0 +1,56 @@
+fragment CommonInfluenceData on Influence {
+  _id
+  name
+  aspects {
+    Aspect {
+      _id
+      name
+    }
+    quantity
+  }
+}
+
+fragment CommonIngredientData on Ingredient {
+  _id
+  name
+  aspects {
+    Aspect {
+      _id
+      name
+    }
+    quantity
+  }
+}
+
+fragment CommonLoreData on Lore {
+  _id
+  name
+  aspects {
+    Aspect {
+      _id
+      name
+    }
+    quantity
+  }
+}
+
+fragment CommonMansusOptionData on MansusDoorOption {
+  _id
+  name
+  door {
+    _id
+    name
+  }
+}
+
+fragment CommonToolData on Tool {
+  _id
+  name
+  aspects {
+    Aspect {
+      _id
+      name
+    }
+    quantity
+  }
+}

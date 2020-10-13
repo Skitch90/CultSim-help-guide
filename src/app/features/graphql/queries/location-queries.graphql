@@ -1,0 +1,89 @@
+query getLocations {
+  Location(orderBy: name_asc) {
+    name
+    vault
+  }
+}
+
+query getLocation($location: String!) {
+  Location(name: $location) {
+    _id
+    name
+    vault
+    histories {
+      _id
+      name
+      aspects {
+        quantity
+      }
+    }
+    obstacles {
+      _id
+      name
+      defeatedWith {
+        name
+      }
+    }
+    bookRewards {
+      _id
+      name
+    }
+    influenceRewards {
+      ...CommonInfluenceData
+    }
+    ingredientRewards{
+      ...CommonIngredientData
+    }
+    toolRewards {
+      _id
+      name
+      aspects {
+        Aspect {
+          _id
+          name
+        }
+        quantity
+      }
+    }
+  }
+}
+
+mutation saveLocation($location: String!, $vault: Boolean!) {
+  CreateLocation(name: $location, vault: $vault) {
+    name
+  }
+}
+
+mutation setLocationObstacle($location: String!, $obstacle: String!) {
+  AddLocationObstacles(from: { name: $location }, to: { name: $obstacle }) {
+    from {
+      name
+    }
+    to {
+      name
+    }
+  }
+}
+
+query getObstacles {
+  ExpeditionObstacle(orderBy: name_asc) {
+    name
+  }
+}
+
+mutation saveObstacle($name: String!) {
+  CreateExpeditionObstacle(name: $name) {
+    name
+  }
+}
+
+mutation setObstacleAspect($obstacle: String!, $aspect: String!) {
+  AddExpeditionObstacleDefeatedWith(from: { name: $obstacle }, to: { name: $aspect }) {
+    from {
+      name
+    }
+    to {
+      name
+    }
+  }
+}
