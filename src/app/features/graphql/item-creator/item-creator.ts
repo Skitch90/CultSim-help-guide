@@ -1,7 +1,10 @@
 import { SaveItemInput } from './item-creator.types';
 import { SaveFollowerGQL, AddAspectToFollowerGQL, GetEntitiesByAspectDocument, SaveAspectGQL, GetAspectsDocument,
     SaveToolGQL, GetToolsDocument, SetToolAspectGQL, SaveDesireGQL, GetDesiresDocument, SaveChangeLessonGQL, SaveLocationGQL,
-    GetLocationsDocument } from '../model';
+    GetLocationsDocument,
+    SaveObstacleGQL,
+    SetObstacleAspectGQL,
+    GetObstaclesDocument} from '../model';
 import { Injector } from '@angular/core';
 import { AspectInfo } from '../graphql.types';
 import { Mutation } from 'apollo-angular';
@@ -126,5 +129,30 @@ export class LocationCreator implements ItemCreator {
             { location, vault },
             { refetchQueries: [{ query: GetLocationsDocument }] }
         ).toPromise();
+    }
+}
+
+export class ExpeditionObstacleCreator implements ItemCreator {
+    private saveObstacleGQL: SaveObstacleGQL;
+    private setObstacleAspectGQL: SetObstacleAspectGQL;
+
+    constructor(injector: Injector) {
+        this.saveObstacleGQL = injector.get(SaveObstacleGQL);
+        this.setObstacleAspectGQL = injector.get(SetObstacleAspectGQL);
+    }
+
+    createItem = async ({ name, obstacleAspects }: SaveItemInput): Promise<void> => {
+        await this.saveObstacleGQL.mutate(
+            { name },
+            { refetchQueries: [{ query: GetObstaclesDocument }] }
+        ).toPromise();
+
+        new Set(obstacleAspects.map(aspect => aspect.obstacleAspect)).forEach(async aspect => {
+            if (aspect) {
+                this.setObstacleAspectGQL.mutate(
+                    { obstacle: name, aspect }
+                ).toPromise();
+            }
+        });
     }
 }

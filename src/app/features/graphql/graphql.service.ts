@@ -191,17 +191,6 @@ export class GraphqlService {
                         query: GET_LANGUAGES
                     }]
                 }).toPromise();
-            } else if (itemType === 'Location') {
-                await this.apollo.mutate({
-                    mutation: CREATE_LOCATION,
-                    variables: {
-                        location: name,
-                        vault
-                    },
-                    refetchQueries: [{
-                        query: GET_LOCATIONS
-                    }]
-                }).toPromise();
             } else if (itemType === 'MansusDoor') {
                 await this.apollo.mutate({
                     mutation: CREATE_MANSUS_DOOR,
