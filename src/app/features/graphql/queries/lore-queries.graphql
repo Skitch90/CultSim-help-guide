@@ -1,0 +1,73 @@
+query getLores {
+  Lore(orderBy: name_asc) {
+    name
+  }
+}
+
+query getLore($name: String!) {
+  Lore(name: $name) {
+    ...CommonLoreData
+    exploreResults {
+      _id
+      name
+    }
+    fromBook {
+      _id
+      name
+    }
+    fromDreamingIn {
+      ...CommonMansusOptionData
+    }
+    upgradesTo {
+      ...CommonLoreData
+    }
+    upgradedFrom {
+      ...CommonLoreData
+    }
+  }
+}
+
+mutation saveLore($name: String!) {
+  CreateLore(name: $name) {
+    name
+  }
+}
+
+mutation setLoreAspect($name: String!, $aspect: String!, $quantity: Int!) {
+  AddLoreAspects(from: {name: $name}, to: {name: $aspect}, data: {quantity: $quantity}) {
+    quantity
+  }
+}
+
+mutation setLoreExploringLocation($lore: String!, $location: String!) {
+  AddLoreExploreResults(from: { name: $lore }, to: { name: $location }) {
+    from {
+      name
+    }
+    to {
+      name
+    }
+  }
+}
+
+mutation setLoreDreamingResult($door: String!, $lore: String!) {
+  AddLoreFromDreamingIn (from: { name: $door }, to: { name: $lore }) {
+    from {
+      name
+    }
+    to {
+      name
+    }
+  }
+}
+
+mutation setLoreUpgrade($startLore: String!, $lore: String!) {
+  AddLoreUpgradesTo(from: { name: $startLore }, to: { name: $lore }) {
+    from {
+      name
+    }
+    to {
+      name
+    }
+  }
+}

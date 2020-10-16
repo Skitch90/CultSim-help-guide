@@ -7,7 +7,10 @@ import { SaveFollowerGQL, AddAspectToFollowerGQL, GetEntitiesByAspectDocument, S
     GetObstaclesDocument,
     SaveBookGQL,
     SetBookLanguageGQL,
-    GetBooksDocument} from '../model';
+    GetBooksDocument,
+    SaveLoreGQL,
+    SetLoreAspectGQL,
+    GetLoresDocument} from '../model';
 import { Injector } from '@angular/core';
 import { AspectInfo } from '../graphql.types';
 import { Mutation } from 'apollo-angular';
@@ -180,5 +183,19 @@ export class BookCreator implements ItemCreator {
                 { title, language }
             ).toPromise();
         }
+    }
+}
+
+export class LoreCreator implements ItemCreator {
+    private saveLoreGQL: SaveLoreGQL;
+    private setLoreAspect: SetLoreAspectGQL;
+
+    constructor(injector: Injector) {
+        this.saveLoreGQL = injector.get(SaveLoreGQL);
+        this.setLoreAspect = injector.get(SetLoreAspectGQL);
+    }
+
+    createItem = async ({ name, aspects }: SaveItemInput): Promise<void> => {
+        createItemWithAspects(name, aspects, this.saveLoreGQL, GetLoresDocument, this.setLoreAspect);
     }
 }

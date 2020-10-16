@@ -155,8 +155,6 @@ export class GraphqlService {
                         door: name
                     }
                 }).toPromise();
-            } else if (itemType === 'Lore') {
-                this.saveItemWithAspects(params, CREATE_LORE, GET_LORES, SET_LORE_ASPECT);
             } else if (itemType === 'Influence') {
                 await this.apollo.mutate({
                     mutation: CREATE_INFLUENCE,

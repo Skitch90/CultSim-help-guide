@@ -4434,6 +4434,156 @@ export type SetObstacleAspectMutation = (
   }
 );
 
+export type GetLoresQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetLoresQuery = (
+  { __typename?: 'Query' }
+  & {
+    Lore?: Maybe<Array<Maybe<(
+      { __typename?: 'Lore' }
+      & Pick<Lore, 'name'>
+    )>>>
+  }
+);
+
+export type GetLoreQueryVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+
+export type GetLoreQuery = (
+  { __typename?: 'Query' }
+  & {
+    Lore?: Maybe<Array<Maybe<(
+      { __typename?: 'Lore' }
+      & {
+        exploreResults: Array<(
+          { __typename?: 'Location' }
+          & Pick<Location, '_id' | 'name'>
+        )>, fromBook: Array<(
+          { __typename?: 'Book' }
+          & Pick<Book, '_id' | 'name'>
+        )>, fromDreamingIn: Array<(
+          { __typename?: 'MansusDoorOption' }
+          & CommonMansusOptionDataFragment
+        )>, upgradesTo?: Maybe<(
+          { __typename?: 'Lore' }
+          & CommonLoreDataFragment
+        )>, upgradedFrom?: Maybe<(
+          { __typename?: 'Lore' }
+          & CommonLoreDataFragment
+        )>
+      }
+      & CommonLoreDataFragment
+    )>>>
+  }
+);
+
+export type SaveLoreMutationVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+
+export type SaveLoreMutation = (
+  { __typename?: 'Mutation' }
+  & {
+    CreateLore?: Maybe<(
+      { __typename?: 'Lore' }
+      & Pick<Lore, 'name'>
+    )>
+  }
+);
+
+export type SetLoreAspectMutationVariables = Exact<{
+  name: Scalars['String'];
+  aspect: Scalars['String'];
+  quantity: Scalars['Int'];
+}>;
+
+
+export type SetLoreAspectMutation = (
+  { __typename?: 'Mutation' }
+  & {
+    AddLoreAspects?: Maybe<(
+      { __typename?: '_AddLoreAspectsPayload' }
+      & Pick<_AddLoreAspectsPayload, 'quantity'>
+    )>
+  }
+);
+
+export type SetLoreExploringLocationMutationVariables = Exact<{
+  lore: Scalars['String'];
+  location: Scalars['String'];
+}>;
+
+
+export type SetLoreExploringLocationMutation = (
+  { __typename?: 'Mutation' }
+  & {
+    AddLoreExploreResults?: Maybe<(
+      { __typename?: '_AddLoreExploreResultsPayload' }
+      & {
+        from?: Maybe<(
+          { __typename?: 'Lore' }
+          & Pick<Lore, 'name'>
+        )>, to?: Maybe<(
+          { __typename?: 'Location' }
+          & Pick<Location, 'name'>
+        )>
+      }
+    )>
+  }
+);
+
+export type SetLoreDreamingResultMutationVariables = Exact<{
+  door: Scalars['String'];
+  lore: Scalars['String'];
+}>;
+
+
+export type SetLoreDreamingResultMutation = (
+  { __typename?: 'Mutation' }
+  & {
+    AddLoreFromDreamingIn?: Maybe<(
+      { __typename?: '_AddLoreFromDreamingInPayload' }
+      & {
+        from?: Maybe<(
+          { __typename?: 'MansusDoorOption' }
+          & Pick<MansusDoorOption, 'name'>
+        )>, to?: Maybe<(
+          { __typename?: 'Lore' }
+          & Pick<Lore, 'name'>
+        )>
+      }
+    )>
+  }
+);
+
+export type SetLoreUpgradeMutationVariables = Exact<{
+  startLore: Scalars['String'];
+  lore: Scalars['String'];
+}>;
+
+
+export type SetLoreUpgradeMutation = (
+  { __typename?: 'Mutation' }
+  & {
+    AddLoreUpgradesTo?: Maybe<(
+      { __typename?: '_AddLoreUpgradesToPayload' }
+      & {
+        from?: Maybe<(
+          { __typename?: 'Lore' }
+          & Pick<Lore, 'name'>
+        )>, to?: Maybe<(
+          { __typename?: 'Lore' }
+          & Pick<Lore, 'name'>
+        )>
+      }
+    )>
+  }
+);
+
 export type GetToolsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -5197,6 +5347,166 @@ export const SetObstacleAspectDocument = gql`
 })
 export class SetObstacleAspectGQL extends Apollo.Mutation<SetObstacleAspectMutation, SetObstacleAspectMutationVariables> {
   document = SetObstacleAspectDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const GetLoresDocument = gql`
+    query getLores {
+  Lore(orderBy: name_asc) {
+    name
+  }
+}
+    `;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class GetLoresGQL extends Apollo.Query<GetLoresQuery, GetLoresQueryVariables> {
+  document = GetLoresDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const GetLoreDocument = gql`
+    query getLore($name: String!) {
+  Lore(name: $name) {
+    ...CommonLoreData
+    exploreResults {
+      _id
+      name
+    }
+    fromBook {
+      _id
+      name
+    }
+    fromDreamingIn {
+      ...CommonMansusOptionData
+    }
+    upgradesTo {
+      ...CommonLoreData
+    }
+    upgradedFrom {
+      ...CommonLoreData
+    }
+  }
+}
+    ${CommonLoreDataFragmentDoc}
+${CommonMansusOptionDataFragmentDoc}`;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class GetLoreGQL extends Apollo.Query<GetLoreQuery, GetLoreQueryVariables> {
+  document = GetLoreDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const SaveLoreDocument = gql`
+    mutation saveLore($name: String!) {
+  CreateLore(name: $name) {
+    name
+  }
+}
+    `;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SaveLoreGQL extends Apollo.Mutation<SaveLoreMutation, SaveLoreMutationVariables> {
+  document = SaveLoreDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const SetLoreAspectDocument = gql`
+    mutation setLoreAspect($name: String!, $aspect: String!, $quantity: Int!) {
+  AddLoreAspects(from: {name: $name}, to: {name: $aspect}, data: {quantity: $quantity}) {
+    quantity
+  }
+}
+    `;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SetLoreAspectGQL extends Apollo.Mutation<SetLoreAspectMutation, SetLoreAspectMutationVariables> {
+  document = SetLoreAspectDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const SetLoreExploringLocationDocument = gql`
+    mutation setLoreExploringLocation($lore: String!, $location: String!) {
+  AddLoreExploreResults(from: {name: $lore}, to: {name: $location}) {
+    from {
+      name
+    }
+    to {
+      name
+    }
+  }
+}
+    `;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SetLoreExploringLocationGQL
+                                    extends Apollo.Mutation<SetLoreExploringLocationMutation, SetLoreExploringLocationMutationVariables> {
+  document = SetLoreExploringLocationDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const SetLoreDreamingResultDocument = gql`
+    mutation setLoreDreamingResult($door: String!, $lore: String!) {
+  AddLoreFromDreamingIn(from: {name: $door}, to: {name: $lore}) {
+    from {
+      name
+    }
+    to {
+      name
+    }
+  }
+}
+    `;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SetLoreDreamingResultGQL extends Apollo.Mutation<SetLoreDreamingResultMutation, SetLoreDreamingResultMutationVariables> {
+  document = SetLoreDreamingResultDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const SetLoreUpgradeDocument = gql`
+    mutation setLoreUpgrade($startLore: String!, $lore: String!) {
+  AddLoreUpgradesTo(from: {name: $startLore}, to: {name: $lore}) {
+    from {
+      name
+    }
+    to {
+      name
+    }
+  }
+}
+    `;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SetLoreUpgradeGQL extends Apollo.Mutation<SetLoreUpgradeMutation, SetLoreUpgradeMutationVariables> {
+  document = SetLoreUpgradeDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

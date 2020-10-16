@@ -10,7 +10,7 @@ import { BoardService } from './features/board/board.service';
 import { DialogService } from './features/dialogs/dialog.service';
 import { ItemCreatorService } from './features/graphql/item-creator/item-creator.service';
 import { FollowerCreator, AspectCreator, ToolCreator, DesireCreator, ChangeLessonCreator, LocationCreator,
-          ExpeditionObstacleCreator, BookCreator
+          ExpeditionObstacleCreator, BookCreator, LoreCreator
 } from './features/graphql/item-creator/item-creator';
 import { isEntity } from './shared/utils';
 
@@ -38,6 +38,7 @@ export class AppComponent implements OnInit {
     itemCreatorService.addItemCreator('Location', new LocationCreator(injector));
     itemCreatorService.addItemCreator('ExpeditionObstacle', new ExpeditionObstacleCreator(injector));
     itemCreatorService.addItemCreator('Book', new BookCreator(injector));
+    itemCreatorService.addItemCreator('Lore', new LoreCreator(injector));
   }
 
 
