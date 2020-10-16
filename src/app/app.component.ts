@@ -9,7 +9,9 @@ import { AddItemDialogComponent } from './features/dialogs/add-item-dialog/add-i
 import { BoardService } from './features/board/board.service';
 import { DialogService } from './features/dialogs/dialog.service';
 import { ItemCreatorService } from './features/graphql/item-creator/item-creator.service';
-import { FollowerCreator, AspectCreator, ToolCreator, DesireCreator, ChangeLessonCreator, LocationCreator, ExpeditionObstacleCreator } from './features/graphql/item-creator/item-creator';
+import { FollowerCreator, AspectCreator, ToolCreator, DesireCreator, ChangeLessonCreator, LocationCreator,
+          ExpeditionObstacleCreator, BookCreator
+} from './features/graphql/item-creator/item-creator';
 import { isEntity } from './shared/utils';
 
 @Component({
@@ -35,6 +37,7 @@ export class AppComponent implements OnInit {
     itemCreatorService.addItemCreator('ChangeLesson', new ChangeLessonCreator(injector));
     itemCreatorService.addItemCreator('Location', new LocationCreator(injector));
     itemCreatorService.addItemCreator('ExpeditionObstacle', new ExpeditionObstacleCreator(injector));
+    itemCreatorService.addItemCreator('Book', new BookCreator(injector));
   }
 
 

@@ -3823,6 +3823,255 @@ export type SaveAspectMutation = (
   }
 );
 
+export type GetBookQueryVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+
+export type GetBookQuery = (
+  { __typename?: 'Query' }
+  & {
+    Book?: Maybe<Array<Maybe<(
+      { __typename?: 'Book' }
+      & Pick<Book, '_id' | 'name'>
+      & {
+        foundInLocation?: Maybe<Array<Maybe<(
+          { __typename?: '_BookFoundInLocation' }
+          & Pick<_BookFoundInLocation, 'chance'>
+          & {
+            Location?: Maybe<(
+              { __typename?: 'Location' }
+              & Pick<Location, '_id' | 'name'>
+            )>
+          }
+        )>>>, language?: Maybe<(
+          { __typename?: 'Language' }
+          & Pick<Language, '_id' | 'name'>
+        )>, studiedIntoLore: Array<(
+          { __typename?: 'Lore' }
+          & CommonLoreDataFragment
+        )>, teachesRite?: Maybe<(
+          { __typename?: 'Rite' }
+          & Pick<Rite, '_id' | 'name'>
+        )>, teachesLanguage?: Maybe<(
+          { __typename?: 'Language' }
+          & Pick<Language, '_id' | 'name'>
+        )>, resultsInInfluence: Array<(
+          { __typename?: 'Influence' }
+          & CommonInfluenceDataFragment
+        )>, resultsInTool?: Maybe<(
+          { __typename?: 'Tool' }
+          & CommonToolDataFragment
+        )>
+      }
+    )>>>
+  }
+);
+
+export type GetBooksQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetBooksQuery = (
+  { __typename?: 'Query' }
+  & {
+    Book?: Maybe<Array<Maybe<(
+      { __typename?: 'Book' }
+      & Pick<Book, 'name'>
+    )>>>
+  }
+);
+
+export type SaveBookMutationVariables = Exact<{
+  title: Scalars['String'];
+}>;
+
+
+export type SaveBookMutation = (
+  { __typename?: 'Mutation' }
+  & {
+    CreateBook?: Maybe<(
+      { __typename?: 'Book' }
+      & Pick<Book, 'name'>
+    )>
+  }
+);
+
+export type SetBookLocationMutationVariables = Exact<{
+  name: Scalars['String'];
+  location: Scalars['String'];
+  chance: Scalars['Boolean'];
+}>;
+
+
+export type SetBookLocationMutation = (
+  { __typename?: 'Mutation' }
+  & {
+    AddBookFoundInLocation?: Maybe<(
+      { __typename?: '_AddBookFoundInLocationPayload' }
+      & Pick<_AddBookFoundInLocationPayload, 'chance'>
+      & {
+        from?: Maybe<(
+          { __typename?: 'Book' }
+          & Pick<Book, 'name'>
+        )>, to?: Maybe<(
+          { __typename?: 'Location' }
+          & Pick<Location, 'name'>
+        )>
+      }
+    )>
+  }
+);
+
+export type SetBookLanguageMutationVariables = Exact<{
+  title: Scalars['String'];
+  language: Scalars['String'];
+}>;
+
+
+export type SetBookLanguageMutation = (
+  { __typename?: 'Mutation' }
+  & {
+    AddBookLanguage?: Maybe<(
+      { __typename?: '_AddBookLanguagePayload' }
+      & {
+        from?: Maybe<(
+          { __typename?: 'Book' }
+          & Pick<Book, 'name'>
+        )>, to?: Maybe<(
+          { __typename?: 'Language' }
+          & Pick<Language, 'name'>
+        )>
+      }
+    )>
+  }
+);
+
+export type SetBookLoreResultMutationVariables = Exact<{
+  book: Scalars['String'];
+  name: Scalars['String'];
+}>;
+
+
+export type SetBookLoreResultMutation = (
+  { __typename?: 'Mutation' }
+  & {
+    AddBookStudiedIntoLore?: Maybe<(
+      { __typename?: '_AddBookStudiedIntoLorePayload' }
+      & {
+        from?: Maybe<(
+          { __typename?: 'Book' }
+          & Pick<Book, 'name'>
+        )>, to?: Maybe<(
+          { __typename?: 'Lore' }
+          & Pick<Lore, 'name'>
+        )>
+      }
+    )>
+  }
+);
+
+export type SetBookLanguageResultMutationVariables = Exact<{
+  book: Scalars['String'];
+  name: Scalars['String'];
+}>;
+
+
+export type SetBookLanguageResultMutation = (
+  { __typename?: 'Mutation' }
+  & {
+    AddBookTeachesLanguage?: Maybe<(
+      { __typename?: '_AddBookTeachesLanguagePayload' }
+      & {
+        from?: Maybe<(
+          { __typename?: 'Book' }
+          & Pick<Book, 'name'>
+          & {
+            language?: Maybe<(
+              { __typename?: 'Language' }
+              & Pick<Language, 'name'>
+            )>
+          }
+        )>, to?: Maybe<(
+          { __typename?: 'Language' }
+          & Pick<Language, 'name'>
+        )>
+      }
+    )>
+  }
+);
+
+export type SetBookInfluenceResultMutationVariables = Exact<{
+  book: Scalars['String'];
+  name: Scalars['String'];
+}>;
+
+
+export type SetBookInfluenceResultMutation = (
+  { __typename?: 'Mutation' }
+  & {
+    AddBookResultsInInfluence?: Maybe<(
+      { __typename?: '_AddBookResultsInInfluencePayload' }
+      & {
+        from?: Maybe<(
+          { __typename?: 'Book' }
+          & Pick<Book, 'name'>
+        )>, to?: Maybe<(
+          { __typename?: 'Influence' }
+          & Pick<Influence, 'name'>
+        )>
+      }
+    )>
+  }
+);
+
+export type SetBookRiteResultMutationVariables = Exact<{
+  book: Scalars['String'];
+  name: Scalars['String'];
+}>;
+
+
+export type SetBookRiteResultMutation = (
+  { __typename?: 'Mutation' }
+  & {
+    AddBookTeachesRite?: Maybe<(
+      { __typename?: '_AddBookTeachesRitePayload' }
+      & {
+        from?: Maybe<(
+          { __typename?: 'Book' }
+          & Pick<Book, 'name'>
+        )>, to?: Maybe<(
+          { __typename?: 'Rite' }
+          & Pick<Rite, 'name'>
+        )>
+      }
+    )>
+  }
+);
+
+export type SetBookToolResultMutationVariables = Exact<{
+  book: Scalars['String'];
+  name: Scalars['String'];
+}>;
+
+
+export type SetBookToolResultMutation = (
+  { __typename?: 'Mutation' }
+  & {
+    AddBookResultsInTool?: Maybe<(
+      { __typename?: '_AddBookResultsInToolPayload' }
+      & {
+        from?: Maybe<(
+          { __typename?: 'Book' }
+          & Pick<Book, 'name'>
+        )>, to?: Maybe<(
+          { __typename?: 'Tool' }
+          & Pick<Tool, 'name'>
+        )>
+      }
+    )>
+  }
+);
+
 export type GetDesiresQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -4388,6 +4637,256 @@ export const SaveAspectDocument = gql`
 })
 export class SaveAspectGQL extends Apollo.Mutation<SaveAspectMutation, SaveAspectMutationVariables> {
   document = SaveAspectDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const GetBookDocument = gql`
+    query getBook($name: String!) {
+  Book(name: $name, orderBy: name_asc) {
+    _id
+    name
+    foundInLocation {
+      Location {
+        _id
+        name
+      }
+      chance
+    }
+    language {
+      _id
+      name
+    }
+    studiedIntoLore {
+      ...CommonLoreData
+    }
+    teachesRite {
+      _id
+      name
+    }
+    teachesLanguage {
+      _id
+      name
+    }
+    resultsInInfluence {
+      ...CommonInfluenceData
+    }
+    resultsInTool {
+      ...CommonToolData
+    }
+  }
+}
+    ${CommonLoreDataFragmentDoc}
+${CommonInfluenceDataFragmentDoc}
+${CommonToolDataFragmentDoc}`;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class GetBookGQL extends Apollo.Query<GetBookQuery, GetBookQueryVariables> {
+  document = GetBookDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const GetBooksDocument = gql`
+    query getBooks {
+  Book(orderBy: name_asc) {
+    name
+  }
+}
+    `;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class GetBooksGQL extends Apollo.Query<GetBooksQuery, GetBooksQueryVariables> {
+  document = GetBooksDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const SaveBookDocument = gql`
+    mutation saveBook($title: String!) {
+  CreateBook(name: $title) {
+    name
+  }
+}
+    `;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SaveBookGQL extends Apollo.Mutation<SaveBookMutation, SaveBookMutationVariables> {
+  document = SaveBookDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const SetBookLocationDocument = gql`
+    mutation setBookLocation($name: String!, $location: String!, $chance: Boolean!) {
+  AddBookFoundInLocation(from: {name: $name}, to: {name: $location}, data: {chance: $chance}) {
+    from {
+      name
+    }
+    to {
+      name
+    }
+    chance
+  }
+}
+    `;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SetBookLocationGQL extends Apollo.Mutation<SetBookLocationMutation, SetBookLocationMutationVariables> {
+  document = SetBookLocationDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const SetBookLanguageDocument = gql`
+    mutation setBookLanguage($title: String!, $language: String!) {
+  AddBookLanguage(from: {name: $title}, to: {name: $language}) {
+    from {
+      name
+    }
+    to {
+      name
+    }
+  }
+}
+    `;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SetBookLanguageGQL extends Apollo.Mutation<SetBookLanguageMutation, SetBookLanguageMutationVariables> {
+  document = SetBookLanguageDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const SetBookLoreResultDocument = gql`
+    mutation setBookLoreResult($book: String!, $name: String!) {
+  AddBookStudiedIntoLore(from: {name: $book}, to: {name: $name}) {
+    from {
+      name
+    }
+    to {
+      name
+    }
+  }
+}
+    `;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SetBookLoreResultGQL extends Apollo.Mutation<SetBookLoreResultMutation, SetBookLoreResultMutationVariables> {
+  document = SetBookLoreResultDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const SetBookLanguageResultDocument = gql`
+    mutation setBookLanguageResult($book: String!, $name: String!) {
+  AddBookTeachesLanguage(from: {name: $book}, to: {name: $name}) {
+    from {
+      name
+      language {
+        name
+      }
+    }
+    to {
+      name
+    }
+  }
+}
+    `;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SetBookLanguageResultGQL extends Apollo.Mutation<SetBookLanguageResultMutation, SetBookLanguageResultMutationVariables> {
+  document = SetBookLanguageResultDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const SetBookInfluenceResultDocument = gql`
+    mutation setBookInfluenceResult($book: String!, $name: String!) {
+  AddBookResultsInInfluence(from: {name: $book}, to: {name: $name}) {
+    from {
+      name
+    }
+    to {
+      name
+    }
+  }
+}
+    `;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SetBookInfluenceResultGQL extends Apollo.Mutation<SetBookInfluenceResultMutation, SetBookInfluenceResultMutationVariables> {
+  document = SetBookInfluenceResultDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const SetBookRiteResultDocument = gql`
+    mutation setBookRiteResult($book: String!, $name: String!) {
+  AddBookTeachesRite(from: {name: $book}, to: {name: $name}) {
+    from {
+      name
+    }
+    to {
+      name
+    }
+  }
+}
+    `;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SetBookRiteResultGQL extends Apollo.Mutation<SetBookRiteResultMutation, SetBookRiteResultMutationVariables> {
+  document = SetBookRiteResultDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const SetBookToolResultDocument = gql`
+    mutation setBookToolResult($book: String!, $name: String!) {
+  AddBookResultsInTool(from: {name: $book}, to: {name: $name}) {
+    from {
+      name
+    }
+    to {
+      name
+    }
+  }
+}
+    `;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SetBookToolResultGQL extends Apollo.Mutation<SetBookToolResultMutation, SetBookToolResultMutationVariables> {
+  document = SetBookToolResultDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

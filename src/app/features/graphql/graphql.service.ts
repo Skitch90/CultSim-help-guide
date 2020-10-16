@@ -134,52 +134,9 @@ export class GraphqlService {
 
     private saveItem = async (params: SaveItemInput) => {
         try {
-            const { name, itemType, aspects, language, vault } = params;
+            const { name, itemType, aspects } = params;
 
-            if (itemType === 'Book') {
-                await this.apollo.mutate({
-                    mutation: CREATE_BOOK,
-                    variables: {
-                        title: name
-                    },
-                    refetchQueries: [{
-                        query: GET_BOOKS
-                    }]
-                }).toPromise();
-
-                if (language) {
-                    await this.apollo.mutate({
-                        mutation: SET_BOOK_LANGUAGE,
-                        variables: {
-                            title: name,
-                            language
-                        }
-                    }).toPromise();
-                }
-            } else if (itemType === 'ExpeditionObstacle') {
-                const obstacleAspects = new Set(params.obstacleAspects.map(item => item.obstacleAspect));
-                await this.apollo.mutate({
-                    mutation: CREATE_OBSTACLE,
-                    variables: {
-                        name
-                    },
-                    refetchQueries: [{
-                        query: GET_OBSTACLES
-                    }]
-                }).toPromise();
-
-                obstacleAspects.forEach(async item => {
-                    if (item) {
-                        await this.apollo.mutate({
-                            mutation: SET_OBSTACLE_ASPECT,
-                            variables: {
-                                obstacle: name,
-                                aspect: item
-                            }
-                        }).toPromise();
-                    }
-                });
-            } else if (itemType === 'Ingredient') {
+            if (itemType === 'Ingredient') {
                 this.saveItemWithAspects(params, CREATE_INGREDIENT, GET_INGREDIENTS, SET_INGREDIENT_ASPECT);
             } else if (itemType === 'Language') {
                 await this.apollo.mutate({

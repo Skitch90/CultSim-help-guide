@@ -1,0 +1,127 @@
+query getBook($name: String!) {
+  Book(name: $name, orderBy: name_asc) {
+    _id
+    name
+    foundInLocation {
+      Location {
+        _id
+        name
+      }
+      chance
+    }
+    language {
+      _id
+      name
+    }
+    studiedIntoLore{
+      ...CommonLoreData
+    }
+    teachesRite {
+      _id
+      name
+    }
+    teachesLanguage {
+      _id
+      name
+    }
+    resultsInInfluence {
+      ...CommonInfluenceData
+    }
+    resultsInTool {
+      ...CommonToolData
+    }
+  }
+}
+
+query getBooks {
+  Book(orderBy: name_asc) {
+    name
+  }
+}
+
+mutation saveBook($title: String!) {
+  CreateBook(name: $title) {
+    name
+  }
+}
+
+mutation setBookLocation($name: String!, $location: String!, $chance: Boolean!) {
+  AddBookFoundInLocation(from: {name: $name}, to: {name: $location}, data: {chance: $chance}) {
+    from {
+      name
+    }
+    to {
+      name
+    }
+    chance
+  }
+}
+
+mutation setBookLanguage($title: String!, $language: String!) {
+  AddBookLanguage(from: {name: $title}, to: {name: $language}) {
+    from {
+      name
+    }
+    to {
+      name
+    }
+  }
+}
+
+mutation setBookLoreResult($book: String!, $name: String!) {
+  AddBookStudiedIntoLore(from: {name: $book}, to: {name: $name}) {
+    from {
+      name
+    }
+    to {
+      name
+    }
+  }
+}
+
+mutation setBookLanguageResult($book: String!, $name: String!) {
+  AddBookTeachesLanguage(from: { name: $book }, to: { name: $name }) {
+    from {
+      name
+      language {
+        name
+      }
+    }
+    to {
+      name
+    }
+  }
+}
+
+mutation setBookInfluenceResult($book: String!, $name: String!) {
+  AddBookResultsInInfluence(from: { name: $book }, to: { name: $name }) {
+    from {
+      name
+    }
+    to {
+      name
+    }
+  }
+}
+
+mutation setBookRiteResult($book: String!, $name: String!) {
+  AddBookTeachesRite(from: { name: $book }, to: { name: $name }) {
+    from {
+      name
+    }
+    to {
+      name
+    }
+  }
+}
+
+mutation setBookToolResult($book: String!, $name: String!) {
+  AddBookResultsInTool(from: { name: $book }, to: { name: $name }) {
+    from {
+      name
+    }
+    to {
+      name
+    }
+  }
+}

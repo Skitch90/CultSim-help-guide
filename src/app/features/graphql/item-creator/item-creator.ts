@@ -4,7 +4,10 @@ import { SaveFollowerGQL, AddAspectToFollowerGQL, GetEntitiesByAspectDocument, S
     GetLocationsDocument,
     SaveObstacleGQL,
     SetObstacleAspectGQL,
-    GetObstaclesDocument} from '../model';
+    GetObstaclesDocument,
+    SaveBookGQL,
+    SetBookLanguageGQL,
+    GetBooksDocument} from '../model';
 import { Injector } from '@angular/core';
 import { AspectInfo } from '../graphql.types';
 import { Mutation } from 'apollo-angular';
@@ -154,5 +157,28 @@ export class ExpeditionObstacleCreator implements ItemCreator {
                 ).toPromise();
             }
         });
+    }
+}
+
+export class BookCreator implements ItemCreator {
+    private saveBookGQL: SaveBookGQL;
+    private setBookLanguageGQL: SetBookLanguageGQL;
+
+    constructor(injector: Injector) {
+        this.saveBookGQL = injector.get(SaveBookGQL);
+        this.setBookLanguageGQL = injector.get(SetBookLanguageGQL);
+    }
+
+    createItem = async ({ name: title, language }: SaveItemInput): Promise<void> => {
+        await this.saveBookGQL.mutate(
+            { title },
+            { refetchQueries: [{ query: GetBooksDocument }] }
+        ).toPromise();
+
+        if (language) {
+            await this.setBookLanguageGQL.mutate(
+                { title, language }
+            ).toPromise();
+        }
     }
 }
