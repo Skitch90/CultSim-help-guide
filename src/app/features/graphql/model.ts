@@ -18,7 +18,6 @@ export type Query = {
   __typename?: 'Query';
   entityWithName: Array<SearchEntity>;
   entityWithAspect: Array<AspectSearchGroupResult>;
-  howToObtainLore?: Maybe<Scalars['Int']>;
   SearchEntity?: Maybe<Array<Maybe<SearchEntity>>>;
   AspectQuantity?: Maybe<Array<Maybe<AspectQuantity>>>;
   AspectSearchGroupResult?: Maybe<Array<Maybe<AspectSearchGroupResult>>>;
@@ -41,7 +40,6 @@ export type Query = {
   Tool?: Maybe<Array<Maybe<Tool>>>;
   Rite?: Maybe<Array<Maybe<Rite>>>;
   RiteComponent?: Maybe<Array<Maybe<RiteComponent>>>;
-  HowToObtainResult?: Maybe<Array<Maybe<HowToObtainResult>>>;
 };
 
 
@@ -60,12 +58,6 @@ export type QueryEntityWithAspectArgs = {
   offset?: Maybe<Scalars['Int']>;
   orderBy?: Maybe<Array<Maybe<_AspectSearchGroupResultOrdering>>>;
   filter?: Maybe<_AspectSearchGroupResultFilter>;
-};
-
-
-export type QueryHowToObtainLoreArgs = {
-  loreName: Scalars['String'];
-  fromType?: Maybe<Scalars['String']>;
 };
 
 
@@ -294,17 +286,6 @@ export type QueryRiteComponentArgs = {
   offset?: Maybe<Scalars['Int']>;
   orderBy?: Maybe<Array<Maybe<_RiteComponentOrdering>>>;
   filter?: Maybe<_RiteComponentFilter>;
-};
-
-
-export type QueryHowToObtainResultArgs = {
-  fromType?: Maybe<Scalars['String']>;
-  pathLength?: Maybe<Scalars['Int']>;
-  _id?: Maybe<Scalars['String']>;
-  first?: Maybe<Scalars['Int']>;
-  offset?: Maybe<Scalars['Int']>;
-  orderBy?: Maybe<Array<Maybe<_HowToObtainResultOrdering>>>;
-  filter?: Maybe<_HowToObtainResultFilter>;
 };
 
 export enum _SearchEntityOrdering {
@@ -1875,48 +1856,6 @@ export enum _RiteOrdering {
   IdDesc = '_id_desc'
 }
 
-export enum _HowToObtainResultOrdering {
-  FromTypeAsc = 'fromType_asc',
-  FromTypeDesc = 'fromType_desc',
-  PathLengthAsc = 'pathLength_asc',
-  PathLengthDesc = 'pathLength_desc',
-  IdAsc = '_id_asc',
-  IdDesc = '_id_desc'
-}
-
-export type _HowToObtainResultFilter = {
-  AND?: Maybe<Array<_HowToObtainResultFilter>>;
-  OR?: Maybe<Array<_HowToObtainResultFilter>>;
-  fromType?: Maybe<Scalars['String']>;
-  fromType_not?: Maybe<Scalars['String']>;
-  fromType_in?: Maybe<Array<Scalars['String']>>;
-  fromType_not_in?: Maybe<Array<Scalars['String']>>;
-  fromType_contains?: Maybe<Scalars['String']>;
-  fromType_not_contains?: Maybe<Scalars['String']>;
-  fromType_starts_with?: Maybe<Scalars['String']>;
-  fromType_not_starts_with?: Maybe<Scalars['String']>;
-  fromType_ends_with?: Maybe<Scalars['String']>;
-  fromType_not_ends_with?: Maybe<Scalars['String']>;
-  pathLength?: Maybe<Scalars['Int']>;
-  pathLength_not?: Maybe<Scalars['Int']>;
-  pathLength_in?: Maybe<Array<Scalars['Int']>>;
-  pathLength_not_in?: Maybe<Array<Scalars['Int']>>;
-  pathLength_lt?: Maybe<Scalars['Int']>;
-  pathLength_lte?: Maybe<Scalars['Int']>;
-  pathLength_gt?: Maybe<Scalars['Int']>;
-  pathLength_gte?: Maybe<Scalars['Int']>;
-};
-
-export type HowToObtainResult = {
-  __typename?: 'HowToObtainResult';
-  fromType: Scalars['String'];
-  path: Array<Entity>;
-  pathLength: Scalars['Int'];
-  _id?: Maybe<Scalars['String']>;
-};
-
-export type Entity = Lore | Book;
-
 export type Mutation = {
   __typename?: 'Mutation';
   setLanguageRequires: SetLanguageRequiresOut;
@@ -2062,9 +2001,6 @@ export type Mutation = {
   CreateRiteComponent?: Maybe<RiteComponent>;
   UpdateRiteComponent?: Maybe<RiteComponent>;
   DeleteRiteComponent?: Maybe<RiteComponent>;
-  CreateHowToObtainResult?: Maybe<HowToObtainResult>;
-  UpdateHowToObtainResult?: Maybe<HowToObtainResult>;
-  DeleteHowToObtainResult?: Maybe<HowToObtainResult>;
 };
 
 
@@ -2901,23 +2837,6 @@ export type MutationDeleteRiteComponentArgs = {
   name: Scalars['String'];
 };
 
-
-export type MutationCreateHowToObtainResultArgs = {
-  fromType: Scalars['String'];
-  pathLength: Scalars['Int'];
-};
-
-
-export type MutationUpdateHowToObtainResultArgs = {
-  fromType: Scalars['String'];
-  pathLength?: Maybe<Scalars['Int']>;
-};
-
-
-export type MutationDeleteHowToObtainResultArgs = {
-  fromType: Scalars['String'];
-};
-
 export type _FollowerInput = {
   name: Scalars['String'];
 };
@@ -3643,6 +3562,8 @@ export type ToolFoundInLocation = {
   chance: Scalars['Boolean'];
 };
 
+export type Entity = Lore | Book;
+
 export enum _RelationDirections {
   In = 'IN',
   Out = 'OUT'
@@ -3789,10 +3710,6 @@ export type _VerbInput = {
 
 export type _ChangeLessonInput = {
   name: Scalars['String'];
-};
-
-export type _HowToObtainResultInput = {
-  fromType: Scalars['String'];
 };
 
 export type GetAspectsQueryVariables = Exact<{ [key: string]: never; }>;
@@ -5459,7 +5376,7 @@ export const SetLoreExploringLocationDocument = gql`
   providedIn: 'root'
 })
 export class SetLoreExploringLocationGQL
-                                    extends Apollo.Mutation<SetLoreExploringLocationMutation, SetLoreExploringLocationMutationVariables> {
+                                      extends Apollo.Mutation<SetLoreExploringLocationMutation, SetLoreExploringLocationMutationVariables> {
   document = SetLoreExploringLocationDocument;
 
   constructor(apollo: Apollo.Apollo) {
