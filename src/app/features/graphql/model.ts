@@ -4207,6 +4207,131 @@ export type CommonToolDataFragment = (
   }
 );
 
+export type GetIngredientsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetIngredientsQuery = (
+  { __typename?: 'Query' }
+  & {
+    Ingredient?: Maybe<Array<Maybe<(
+      { __typename?: 'Ingredient' }
+      & Pick<Ingredient, 'name'>
+    )>>>
+  }
+);
+
+export type GetIngredientQueryVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+
+export type GetIngredientQuery = (
+  { __typename?: 'Query' }
+  & {
+    Ingredient?: Maybe<Array<Maybe<(
+      { __typename?: 'Ingredient' }
+      & {
+        foundInLocation?: Maybe<Array<Maybe<(
+          { __typename?: '_IngredientFoundInLocation' }
+          & Pick<_IngredientFoundInLocation, 'chance'>
+          & {
+            Location?: Maybe<(
+              { __typename?: 'Location' }
+              & Pick<Location, 'name'>
+            )>
+          }
+        )>>>, fromDreamingIn: Array<(
+          { __typename?: 'MansusDoorOption' }
+          & CommonMansusOptionDataFragment
+        )>
+      }
+      & CommonIngredientDataFragment
+    )>>>
+  }
+);
+
+export type SaveIngredientMutationVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+
+export type SaveIngredientMutation = (
+  { __typename?: 'Mutation' }
+  & {
+    CreateIngredient?: Maybe<(
+      { __typename?: 'Ingredient' }
+      & Pick<Ingredient, 'name'>
+    )>
+  }
+);
+
+export type SetIngredientAspectMutationVariables = Exact<{
+  name: Scalars['String'];
+  aspect: Scalars['String'];
+  quantity: Scalars['Int'];
+}>;
+
+
+export type SetIngredientAspectMutation = (
+  { __typename?: 'Mutation' }
+  & {
+    AddIngredientAspects?: Maybe<(
+      { __typename?: '_AddIngredientAspectsPayload' }
+      & Pick<_AddIngredientAspectsPayload, 'quantity'>
+    )>
+  }
+);
+
+export type SetIngredientLocationMutationVariables = Exact<{
+  name: Scalars['String'];
+  location: Scalars['String'];
+  chance: Scalars['Boolean'];
+}>;
+
+
+export type SetIngredientLocationMutation = (
+  { __typename?: 'Mutation' }
+  & {
+    AddIngredientFoundInLocation?: Maybe<(
+      { __typename?: '_AddIngredientFoundInLocationPayload' }
+      & Pick<_AddIngredientFoundInLocationPayload, 'chance'>
+      & {
+        from?: Maybe<(
+          { __typename?: 'Ingredient' }
+          & Pick<Ingredient, 'name'>
+        )>, to?: Maybe<(
+          { __typename?: 'Location' }
+          & Pick<Location, 'name'>
+        )>
+      }
+    )>
+  }
+);
+
+export type SetIngredientBreamingResultMutationVariables = Exact<{
+  door: Scalars['String'];
+  ingredient: Scalars['String'];
+}>;
+
+
+export type SetIngredientBreamingResultMutation = (
+  { __typename?: 'Mutation' }
+  & {
+    AddIngredientFromDreamingIn?: Maybe<(
+      { __typename?: '_AddIngredientFromDreamingInPayload' }
+      & {
+        from?: Maybe<(
+          { __typename?: 'MansusDoorOption' }
+          & Pick<MansusDoorOption, 'name'>
+        )>, to?: Maybe<(
+          { __typename?: 'Ingredient' }
+          & Pick<Ingredient, 'name'>
+        )>
+      }
+    )>
+  }
+);
+
 export type GetLocationsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -5133,6 +5258,136 @@ export const AddAspectToFollowerDocument = gql`
 })
 export class AddAspectToFollowerGQL extends Apollo.Mutation<AddAspectToFollowerMutation, AddAspectToFollowerMutationVariables> {
   document = AddAspectToFollowerDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const GetIngredientsDocument = gql`
+    query getIngredients {
+  Ingredient(orderBy: name_asc) {
+    name
+  }
+}
+    `;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class GetIngredientsGQL extends Apollo.Query<GetIngredientsQuery, GetIngredientsQueryVariables> {
+  document = GetIngredientsDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const GetIngredientDocument = gql`
+    query getIngredient($name: String!) {
+  Ingredient(name: $name) {
+    ...CommonIngredientData
+    foundInLocation {
+      Location {
+        name
+      }
+      chance
+    }
+    fromDreamingIn {
+      ...CommonMansusOptionData
+    }
+  }
+}
+    ${CommonIngredientDataFragmentDoc}
+${CommonMansusOptionDataFragmentDoc}`;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class GetIngredientGQL extends Apollo.Query<GetIngredientQuery, GetIngredientQueryVariables> {
+  document = GetIngredientDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const SaveIngredientDocument = gql`
+    mutation saveIngredient($name: String!) {
+  CreateIngredient(name: $name) {
+    name
+  }
+}
+    `;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SaveIngredientGQL extends Apollo.Mutation<SaveIngredientMutation, SaveIngredientMutationVariables> {
+  document = SaveIngredientDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const SetIngredientAspectDocument = gql`
+    mutation setIngredientAspect($name: String!, $aspect: String!, $quantity: Int!) {
+  AddIngredientAspects(from: {name: $name}, to: {name: $aspect}, data: {quantity: $quantity}) {
+    quantity
+  }
+}
+    `;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SetIngredientAspectGQL extends Apollo.Mutation<SetIngredientAspectMutation, SetIngredientAspectMutationVariables> {
+  document = SetIngredientAspectDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const SetIngredientLocationDocument = gql`
+    mutation setIngredientLocation($name: String!, $location: String!, $chance: Boolean!) {
+  AddIngredientFoundInLocation(from: {name: $name}, to: {name: $location}, data: {chance: $chance}) {
+    from {
+      name
+    }
+    to {
+      name
+    }
+    chance
+  }
+}
+    `;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SetIngredientLocationGQL extends Apollo.Mutation<SetIngredientLocationMutation, SetIngredientLocationMutationVariables> {
+  document = SetIngredientLocationDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const SetIngredientBreamingResultDocument = gql`
+    mutation setIngredientBreamingResult($door: String!, $ingredient: String!) {
+  AddIngredientFromDreamingIn(from: {name: $door}, to: {name: $ingredient}) {
+    from {
+      name
+    }
+    to {
+      name
+    }
+  }
+}
+    `;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class SetIngredientBreamingResultGQL
+                                extends Apollo.Mutation<SetIngredientBreamingResultMutation, SetIngredientBreamingResultMutationVariables> {
+  document = SetIngredientBreamingResultDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

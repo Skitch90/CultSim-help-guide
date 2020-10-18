@@ -1,0 +1,55 @@
+query getIngredients {
+  Ingredient(orderBy: name_asc) {
+    name
+  }
+}
+
+query getIngredient($name: String!) {
+  Ingredient(name: $name) {
+    ...CommonIngredientData
+    foundInLocation {
+      Location {
+        name
+      }
+      chance
+    }
+    fromDreamingIn {
+      ...CommonMansusOptionData
+    }
+  }
+}
+
+mutation saveIngredient($name: String!) {
+  CreateIngredient(name: $name) {
+    name
+  }
+}
+
+mutation setIngredientAspect($name: String!, $aspect: String!, $quantity: Int!) {
+  AddIngredientAspects(from: { name: $name }, to: { name: $aspect }, data: { quantity: $quantity }) {
+    quantity
+  }
+}
+
+mutation setIngredientLocation($name: String!, $location: String!, $chance: Boolean!) {
+  AddIngredientFoundInLocation(from: {name: $name}, to: {name: $location}, data: {chance: $chance}) {
+    from {
+      name
+    }
+    to {
+      name
+    }
+    chance
+  }
+}
+
+mutation setIngredientBreamingResult($door: String!, $ingredient: String!) {
+  AddIngredientFromDreamingIn(from: { name: $door }, to: { name: $ingredient }) {
+    from {
+      name
+    }
+    to {
+      name
+    }
+  }
+}

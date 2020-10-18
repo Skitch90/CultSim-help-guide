@@ -10,7 +10,7 @@ import { BoardService } from './features/board/board.service';
 import { DialogService } from './features/dialogs/dialog.service';
 import { ItemCreatorService } from './features/graphql/item-creator/item-creator.service';
 import { FollowerCreator, AspectCreator, ToolCreator, DesireCreator, ChangeLessonCreator, LocationCreator,
-          ExpeditionObstacleCreator, BookCreator, LoreCreator
+          ExpeditionObstacleCreator, BookCreator, LoreCreator, IngredientCreator
 } from './features/graphql/item-creator/item-creator';
 import { isEntity } from './shared/utils';
 
@@ -30,15 +30,16 @@ export class AppComponent implements OnInit {
               private injector: Injector,
               private boardService: BoardService,
               private itemCreatorService: ItemCreatorService) {
-    itemCreatorService.addItemCreator('Follower', new FollowerCreator(this.injector));
     itemCreatorService.addItemCreator('Aspect', new AspectCreator(injector));
-    itemCreatorService.addItemCreator('Tool', new ToolCreator(injector));
-    itemCreatorService.addItemCreator('Desire', new DesireCreator(injector));
-    itemCreatorService.addItemCreator('ChangeLesson', new ChangeLessonCreator(injector));
-    itemCreatorService.addItemCreator('Location', new LocationCreator(injector));
-    itemCreatorService.addItemCreator('ExpeditionObstacle', new ExpeditionObstacleCreator(injector));
     itemCreatorService.addItemCreator('Book', new BookCreator(injector));
+    itemCreatorService.addItemCreator('ChangeLesson', new ChangeLessonCreator(injector));
+    itemCreatorService.addItemCreator('Desire', new DesireCreator(injector));
+    itemCreatorService.addItemCreator('ExpeditionObstacle', new ExpeditionObstacleCreator(injector));
+    itemCreatorService.addItemCreator('Follower', new FollowerCreator(this.injector));
+    itemCreatorService.addItemCreator('Ingredient', new IngredientCreator(injector));
+    itemCreatorService.addItemCreator('Location', new LocationCreator(injector));
     itemCreatorService.addItemCreator('Lore', new LoreCreator(injector));
+    itemCreatorService.addItemCreator('Tool', new ToolCreator(injector));
   }
 
 

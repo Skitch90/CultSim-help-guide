@@ -136,9 +136,7 @@ export class GraphqlService {
         try {
             const { name, itemType, aspects } = params;
 
-            if (itemType === 'Ingredient') {
-                this.saveItemWithAspects(params, CREATE_INGREDIENT, GET_INGREDIENTS, SET_INGREDIENT_ASPECT);
-            } else if (itemType === 'Language') {
+            if (itemType === 'Language') {
                 await this.apollo.mutate({
                     mutation: CREATE_LANGUAGE,
                     variables: {
