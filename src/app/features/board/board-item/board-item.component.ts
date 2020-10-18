@@ -15,7 +15,7 @@ import { DialogService } from '../../dialogs/dialog.service';
 import { BoardItemInitiatorService } from '../../graphql/board-item-initiator/board-item-initiator.service';
 import { AddLoreUpgradeDialogComponent } from '../../dialogs/add-lore-upgrade-dialog/add-lore-upgrade-dialog.component';
 import { AddDesireChangeDialogComponent } from '../../dialogs/add-desire-change-dialog/add-desire-change-dialog.component';
-import { AspectInitiator, FollowerInitiator, LocationInitiator } from '../../graphql/board-item-initiator/board-item-initiator';
+import { AspectInitiator, FollowerInitiator, IngredientInitiator, LocationInitiator } from '../../graphql/board-item-initiator/board-item-initiator';
 
 @Component({
   selector: 'app-board-item',
@@ -34,6 +34,7 @@ export class BoardItemComponent implements OnInit {
               private itemInitService: BoardItemInitiatorService, injector: Injector) {
     itemInitService.addItemInitiator('Aspect', new AspectInitiator(injector));
     itemInitService.addItemInitiator('Follower', new FollowerInitiator(injector));
+    itemInitService.addItemInitiator('Ingredient', new IngredientInitiator(injector));
     itemInitService.addItemInitiator('Location', new LocationInitiator(injector));
   }
 
@@ -55,12 +56,6 @@ export class BoardItemComponent implements OnInit {
     //   this.entities = this.service.getInfluence(name).valueChanges.pipe(
     //     map(result => result.data.Influence[0]),
     //     map(influence => getGroupsFromInfluence(influence))
-    //   );
-    // }
-    // if (label === 'Ingredient') {
-    //   this.entities = this.service.getIngredient(name).valueChanges.pipe(
-    //     map(result => result.data.Ingredient[0]),
-    //     map(ingredient => getGroupsFromIngredient(ingredient))
     //   );
     // }
     // if (label === 'Language') {

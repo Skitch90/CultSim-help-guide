@@ -2,9 +2,9 @@ import { Injector } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { EntitiesGroup } from '../../../shared/model';
-import { GetEntitiesByAspectGQL, GetFollowerGQL, GetLocationGQL } from '../model';
-import { convertToGroupItem, createAspectGroupItem } from './board-item-initiator-utils';
-import { AspectSearchGroupResult, Follower, ItemInitResult, Location } from './board-item-initiator.types';
+import { GetEntitiesByAspectGQL, GetFollowerGQL, GetIngredientGQL, GetLocationGQL } from '../model';
+import { convertToGroupItem, createAspectGroupItem, createSimpleAspectGroupItem } from './board-item-initiator-utils';
+import { AspectSearchGroupResult, Follower, Ingredient, ItemInitResult, Location } from './board-item-initiator.types';
 
 export interface ItemInitiator {
     initBoardItem(name: string): ItemInitResult;
@@ -22,7 +22,7 @@ export class FollowerInitiator implements ItemInitiator {
             entityGroups: this.getFollowerGQL.watch({ name }).valueChanges.pipe(
                 map(getFollowerResult => getFollowerResult.data.Follower[0]),
                 map(follower => {
-                    return this.getGroupsForFollower(follower);
+                    return this.getGroupsFromFollower(follower);
                 })
             ),
             secretHistoriesLore: false,
@@ -30,12 +30,12 @@ export class FollowerInitiator implements ItemInitiator {
         };
     }
 
-    private getGroupsForFollower({ aspects }: Follower) {
+    private getGroupsFromFollower({ aspects }: Follower) {
         const groups: EntitiesGroup[] = [];
         if (aspects && aspects.length > 0) {
             groups.push({
                 label: 'Aspect',
-                entities: aspects.map(aspect => createAspectGroupItem(aspect))
+                entities: aspects.map(aspect => createSimpleAspectGroupItem(aspect))
             });
         }
         return groups;
@@ -54,7 +54,7 @@ export class LocationInitiator implements ItemInitiator {
         const entityGroups = this.getLocationGQL.watch({ location: name }).valueChanges.pipe(
             map(result => result.data.Location[0]),
             tap(location => vaultLocation = location.vault),
-            map(location => this.getGroupsForLocation(location))
+            map(location => this.getGroupsFromLocation(location))
         );
         return {
             entityGroups,
@@ -63,7 +63,7 @@ export class LocationInitiator implements ItemInitiator {
         };
     }
 
-    private getGroupsForLocation(
+    private getGroupsFromLocation(
         { histories, obstacles, bookRewards, influenceRewards, ingredientRewards, toolRewards }: Location): EntitiesGroup[] {
         const groups: EntitiesGroup[] = [];
         if (histories.length > 0) {
@@ -133,6 +133,45 @@ export class AspectInitiator implements ItemInitiator {
                 })
             };
         });
+    }
+
+}
+
+export class IngredientInitiator implements ItemInitiator {
+    private getIngredientGQL: GetIngredientGQL;
+
+    constructor(injector: Injector) {
+        this.getIngredientGQL = injector.get(GetIngredientGQL);
+    }
+
+    initBoardItem(name: string): ItemInitResult {
+        return {
+            entityGroups: this.getIngredientGQL.watch({ name }).valueChanges.pipe(
+                map(result => result.data.Ingredient[0]),
+                map(ingredient => this.getGroupsFromIngredient(ingredient))
+            ),
+            secretHistoriesLore: false,
+            vaultLocation: false
+        };
+    }
+
+    private getGroupsFromIngredient({ aspects, foundInLocation, fromDreamingIn }: Ingredient): EntitiesGroup[] {
+        const groups: EntitiesGroup[] = [];
+        if (aspects.length > 0) {
+            groups.push({
+                label: 'Aspects',
+                entities: aspects.map(aspect => createAspectGroupItem(aspect))
+            });
+        }
+        if (foundInLocation.length > 0 || fromDreamingIn.length > 0) {
+            const locations = foundInLocation.map(location => convertToGroupItem(location.Location));
+            const fromDreaming = fromDreamingIn.map(location => convertToGroupItem(location));
+            groups.push({
+                label: 'Found From',
+                entities: [...locations, ...fromDreaming]
+            });
+        }
+        return groups;
     }
 
 }

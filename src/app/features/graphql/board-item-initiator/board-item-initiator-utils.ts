@@ -1,11 +1,20 @@
 import { EntitiesGroupItem } from '../../../shared/model';
-import { Aspect, GroupItemConvertInput } from './board-item-initiator.types';
+import { Aspect, AspectWithQuantity, GroupItemConvertInput } from './board-item-initiator.types';
 
-export const createAspectGroupItem = ({ _id, name: aspectName, __typename }: Aspect): EntitiesGroupItem => {
+export const createSimpleAspectGroupItem = ({ _id, name, __typename }: Aspect): EntitiesGroupItem => {
     return {
         id: +_id,
         label: __typename,
-        name: aspectName
+        name
+    };
+};
+
+export const createAspectGroupItem = ({ Aspect: { _id, name, __typename }, quantity }: AspectWithQuantity): EntitiesGroupItem => {
+    return {
+        id: +_id,
+        name,
+        label: __typename,
+        aspectQuantity: quantity
     };
 };
 

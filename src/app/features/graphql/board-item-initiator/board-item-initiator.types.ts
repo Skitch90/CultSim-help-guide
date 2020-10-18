@@ -29,6 +29,11 @@ export type GroupItemConvertInput = {
     __typename?: string;
 };
 
+export type AspectWithQuantity = {
+    Aspect?: Aspect;
+    quantity?: number;
+};
+
 export type Aspect = { __typename?: 'Aspect'; } & Pick<Model.Aspect, 'name' | '_id'>;
 
 export type Follower = {
@@ -121,3 +126,34 @@ export type AspectSearchGroupResult = ({
 } & Pick<Model.AspectSearchGroupResult, 'label'> & {
     entities: AspectSearchEntity[];
 });
+
+type LocationName = {
+    __typename?: 'Location';
+} & Pick<Model.Location, 'name'>;
+
+type IngredientFoundInLocation = ({
+    __typename?: '_IngredientFoundInLocation';
+} & Pick<Model._IngredientFoundInLocation, 'chance'> & {
+    Location?: LocationName;
+});
+
+type MansusDoorOptionSimple = ({
+    __typename?: 'MansusDoorOption';
+} & {
+    __typename?: 'MansusDoorOption';
+} & Pick<Model.MansusDoorOption, 'name' | '_id'> & {
+    door?: {
+        __typename?: 'MansusDoor';
+    } & Pick<Model.MansusDoor, 'name' | '_id'>;
+});
+
+export type Ingredient = {
+    __typename?: 'Ingredient';
+} & {
+    foundInLocation?: IngredientFoundInLocation[];
+    fromDreamingIn: MansusDoorOptionSimple[];
+} & {
+    __typename?: 'Ingredient';
+} & Pick<Model.Ingredient, 'name' | '_id'> & {
+    aspects?: IngredientAspect[];
+};
