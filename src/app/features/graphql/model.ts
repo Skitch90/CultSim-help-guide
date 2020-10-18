@@ -4071,6 +4071,27 @@ export type GetEntitiesByAspectQuery = (
   }
 );
 
+export type GetFollowerQueryVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+
+export type GetFollowerQuery = (
+  { __typename?: 'Query' }
+  & {
+    Follower?: Maybe<Array<Maybe<(
+      { __typename?: 'Follower' }
+      & Pick<Follower, '_id' | 'name'>
+      & {
+        aspects: Array<(
+          { __typename?: 'Aspect' }
+          & Pick<Aspect, '_id' | 'name'>
+        )>
+      }
+    )>>>
+  }
+);
+
 export type SaveFollowerMutationVariables = Exact<{
   name: Scalars['String'];
 }>;
@@ -5051,6 +5072,29 @@ export const GetEntitiesByAspectDocument = gql`
 })
 export class GetEntitiesByAspectGQL extends Apollo.Query<GetEntitiesByAspectQuery, GetEntitiesByAspectQueryVariables> {
   document = GetEntitiesByAspectDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+    super(apollo);
+  }
+}
+export const GetFollowerDocument = gql`
+    query getFollower($name: String!) {
+  Follower(name: $name) {
+    _id
+    name
+    aspects {
+      _id
+      name
+    }
+  }
+}
+    `;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class GetFollowerGQL extends Apollo.Query<GetFollowerQuery, GetFollowerQueryVariables> {
+  document = GetFollowerDocument;
 
   constructor(apollo: Apollo.Apollo) {
     super(apollo);

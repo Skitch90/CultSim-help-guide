@@ -1,3 +1,14 @@
+query getFollower($name: String!) {
+  Follower(name: $name) {
+    _id
+    name
+    aspects {
+      _id
+      name
+    }
+  }
+}
+
 mutation saveFollower($name: String!) {
   CreateFollower(name: $name) {
     name

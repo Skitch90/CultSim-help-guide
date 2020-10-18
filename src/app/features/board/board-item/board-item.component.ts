@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Injector } from '@angular/core';
 import { Entity, EntitiesGroup } from 'src/app/shared/model';
 import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
 import { AddRewardLocationDialogComponent } from '../../dialogs/add-reward-location-dialog/add-reward-location-dialog.component';
@@ -18,8 +18,10 @@ import {
 } from './board-item-detail-utils';
 import { Observable } from 'rxjs';
 import { DialogService } from '../../dialogs/dialog.service';
+import { BoardItemInitiatorService } from '../../graphql/board-item-initiator/board-item-initiator.service';
 import { AddLoreUpgradeDialogComponent } from '../../dialogs/add-lore-upgrade-dialog/add-lore-upgrade-dialog.component';
 import { AddDesireChangeDialogComponent } from '../../dialogs/add-desire-change-dialog/add-desire-change-dialog.component';
+import { FollowerInitiator } from '../../graphql/board-item-initiator/board-item-initiator';
 
 @Component({
   selector: 'app-board-item',
@@ -34,78 +36,82 @@ export class BoardItemComponent implements OnInit {
   vaultLocation = false;
 
   constructor(private dialogService: DialogService, private dialog: MatDialog,
-              private service: GraphqlService, private boardService: BoardService) { }
+              private service: GraphqlService, private boardService: BoardService,
+              private itemInitService: BoardItemInitiatorService, injector: Injector) {
+    itemInitService.addItemInitiator('Follower', new FollowerInitiator(injector));
+  }
 
   ngOnInit() {
-    const { name, label } = this.item;
-    if (label === 'Aspect') {
-      this.entities = this.service.getEntitiesByAspect(name).valueChanges.pipe(
-        map(result => result.data.entityWithAspect),
-        map(groups => getGroupsFromEntities(groups))
-      );
-    }
-    if (label === 'Book') {
-      this.entities = this.service.getBook(name).valueChanges.pipe(
-        map(result => result.data.Book[0]),
-        map(book => getGroupsFromBook(book))
-      );
-    }
-    if (label === 'Influence') {
-      this.entities = this.service.getInfluence(name).valueChanges.pipe(
-        map(result => result.data.Influence[0]),
-        map(influence => getGroupsFromInfluence(influence))
-      );
-    }
-    if (label === 'Ingredient') {
-      this.entities = this.service.getIngredient(name).valueChanges.pipe(
-        map(result => result.data.Ingredient[0]),
-        map(ingredient => getGroupsFromIngredient(ingredient))
-      );
-    }
-    if (label === 'Language') {
-      this.entities = this.service.getLanguage(name).valueChanges.pipe(
-        map(result => result.data.Language[0]),
-        map(language => getGroupsFromLanguage(language))
-      );
-    }
-    if (this.item.label === 'Location') {
-      this.entities = this.service.getLocation(this.item.name).valueChanges.pipe(
-        map(result => result.data.Location[0]),
-        tap(location => this.vaultLocation = location.vault),
-        map(val => getGroupsFromLocation(val))
-      );
-    }
-    if (this.item.label === 'Lore') {
-      this.entities = this.service.getLore(this.item.name).valueChanges.pipe(
-        map(result => result.data.Lore[0]),
-        tap(lore => this.secretHistoriesLore = lore.aspects.some(aspect => aspect.Aspect.name === 'Secret Histories')),
-        map(val => getGroupsFromLore(val))
-      );
-    }
-    if (label === 'MansusDoor') {
-      this.entities = this.service.getMansusDoor(name).valueChanges.pipe(
-        map(result => result.data.MansusDoor[0]),
-        map(door => getGroupsFromMansusDoor(door))
-      );
-    }
-    if (label === 'MansusDoorOption') {
-      this.entities = this.service.getMansusDoorOption(name).valueChanges.pipe(
-        map(result => result.data.MansusDoorOption[0]),
-        map(doorOption => getGroupsFromMansusDoorOption(doorOption))
-      );
-    }
-    if (label === 'Rite') {
-      this.entities = this.service.getRite(name).valueChanges.pipe(
-        map(result => result.data.Rite[0]),
-        map(rite => getGroupsFromRite(rite))
-      );
-    }
-    if (label === 'Tool') {
-      this.entities = this.service.getTool(name).valueChanges.pipe(
-        map(result => result.data.Tool[0]),
-        map(tool => getGroupsFromTool(tool))
-      );
-    }
+    this.entities = this.itemInitService.initItem(this.item);
+    // const { name, label } = this.item;
+    // if (label === 'Aspect') {
+    //   this.entities = this.service.getEntitiesByAspect(name).valueChanges.pipe(
+    //     map(result => result.data.entityWithAspect),
+    //     map(groups => getGroupsFromEntities(groups))
+    //   );
+    // }
+    // if (label === 'Book') {
+    //   this.entities = this.service.getBook(name).valueChanges.pipe(
+    //     map(result => result.data.Book[0]),
+    //     map(book => getGroupsFromBook(book))
+    //   );
+    // }
+    // if (label === 'Influence') {
+    //   this.entities = this.service.getInfluence(name).valueChanges.pipe(
+    //     map(result => result.data.Influence[0]),
+    //     map(influence => getGroupsFromInfluence(influence))
+    //   );
+    // }
+    // if (label === 'Ingredient') {
+    //   this.entities = this.service.getIngredient(name).valueChanges.pipe(
+    //     map(result => result.data.Ingredient[0]),
+    //     map(ingredient => getGroupsFromIngredient(ingredient))
+    //   );
+    // }
+    // if (label === 'Language') {
+    //   this.entities = this.service.getLanguage(name).valueChanges.pipe(
+    //     map(result => result.data.Language[0]),
+    //     map(language => getGroupsFromLanguage(language))
+    //   );
+    // }
+    // if (this.item.label === 'Location') {
+    //   this.entities = this.service.getLocation(this.item.name).valueChanges.pipe(
+    //     map(result => result.data.Location[0]),
+    //     tap(location => this.vaultLocation = location.vault),
+    //     map(val => getGroupsFromLocation(val))
+    //   );
+    // }
+    // if (this.item.label === 'Lore') {
+    //   this.entities = this.service.getLore(this.item.name).valueChanges.pipe(
+    //     map(result => result.data.Lore[0]),
+    //     tap(lore => this.secretHistoriesLore = lore.aspects.some(aspect => aspect.Aspect.name === 'Secret Histories')),
+    //     map(val => getGroupsFromLore(val))
+    //   );
+    // }
+    // if (label === 'MansusDoor') {
+    //   this.entities = this.service.getMansusDoor(name).valueChanges.pipe(
+    //     map(result => result.data.MansusDoor[0]),
+    //     map(door => getGroupsFromMansusDoor(door))
+    //   );
+    // }
+    // if (label === 'MansusDoorOption') {
+    //   this.entities = this.service.getMansusDoorOption(name).valueChanges.pipe(
+    //     map(result => result.data.MansusDoorOption[0]),
+    //     map(doorOption => getGroupsFromMansusDoorOption(doorOption))
+    //   );
+    // }
+    // if (label === 'Rite') {
+    //   this.entities = this.service.getRite(name).valueChanges.pipe(
+    //     map(result => result.data.Rite[0]),
+    //     map(rite => getGroupsFromRite(rite))
+    //   );
+    // }
+    // if (label === 'Tool') {
+    //   this.entities = this.service.getTool(name).valueChanges.pipe(
+    //     map(result => result.data.Tool[0]),
+    //     map(tool => getGroupsFromTool(tool))
+    //   );
+    // }
   }
 
   removeFromBoard(item: Entity) {
