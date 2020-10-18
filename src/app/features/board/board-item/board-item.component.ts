@@ -10,18 +10,12 @@ import { AddInfluenceDecayDialogComponent } from '../../dialogs/add-influence-de
 import { BoardService } from '../board.service';
 import { AddLocationDialogComponent } from '../../dialogs/add-location-dialog/add-location-dialog.component';
 import { AddObstacleLocationDialogComponent } from '../../dialogs/add-obstacle-location-dialog/add-obstacle-location-dialog.component';
-import { map, tap } from 'rxjs/operators';
-import {
-  getGroupsFromLocation, getGroupsFromLore, getGroupsFromBook, getGroupsFromEntities, getGroupsFromInfluence,
-  getGroupsFromTool, getGroupsFromIngredient, getGroupsFromMansusDoor, getGroupsFromMansusDoorOption, getGroupsFromRite,
-  getGroupsFromLanguage
-} from './board-item-detail-utils';
 import { Observable } from 'rxjs';
 import { DialogService } from '../../dialogs/dialog.service';
 import { BoardItemInitiatorService } from '../../graphql/board-item-initiator/board-item-initiator.service';
 import { AddLoreUpgradeDialogComponent } from '../../dialogs/add-lore-upgrade-dialog/add-lore-upgrade-dialog.component';
 import { AddDesireChangeDialogComponent } from '../../dialogs/add-desire-change-dialog/add-desire-change-dialog.component';
-import { FollowerInitiator } from '../../graphql/board-item-initiator/board-item-initiator';
+import { FollowerInitiator, LocationInitiator } from '../../graphql/board-item-initiator/board-item-initiator';
 
 @Component({
   selector: 'app-board-item',
@@ -39,10 +33,14 @@ export class BoardItemComponent implements OnInit {
               private service: GraphqlService, private boardService: BoardService,
               private itemInitService: BoardItemInitiatorService, injector: Injector) {
     itemInitService.addItemInitiator('Follower', new FollowerInitiator(injector));
+    itemInitService.addItemInitiator('Location', new LocationInitiator(injector));
   }
 
   ngOnInit() {
-    this.entities = this.itemInitService.initItem(this.item);
+    const initResult = this.itemInitService.initItem(this.item);
+    this.entities = initResult.entityGroups;
+    this.vaultLocation = initResult.vaultLocation;
+    this.secretHistoriesLore = initResult.secretHistoriesLore;
     // const { name, label } = this.item;
     // if (label === 'Aspect') {
     //   this.entities = this.service.getEntitiesByAspect(name).valueChanges.pipe(
@@ -72,13 +70,6 @@ export class BoardItemComponent implements OnInit {
     //   this.entities = this.service.getLanguage(name).valueChanges.pipe(
     //     map(result => result.data.Language[0]),
     //     map(language => getGroupsFromLanguage(language))
-    //   );
-    // }
-    // if (this.item.label === 'Location') {
-    //   this.entities = this.service.getLocation(this.item.name).valueChanges.pipe(
-    //     map(result => result.data.Location[0]),
-    //     tap(location => this.vaultLocation = location.vault),
-    //     map(val => getGroupsFromLocation(val))
     //   );
     // }
     // if (this.item.label === 'Lore') {

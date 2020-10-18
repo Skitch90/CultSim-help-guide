@@ -1,4 +1,4 @@
-import { EntitiesGroup, EntitiesGroupItem } from 'src/app/shared/model';
+import { EntitiesGroup, EntitiesGroupItem } from '../../../shared/model';
 
 const convertToGroupItem = (item): EntitiesGroupItem => {
     const { aspects, door } = item;
@@ -47,40 +47,6 @@ export const getGroupsFromLanguage = (language: any): EntitiesGroup[] => {
         groups.push({
             label: 'Found From',
             entities
-        });
-    }
-    return groups;
-};
-
-export const getGroupsFromLocation = (location: any): EntitiesGroup[] => {
-    const groups: EntitiesGroup[] = [];
-    const { histories, obstacles, bookRewards, influenceRewards, ingredientRewards, toolRewards } = location;
-    if (histories.length > 0) {
-        groups.push({
-            label: 'From histories',
-            entities: histories.map(history => convertToGroupItem(history))
-        });
-    }
-    if (obstacles.length > 0) {
-        groups.push({
-            label: 'Obstacles',
-            entities: obstacles.map(obstacle => {
-                const { _id, name, __typename, defeatedWith } = obstacle;
-                return {
-                    id: _id,
-                    name,
-                    label: __typename,
-                    aspects: defeatedWith.map(item => item.name)
-                };
-            })
-        });
-    }
-    if (bookRewards.length || influenceRewards.length || ingredientRewards.length || toolRewards.length) {
-        const rewards = [...bookRewards, ...influenceRewards, ...ingredientRewards, ...toolRewards];
-        const groupItems = rewards.map(item => convertToGroupItem(item));
-        groups.push({
-            label: 'Rewards',
-            entities: groupItems
         });
     }
     return groups;
