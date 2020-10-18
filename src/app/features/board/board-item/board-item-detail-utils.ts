@@ -136,24 +136,6 @@ export const getGroupsFromBook = (book: any): EntitiesGroup[] => {
     return groups;
 };
 
-export const getGroupsFromEntities = (entityGroups: any[]): EntitiesGroup[] => {
-    return entityGroups.map(entityGroup => {
-        const { label, entities } = entityGroup;
-        return {
-            label,
-            entities: entities.map(entity => {
-                const { _id, name, type, aspectQuantity } = entity;
-                return {
-                    id: _id,
-                    name,
-                    label: type,
-                    aspectQuantity
-                };
-            })
-        };
-    });
-};
-
 export const getGroupsFromInfluence = (influence: any): EntitiesGroup[] => {
     const groups: EntitiesGroup[] = [];
     const { aspects, foundInLocation, fromDreamingIn, fromBook, decaysTo, decaysFrom } = influence;

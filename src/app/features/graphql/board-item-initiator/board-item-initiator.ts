@@ -2,9 +2,9 @@ import { Injector } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { EntitiesGroup } from '../../../shared/model';
-import { GetFollowerGQL, GetLocationGQL } from '../model';
+import { GetEntitiesByAspectGQL, GetFollowerGQL, GetLocationGQL } from '../model';
 import { convertToGroupItem, createAspectGroupItem } from './board-item-initiator-utils';
-import { Follower, ItemInitResult, Location } from './board-item-initiator.types';
+import { AspectSearchGroupResult, Follower, ItemInitResult, Location } from './board-item-initiator.types';
 
 export interface ItemInitiator {
     initBoardItem(name: string): ItemInitResult;
@@ -95,6 +95,44 @@ export class LocationInitiator implements ItemInitiator {
             });
         }
         return groups;
+    }
+
+}
+
+export class AspectInitiator implements ItemInitiator {
+    private getEntitiesByAspectGQL: GetEntitiesByAspectGQL;
+
+    constructor(injector: Injector) {
+        this.getEntitiesByAspectGQL = injector.get(GetEntitiesByAspectGQL);
+    }
+
+    initBoardItem(name: string): ItemInitResult {
+        return {
+            entityGroups: this.getEntitiesByAspectGQL.watch({ aspect: name }).valueChanges.pipe(
+                map(result => result.data.entityWithAspect),
+                map(groups => this.getGroupsFromEntities(groups))
+            ),
+            secretHistoriesLore: false,
+            vaultLocation: false
+        };
+    }
+
+    private getGroupsFromEntities(entityGroups: AspectSearchGroupResult[]): EntitiesGroup[] {
+        return entityGroups.map(entityGroup => {
+            const { label, entities } = entityGroup;
+            return {
+                label,
+                entities: entities.map(entity => {
+                    const { _id, name, type, aspectQuantity } = entity;
+                    return {
+                        id: +_id,
+                        name,
+                        label: type,
+                        aspectQuantity
+                    };
+                })
+            };
+        });
     }
 
 }

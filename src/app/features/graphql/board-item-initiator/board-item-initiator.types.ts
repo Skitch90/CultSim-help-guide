@@ -112,3 +112,12 @@ export type Location = {
     toolRewards: ToolAsReward[];
 };
 
+type AspectSearchEntity = ({
+    __typename?: 'AspectSearchEntity';
+} & Pick<Model.AspectSearchEntity, '_id' | 'name' | 'type' | 'aspectQuantity'>);
+
+export type AspectSearchGroupResult = ({
+    __typename?: 'AspectSearchGroupResult';
+} & Pick<Model.AspectSearchGroupResult, 'label'> & {
+    entities: AspectSearchEntity[];
+});

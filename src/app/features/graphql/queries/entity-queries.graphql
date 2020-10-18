@@ -1,11 +1,11 @@
-  query getEntitiesByAspect($aspect: String!) {
-    entityWithAspect(aspect: $aspect) {
-      label
-      entities {
-        _id
-        name
-        type
-        aspectQuantity
-      }
+query getEntitiesByAspect($aspect: String!) {
+  entityWithAspect(aspect: $aspect) {
+    label
+    entities {
+      _id
+      name
+      type
+      aspectQuantity
     }
   }
+}

@@ -15,7 +15,7 @@ import { DialogService } from '../../dialogs/dialog.service';
 import { BoardItemInitiatorService } from '../../graphql/board-item-initiator/board-item-initiator.service';
 import { AddLoreUpgradeDialogComponent } from '../../dialogs/add-lore-upgrade-dialog/add-lore-upgrade-dialog.component';
 import { AddDesireChangeDialogComponent } from '../../dialogs/add-desire-change-dialog/add-desire-change-dialog.component';
-import { FollowerInitiator, LocationInitiator } from '../../graphql/board-item-initiator/board-item-initiator';
+import { AspectInitiator, FollowerInitiator, LocationInitiator } from '../../graphql/board-item-initiator/board-item-initiator';
 
 @Component({
   selector: 'app-board-item',
@@ -32,22 +32,19 @@ export class BoardItemComponent implements OnInit {
   constructor(private dialogService: DialogService, private dialog: MatDialog,
               private service: GraphqlService, private boardService: BoardService,
               private itemInitService: BoardItemInitiatorService, injector: Injector) {
+    itemInitService.addItemInitiator('Aspect', new AspectInitiator(injector));
     itemInitService.addItemInitiator('Follower', new FollowerInitiator(injector));
     itemInitService.addItemInitiator('Location', new LocationInitiator(injector));
   }
 
   ngOnInit() {
     const initResult = this.itemInitService.initItem(this.item);
-    this.entities = initResult.entityGroups;
-    this.vaultLocation = initResult.vaultLocation;
-    this.secretHistoriesLore = initResult.secretHistoriesLore;
+    if (initResult) {
+      this.entities = initResult.entityGroups;
+      this.vaultLocation = initResult.vaultLocation;
+      this.secretHistoriesLore = initResult.secretHistoriesLore;
+    }
     // const { name, label } = this.item;
-    // if (label === 'Aspect') {
-    //   this.entities = this.service.getEntitiesByAspect(name).valueChanges.pipe(
-    //     map(result => result.data.entityWithAspect),
-    //     map(groups => getGroupsFromEntities(groups))
-    //   );
-    // }
     // if (label === 'Book') {
     //   this.entities = this.service.getBook(name).valueChanges.pipe(
     //     map(result => result.data.Book[0]),
