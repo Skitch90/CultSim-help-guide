@@ -89,53 +89,6 @@ export const getGroupsFromLore = (lore: any): EntitiesGroup[] => {
     return groups;
 };
 
-export const getGroupsFromBook = (book: any): EntitiesGroup[] => {
-    const groups: EntitiesGroup[] = [];
-    const { foundInLocation, language, teachesLanguage, studiedIntoLore, teachesRite, resultsInInfluence, resultsInTool } = book;
-    if (foundInLocation.length > 0) {
-        groups.push({
-            label: 'Found In',
-            entities: foundInLocation.map(location => {
-                return convertToGroupItem(location.Location);
-            })
-        });
-    }
-    if (language !== null) {
-        groups.push({
-            label: 'Need Translation from',
-            entities: [convertToGroupItem(language)]
-        });
-    }
-    if (teachesLanguage !== null) {
-        groups.push({
-            label: 'Rewards',
-            entities: [ convertToGroupItem(teachesLanguage) ]
-        });
-    } else {
-        const loreRewards = studiedIntoLore.map(lore => {
-            return convertToGroupItem(lore);
-        });
-        const riteReward = (teachesRite !== null) ? [convertToGroupItem(teachesRite)] : [];
-        const influenceRewards = resultsInInfluence.map(influnce => {
-            return convertToGroupItem(influnce);
-        });
-        const toolReward = (resultsInTool) ? [ convertToGroupItem(resultsInTool) ] : [];
-        const rewards = [
-            ...loreRewards,
-            ...influenceRewards,
-            ...riteReward,
-            ...toolReward
-        ];
-        if (rewards.length > 0) {
-            groups.push({
-                label: 'Rewards',
-                entities: rewards
-            });
-        }
-    }
-    return groups;
-};
-
 export const getGroupsFromInfluence = (influence: any): EntitiesGroup[] => {
     const groups: EntitiesGroup[] = [];
     const { aspects, foundInLocation, fromDreamingIn, fromBook, decaysTo, decaysFrom } = influence;

@@ -157,3 +157,63 @@ export type Ingredient = {
 } & Pick<Model.Ingredient, 'name' | '_id'> & {
     aspects?: IngredientAspect[];
 };
+
+type LocationNameId = {
+    __typename?: 'Location';
+} & Pick<Model.Location, 'name' | '_id'>;
+
+type BookFoundInLocation = ({
+    __typename?: '_BookFoundInLocation';
+} & Pick<Model._BookFoundInLocation, 'chance'> & {
+    Location?: LocationNameId;
+});
+
+type LanguageName = {
+    __typename?: 'Language';
+} & Pick<Model.Language, 'name' | '_id'>;
+
+type LoreAspect = ({
+    __typename?: '_LoreAspects';
+} & Pick<Model._LoreAspects, 'quantity'> & {
+    Aspect?: Aspect;
+});
+
+type Lore = ({
+    __typename?: 'Lore';
+} & {
+    __typename?: 'Lore';
+} & Pick<Model.Lore, 'name' | '_id'> & {
+    aspects?: LoreAspect[];
+});
+
+type RiteName = {
+    __typename?: 'Rite';
+} & Pick<Model.Rite, 'name' | '_id'>;
+
+type BaseTool = {
+    __typename?: 'Tool';
+} & {
+    __typename?: 'Tool';
+} & Pick<Model.Tool, 'name' | '_id'> & {
+    aspects?: ToolAspect[];
+};
+
+type BaseInfluence = ({
+    __typename?: 'Influence';
+} & {
+    __typename?: 'Influence';
+} & Pick<Model.Influence, 'name' | '_id'> & {
+    aspects?: InfluenceAspect[];
+});
+
+export type Book = {
+    __typename?: 'Book';
+} & Pick<Model.Book, 'name' | '_id'> & {
+    foundInLocation?: BookFoundInLocation[];
+    language?: LanguageName;
+    studiedIntoLore: Lore[];
+    teachesRite?: RiteName;
+    teachesLanguage?: LanguageName;
+    resultsInInfluence: BaseInfluence[];
+    resultsInTool?: BaseTool;
+};

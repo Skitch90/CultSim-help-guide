@@ -15,7 +15,7 @@ import { DialogService } from '../../dialogs/dialog.service';
 import { BoardItemInitiatorService } from '../../graphql/board-item-initiator/board-item-initiator.service';
 import { AddLoreUpgradeDialogComponent } from '../../dialogs/add-lore-upgrade-dialog/add-lore-upgrade-dialog.component';
 import { AddDesireChangeDialogComponent } from '../../dialogs/add-desire-change-dialog/add-desire-change-dialog.component';
-import { AspectInitiator, FollowerInitiator, IngredientInitiator, LocationInitiator } from '../../graphql/board-item-initiator/board-item-initiator';
+import { AspectInitiator, BookInitiator, FollowerInitiator, IngredientInitiator, LocationInitiator } from '../../graphql/board-item-initiator/board-item-initiator';
 
 @Component({
   selector: 'app-board-item',
@@ -36,6 +36,7 @@ export class BoardItemComponent implements OnInit {
     itemInitService.addItemInitiator('Follower', new FollowerInitiator(injector));
     itemInitService.addItemInitiator('Ingredient', new IngredientInitiator(injector));
     itemInitService.addItemInitiator('Location', new LocationInitiator(injector));
+    itemInitService.addItemInitiator('Book', new BookInitiator(injector));
   }
 
   ngOnInit() {
@@ -46,12 +47,6 @@ export class BoardItemComponent implements OnInit {
       this.secretHistoriesLore = initResult.secretHistoriesLore;
     }
     // const { name, label } = this.item;
-    // if (label === 'Book') {
-    //   this.entities = this.service.getBook(name).valueChanges.pipe(
-    //     map(result => result.data.Book[0]),
-    //     map(book => getGroupsFromBook(book))
-    //   );
-    // }
     // if (label === 'Influence') {
     //   this.entities = this.service.getInfluence(name).valueChanges.pipe(
     //     map(result => result.data.Influence[0]),
