@@ -15,12 +15,12 @@ import { DialogService } from '../../dialogs/dialog.service';
 import { BoardItemInitiatorService } from '../../graphql/board-item-initiator/board-item-initiator.service';
 import { AddLoreUpgradeDialogComponent } from '../../dialogs/add-lore-upgrade-dialog/add-lore-upgrade-dialog.component';
 import { AddDesireChangeDialogComponent } from '../../dialogs/add-desire-change-dialog/add-desire-change-dialog.component';
-import { AspectInitiator, BookInitiator, FollowerInitiator, IngredientInitiator, LocationInitiator } from '../../graphql/board-item-initiator/board-item-initiator';
+import { AspectInitiator, BookInitiator, FollowerInitiator, IngredientInitiator, LocationInitiator, LoreInitiator } from '../../graphql/board-item-initiator/board-item-initiator';
 
 @Component({
-  selector: 'app-board-item',
-  templateUrl: './board-item.component.html',
-  styleUrls: ['./board-item.component.scss']
+    selector: 'app-board-item',
+    templateUrl: './board-item.component.html',
+    styleUrls: ['./board-item.component.scss']
 })
 export class BoardItemComponent implements OnInit {
   @Input() item: Entity;
@@ -32,134 +32,128 @@ export class BoardItemComponent implements OnInit {
   constructor(private dialogService: DialogService, private dialog: MatDialog,
               private service: GraphqlService, private boardService: BoardService,
               private itemInitService: BoardItemInitiatorService, injector: Injector) {
-    itemInitService.addItemInitiator('Aspect', new AspectInitiator(injector));
-    itemInitService.addItemInitiator('Follower', new FollowerInitiator(injector));
-    itemInitService.addItemInitiator('Ingredient', new IngredientInitiator(injector));
-    itemInitService.addItemInitiator('Location', new LocationInitiator(injector));
-    itemInitService.addItemInitiator('Book', new BookInitiator(injector));
+      itemInitService.addItemInitiator('Aspect', new AspectInitiator(injector));
+      itemInitService.addItemInitiator('Follower', new FollowerInitiator(injector));
+      itemInitService.addItemInitiator('Ingredient', new IngredientInitiator(injector));
+      itemInitService.addItemInitiator('Location', new LocationInitiator(injector));
+      itemInitService.addItemInitiator('Book', new BookInitiator(injector));
+      itemInitService.addItemInitiator('Lore', new LoreInitiator(injector));
   }
 
   ngOnInit() {
-    const initResult = this.itemInitService.initItem(this.item);
-    if (initResult) {
-      this.entities = initResult.entityGroups;
-      this.vaultLocation = initResult.vaultLocation;
-      this.secretHistoriesLore = initResult.secretHistoriesLore;
-    }
-    // const { name, label } = this.item;
-    // if (label === 'Influence') {
-    //   this.entities = this.service.getInfluence(name).valueChanges.pipe(
-    //     map(result => result.data.Influence[0]),
-    //     map(influence => getGroupsFromInfluence(influence))
-    //   );
-    // }
-    // if (label === 'Language') {
-    //   this.entities = this.service.getLanguage(name).valueChanges.pipe(
-    //     map(result => result.data.Language[0]),
-    //     map(language => getGroupsFromLanguage(language))
-    //   );
-    // }
-    // if (this.item.label === 'Lore') {
-    //   this.entities = this.service.getLore(this.item.name).valueChanges.pipe(
-    //     map(result => result.data.Lore[0]),
-    //     tap(lore => this.secretHistoriesLore = lore.aspects.some(aspect => aspect.Aspect.name === 'Secret Histories')),
-    //     map(val => getGroupsFromLore(val))
-    //   );
-    // }
-    // if (label === 'MansusDoor') {
-    //   this.entities = this.service.getMansusDoor(name).valueChanges.pipe(
-    //     map(result => result.data.MansusDoor[0]),
-    //     map(door => getGroupsFromMansusDoor(door))
-    //   );
-    // }
-    // if (label === 'MansusDoorOption') {
-    //   this.entities = this.service.getMansusDoorOption(name).valueChanges.pipe(
-    //     map(result => result.data.MansusDoorOption[0]),
-    //     map(doorOption => getGroupsFromMansusDoorOption(doorOption))
-    //   );
-    // }
-    // if (label === 'Rite') {
-    //   this.entities = this.service.getRite(name).valueChanges.pipe(
-    //     map(result => result.data.Rite[0]),
-    //     map(rite => getGroupsFromRite(rite))
-    //   );
-    // }
-    // if (label === 'Tool') {
-    //   this.entities = this.service.getTool(name).valueChanges.pipe(
-    //     map(result => result.data.Tool[0]),
-    //     map(tool => getGroupsFromTool(tool))
-    //   );
-    // }
+      const initResult = this.itemInitService.initItem(this.item);
+      if (initResult) {
+          this.entities = initResult.entityGroups;
+          this.vaultLocation = initResult.vaultLocation;
+          this.secretHistoriesLore = initResult.secretHistoriesLore;
+      }
+      // const { name, label } = this.item;
+      // if (label === 'Influence') {
+      //   this.entities = this.service.getInfluence(name).valueChanges.pipe(
+      //     map(result => result.data.Influence[0]),
+      //     map(influence => getGroupsFromInfluence(influence))
+      //   );
+      // }
+      // if (label === 'Language') {
+      //   this.entities = this.service.getLanguage(name).valueChanges.pipe(
+      //     map(result => result.data.Language[0]),
+      //     map(language => getGroupsFromLanguage(language))
+      //   );
+      // }
+      // if (label === 'MansusDoor') {
+      //   this.entities = this.service.getMansusDoor(name).valueChanges.pipe(
+      //     map(result => result.data.MansusDoor[0]),
+      //     map(door => getGroupsFromMansusDoor(door))
+      //   );
+      // }
+      // if (label === 'MansusDoorOption') {
+      //   this.entities = this.service.getMansusDoorOption(name).valueChanges.pipe(
+      //     map(result => result.data.MansusDoorOption[0]),
+      //     map(doorOption => getGroupsFromMansusDoorOption(doorOption))
+      //   );
+      // }
+      // if (label === 'Rite') {
+      //   this.entities = this.service.getRite(name).valueChanges.pipe(
+      //     map(result => result.data.Rite[0]),
+      //     map(rite => getGroupsFromRite(rite))
+      //   );
+      // }
+      // if (label === 'Tool') {
+      //   this.entities = this.service.getTool(name).valueChanges.pipe(
+      //     map(result => result.data.Tool[0]),
+      //     map(tool => getGroupsFromTool(tool))
+      //   );
+      // }
   }
 
   removeFromBoard(item: Entity) {
-    this.boardService.removeBoardItem(item);
+      this.boardService.removeBoardItem(item);
   }
 
   openAddRewardDialog(itemName: string, itemLabel: string) {
-    const dialogConfig = new MatDialogConfig();
+      const dialogConfig = new MatDialogConfig();
 
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-    dialogConfig.width = '400px';
+      dialogConfig.disableClose = true;
+      dialogConfig.autoFocus = true;
+      dialogConfig.width = '400px';
 
-    if (itemLabel === 'Location') {
-      this.dialogService.openDialog(AddRewardLocationDialogComponent, this.service.saveLocationReward, { locationName: itemName });
-    } else if (itemLabel === 'Book') {
-      this.dialogService.openDialog(AddRewardBookDialogComponent, this.service.saveBookReward, { bookTitle: itemName });
-    } else if (itemLabel === 'MansusDoorOption') {
-      dialogConfig.data = {
-        mansusDoorOption: itemName
-      };
+      if (itemLabel === 'Location') {
+          this.dialogService.openDialog(AddRewardLocationDialogComponent, this.service.saveLocationReward, { locationName: itemName });
+      } else if (itemLabel === 'Book') {
+          this.dialogService.openDialog(AddRewardBookDialogComponent, this.service.saveBookReward, { bookTitle: itemName });
+      } else if (itemLabel === 'MansusDoorOption') {
+          dialogConfig.data = {
+              mansusDoorOption: itemName
+          };
 
-      const dialogRef = this.dialog.open(AddRewardMansusDialogComponent, dialogConfig);
-      dialogRef.afterClosed().subscribe(val => {
-        if (val) {
-          this.service.saveMansusReward(val);
-        }
-      });
-    }
+          const dialogRef = this.dialog.open(AddRewardMansusDialogComponent, dialogConfig);
+          dialogRef.afterClosed().subscribe(val => {
+              if (val) {
+                  this.service.saveMansusReward(val);
+              }
+          });
+      }
 
   }
 
   openAddOptionDialog(itemName) {
-    this.dialogService.openDialog(AddDoorOptionDialogComponent,
-                                  this.service.saveMansusDoorOption,
-                                  { mansusDoor: itemName });
+      this.dialogService.openDialog(AddDoorOptionDialogComponent,
+          this.service.saveMansusDoorOption,
+          { mansusDoor: itemName });
   }
 
   openAddDesireChangeDialog(itemName: string) {
-    this.dialogService.openDialog(AddDesireChangeDialogComponent,
-                                  this.service.saveDesireChange,
-                                  { desire: itemName});
+      this.dialogService.openDialog(AddDesireChangeDialogComponent,
+          this.service.saveDesireChange,
+          { desire: itemName});
   }
 
   openAddInfluenceDecay(influence) {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-    dialogConfig.width = '400px';
-    dialogConfig.data = {
-      influence
-    };
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.disableClose = true;
+      dialogConfig.autoFocus = true;
+      dialogConfig.width = '400px';
+      dialogConfig.data = {
+          influence
+      };
 
-    const dialogRef = this.dialog.open(AddInfluenceDecayDialogComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe(val => {
-      if (val) {
-        this.service.saveInfluenceDecay(val);
-      }
-    });
+      const dialogRef = this.dialog.open(AddInfluenceDecayDialogComponent, dialogConfig);
+      dialogRef.afterClosed().subscribe(val => {
+          if (val) {
+              this.service.saveInfluenceDecay(val);
+          }
+      });
   }
 
   openAddLocationDialog(itemName) {
-    this.dialogService.openDialog(AddLocationDialogComponent, this.service.saveSecretHistoryLocation, { secretHistory: itemName });
-   }
+      this.dialogService.openDialog(AddLocationDialogComponent, this.service.saveSecretHistoryLocation, { secretHistory: itemName });
+  }
 
   openAddObstaclesDialog(itemName: string) {
-    this.dialogService.openDialog(AddObstacleLocationDialogComponent, this.service.saveLocationObstacle, { vault: itemName });
+      this.dialogService.openDialog(AddObstacleLocationDialogComponent, this.service.saveLocationObstacle, { vault: itemName });
   }
 
   openAddUpgradeDialog(itemName: string) {
-    this.dialogService.openDialog(AddLoreUpgradeDialogComponent, this.service.setLoreUpgrade, { lore: itemName });
+      this.dialogService.openDialog(AddLoreUpgradeDialogComponent, this.service.setLoreUpgrade, { lore: itemName });
   }
 }

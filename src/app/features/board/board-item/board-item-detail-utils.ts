@@ -52,43 +52,6 @@ export const getGroupsFromLanguage = (language: any): EntitiesGroup[] => {
     return groups;
 };
 
-export const getGroupsFromLore = (lore: any): EntitiesGroup[] => {
-    const groups: EntitiesGroup[] = [];
-    const { aspects, exploreResults, fromBook, fromDreamingIn, upgradesTo, upgradedFrom } = lore;
-    if (aspects.length > 0) {
-        groups.push({
-            label: 'Aspects',
-            entities: aspects.map(aspect => createAspectGroupItem(aspect))
-        });
-    }
-    if (fromBook.length || fromDreamingIn.length) {
-        const sources = [ ...fromBook, ...fromDreamingIn ];
-        groups.push({
-            label: 'Found From',
-            entities: sources.map(source => convertToGroupItem(source))
-        });
-    }
-    if (upgradesTo) {
-        groups.push({
-            label: 'Upgrades to',
-            entities: [ convertToGroupItem(upgradesTo) ]
-        });
-    }
-    if (upgradedFrom) {
-        groups.push({
-            label: 'Upgraded from',
-            entities: [ convertToGroupItem(upgradedFrom) ]
-        });
-    }
-    if (exploreResults.length > 0) {
-        groups.push({
-            label: 'Vaults',
-            entities: exploreResults.map(vault => convertToGroupItem(vault))
-        });
-    }
-    return groups;
-};
-
 export const getGroupsFromInfluence = (influence: any): EntitiesGroup[] => {
     const groups: EntitiesGroup[] = [];
     const { aspects, foundInLocation, fromDreamingIn, fromBook, decaysTo, decaysFrom } = influence;

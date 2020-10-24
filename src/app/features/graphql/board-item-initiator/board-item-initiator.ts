@@ -1,9 +1,9 @@
 import { Injector } from '@angular/core';
 import { map, tap } from 'rxjs/operators';
 import { EntitiesGroup } from '../../../shared/model';
-import { GetBookGQL, GetEntitiesByAspectGQL, GetFollowerGQL, GetIngredientGQL, GetLocationGQL } from '../operations';
+import { GetBookGQL, GetEntitiesByAspectGQL, GetFollowerGQL, GetIngredientGQL, GetLocationGQL, GetLoreGQL } from '../operations';
 import { convertToGroupItem, createAspectGroupItem, createSimpleAspectGroupItem } from './board-item-initiator-utils';
-import { AspectSearchGroupResult, Book, Follower, Ingredient, ItemInitResult, Location } from './board-item-initiator.types';
+import { AspectSearchGroupResult, Book, Follower, Ingredient, ItemInitResult, Location, Lore } from './board-item-initiator.types';
 
 export interface ItemInitiator {
     initBoardItem(name: string): ItemInitResult;
@@ -237,6 +237,64 @@ export class BookInitiator implements ItemInitiator {
                     entities: rewards
                 });
             }
+        }
+        return groups;
+    }
+}
+
+export class LoreInitiator implements ItemInitiator {
+    private getLoreGQL: GetLoreGQL;
+
+    constructor(injector: Injector) {
+        this.getLoreGQL = injector.get(GetLoreGQL);
+    }
+
+    initBoardItem(name: string): ItemInitResult {
+        let secretHistoriesLore = false;
+        return {
+            entityGroups: this.getLoreGQL.watch({ name }).valueChanges.pipe(
+                map(result => result.data.Lore[0]),
+                tap(lore => secretHistoriesLore = lore.aspects.some(aspect => aspect.Aspect.name === 'Secret Histories')),
+                map(lore => this.getGroupsFromLore(lore))
+            ),
+            secretHistoriesLore,
+            vaultLocation: false,
+        };
+    }
+
+    private getGroupsFromLore(lore: Lore): EntitiesGroup[] {
+        const groups: EntitiesGroup[] = [];
+        const { aspects, exploreResults, fromBook, fromDreamingIn, upgradesTo, upgradedFrom } = lore;
+        if (aspects.length > 0) {
+            groups.push({
+                label: 'Aspects',
+                entities: aspects.map(aspect => createAspectGroupItem(aspect))
+            });
+        }
+        if (fromBook.length || fromDreamingIn.length) {
+            const sources = [ ...fromBook, ...fromDreamingIn ];
+            groups.push({
+                label: 'Found From',
+                entities: sources.map(source => convertToGroupItem(source))
+            });
+        }
+        if (upgradesTo) {
+            groups.push({
+                label: 'Upgrades to',
+                entities: [ convertToGroupItem(upgradesTo) ]
+            });
+        }
+        if (upgradedFrom) {
+            groups.push({
+                label: 'Upgraded from',
+                entities: [ convertToGroupItem(upgradedFrom) ]
+            });
+        }
+        if (exploreResults.length > 0) {
+            groups.push({
+                label: 'Vaults',
+                entities: exploreResults.map(vault => convertToGroupItem(vault))
+            });
         }
         return groups;
     }

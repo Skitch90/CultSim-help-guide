@@ -178,7 +178,7 @@ type LoreAspect = ({
     Aspect?: Aspect;
 });
 
-type Lore = ({
+type LoreSimple = ({
     __typename?: 'Lore';
 } & {
     __typename?: 'Lore';
@@ -211,9 +211,24 @@ export type Book = {
 } & Pick<Model.Book, 'name' | '_id'> & {
     foundInLocation?: BookFoundInLocation[];
     language?: LanguageName;
-    studiedIntoLore: Lore[];
+    studiedIntoLore: LoreSimple[];
     teachesRite?: RiteName;
     teachesLanguage?: LanguageName;
     resultsInInfluence: BaseInfluence[];
     resultsInTool?: BaseTool;
+};
+
+
+export type Lore = {
+    __typename?: 'Lore';
+} & {
+    exploreResults: LocationNameId[];
+    fromBook: BookAsReward[];
+    fromDreamingIn: MansusDoorOptionSimple[];
+    upgradesTo?: LoreSimple;
+    upgradedFrom?: LoreSimple;
+} & {
+    __typename?: 'Lore';
+} & Pick<Model.Lore, '_id' | 'name'> & {
+    aspects?: LoreAspect[];
 };
