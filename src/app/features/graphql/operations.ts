@@ -1105,6 +1105,42 @@ export type SetMansusDoorOptionMutation = { __typename?: 'Mutation' } & {
   >;
 };
 
+export type GetRitesQueryVariables = Types.Exact<{ [key: string]: never }>;
+
+export type GetRitesQuery = { __typename?: 'Query' } & {
+  Rite?: Types.Maybe<
+    Array<
+      Types.Maybe<{ __typename?: 'Rite' } & Pick<Types.Rite, '_id' | 'name'>>
+    >
+  >;
+};
+
+export type GetRiteQueryVariables = Types.Exact<{
+  name: Types.Scalars['String'];
+}>;
+
+export type GetRiteQuery = { __typename?: 'Query' } & {
+  Rite?: Types.Maybe<
+    Array<
+      Types.Maybe<
+        { __typename?: 'Rite' } & Pick<Types.Rite, 'name'> & {
+            fromBook: Array<
+              { __typename?: 'Book' } & Pick<Types.Book, '_id' | 'name'>
+            >;
+          }
+      >
+    >
+  >;
+};
+
+export type SaveRiteMutationVariables = Types.Exact<{
+  name: Types.Scalars['String'];
+}>;
+
+export type SaveRiteMutation = { __typename?: 'Mutation' } & {
+  CreateRite?: Types.Maybe<{ __typename?: 'Rite' } & Pick<Types.Rite, 'name'>>;
+};
+
 export type GetToolsQueryVariables = Types.Exact<{ [key: string]: never }>;
 
 export type GetToolsQuery = { __typename?: 'Query' } & {
@@ -2802,6 +2838,74 @@ export class SetMansusDoorOptionGQL extends Apollo.Mutation<
   SetMansusDoorOptionMutationVariables
 > {
   document = SetMansusDoorOptionDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+  }
+}
+export const GetRitesDocument = gql`
+  query getRites {
+    Rite(orderBy: name_asc) {
+      _id
+      name
+    }
+  }
+`;
+
+@Injectable({
+    providedIn: 'root',
+})
+export class GetRitesGQL extends Apollo.Query<
+  GetRitesQuery,
+  GetRitesQueryVariables
+> {
+  document = GetRitesDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+  }
+}
+export const GetRiteDocument = gql`
+  query getRite($name: String!) {
+    Rite(name: $name) {
+      name
+      fromBook {
+        _id
+        name
+      }
+    }
+  }
+`;
+
+@Injectable({
+    providedIn: 'root',
+})
+export class GetRiteGQL extends Apollo.Query<
+  GetRiteQuery,
+  GetRiteQueryVariables
+> {
+  document = GetRiteDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+  }
+}
+export const SaveRiteDocument = gql`
+  mutation saveRite($name: String!) {
+    CreateRite(name: $name) {
+      name
+    }
+  }
+`;
+
+@Injectable({
+    providedIn: 'root',
+})
+export class SaveRiteGQL extends Apollo.Mutation<
+  SaveRiteMutation,
+  SaveRiteMutationVariables
+> {
+  document = SaveRiteDocument;
 
   constructor(apollo: Apollo.Apollo) {
       super(apollo);

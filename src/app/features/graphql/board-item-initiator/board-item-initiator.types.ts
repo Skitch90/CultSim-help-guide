@@ -284,3 +284,9 @@ export type Tool = {
     foundInLocation?: ToolFoundInLocation[];
     fromBook: BookBase[];
 };
+
+export type Rite = {
+    __typename?: 'Rite';
+} & Pick<Model.Rite, 'name'> & {
+    fromBook: BookBase[];
+};

@@ -2,10 +2,10 @@ import { Injector } from '@angular/core';
 import { map, tap } from 'rxjs/operators';
 import { EntitiesGroup, EntitiesGroupItem } from '../../../shared/model';
 import { GetBookGQL, GetEntitiesByAspectGQL, GetFollowerGQL, GetInfluenceGQL, GetIngredientGQL, GetLanguageGQL,
-    GetLocationGQL, GetLoreGQL, GetMansusDoorGQL, GetMansusDoorOptionGQL, GetToolGQL } from '../operations';
+    GetLocationGQL, GetLoreGQL, GetMansusDoorGQL, GetMansusDoorOptionGQL, GetRiteGQL, GetToolGQL } from '../operations';
 import { convertToGroupItem, createAspectGroupItem, createSimpleAspectGroupItem } from './board-item-initiator-utils';
 import { AspectSearchGroupResult, Book, Follower, Influence, Ingredient, ItemInitResult, Language, Location, Lore, MansusDoor,
-    MansusDoorOption, Tool} from './board-item-initiator.types';
+    MansusDoorOption, Rite, Tool} from './board-item-initiator.types';
 
 export interface ItemInitiator {
     initBoardItem(name: string): ItemInitResult;
@@ -502,6 +502,37 @@ export class ToolInitiator implements ItemInitiator {
                     ...foundInLocation.map(location => convertToGroupItem(location.Location)),
                     ...fromBook.map(book => convertToGroupItem(book))
                 ]
+            });
+        }
+        return groups;
+    }
+}
+
+export class RiteInitiator implements ItemInitiator {
+    private getRiteGQL: GetRiteGQL;
+
+    constructor(injector: Injector) {
+        this.getRiteGQL = injector.get(GetRiteGQL);
+    }
+
+    initBoardItem(name: string): ItemInitResult {
+        return {
+            entityGroups: this.getRiteGQL.watch({ name }).valueChanges.pipe(
+                map((result) => result.data.Rite[0]),
+                map(rite => this.getGroupsFromRite(rite))
+            ),
+            secretHistoriesLore: false,
+            vaultLocation: false
+        };
+    }
+
+    private getGroupsFromRite(rite: Rite): EntitiesGroup[] {
+        const groups: EntitiesGroup[] = [];
+        const { fromBook } = rite;
+        if (fromBook.length) {
+            groups.push({
+                label: 'From book',
+                entities: fromBook.map(book => convertToGroupItem(book))
             });
         }
         return groups;

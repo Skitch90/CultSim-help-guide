@@ -1,0 +1,22 @@
+query getRites {
+  Rite(orderBy: name_asc) {
+    _id
+    name
+  }
+}
+
+query getRite($name: String!) {
+  Rite(name: $name) {
+    name
+    fromBook {
+      _id
+      name
+    }
+  }
+}
+
+mutation saveRite($name: String!) {
+  CreateRite(name: $name) {
+    name
+  }
+}

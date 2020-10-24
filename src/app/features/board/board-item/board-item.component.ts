@@ -16,7 +16,7 @@ import { BoardItemInitiatorService } from '../../graphql/board-item-initiator/bo
 import { AddLoreUpgradeDialogComponent } from '../../dialogs/add-lore-upgrade-dialog/add-lore-upgrade-dialog.component';
 import { AddDesireChangeDialogComponent } from '../../dialogs/add-desire-change-dialog/add-desire-change-dialog.component';
 import { AspectInitiator, BookInitiator, FollowerInitiator, InfluenceInitiator, IngredientInitiator, LanguageInitiator,
-    LocationInitiator, LoreInitiator, MansusDoorInitiator, MansusDoorOptionInitiator, ToolInitiator } from '../../graphql/board-item-initiator/board-item-initiator';
+    LocationInitiator, LoreInitiator, MansusDoorInitiator, MansusDoorOptionInitiator, RiteInitiator, ToolInitiator } from '../../graphql/board-item-initiator/board-item-initiator';
 
 @Component({
     selector: 'app-board-item',
@@ -44,6 +44,7 @@ export class BoardItemComponent implements OnInit {
       itemInitService.addItemInitiator('MansusDoor', new MansusDoorInitiator(injector));
       itemInitService.addItemInitiator('MansusDoorOption', new MansusDoorOptionInitiator(injector));
       itemInitService.addItemInitiator('Tool', new ToolInitiator(injector));
+      itemInitService.addItemInitiator('Rite', new RiteInitiator(injector));
   }
 
   ngOnInit(): void {
@@ -53,13 +54,6 @@ export class BoardItemComponent implements OnInit {
           this.vaultLocation = initResult.vaultLocation;
           this.secretHistoriesLore = initResult.secretHistoriesLore;
       }
-      // const { name, label } = this.item;
-      // if (label === 'Rite') {
-      //   this.entities = this.service.getRite(name).valueChanges.pipe(
-      //     map(result => result.data.Rite[0]),
-      //     map(rite => getGroupsFromRite(rite))
-      //   );
-      // }
   }
 
   removeFromBoard(item: Entity): void {

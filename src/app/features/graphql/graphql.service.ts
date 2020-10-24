@@ -11,7 +11,7 @@ import {
 import {
     GetLanguagesDocument, SaveLanguageDocument, GetLanguageDocument, SetLanguageRequiresDocument, SetLanguageDreamingResultDocument,
     SaveMansusDoorDocument, SetMansusDoorOptionDocument, GetMansusDoorDocument, GetMansusDoorOptionDocument,
-    GetToolsDocument, GetToolDocument, SetToolLocationDocument
+    GetToolsDocument, GetToolDocument, SetToolLocationDocument, GetRitesDocument, GetRiteDocument, SaveRiteDocument
 } from './operations';
 import {
     GET_LOCATIONS, GET_LOCATION, SET_LOCATION_OBSTACLE,
@@ -21,7 +21,6 @@ import {
 } from './queries/lore-queries';
 import { SaveLocationRewardInput, SaveItemInput, SaveMansusDoorOptionInput, Reward } from './graphql.types';
 import { Entity } from 'src/app/shared/model';
-import { GET_RITES, CREATE_RITE, GET_RITE } from './queries/rite-queries';
 import { GET_DESIRES, ADD_DESIRE_CHANGE } from './queries/desire-queries';
 import { GetInfluenceDocument, GetInfluencesDocument, SaveInfluenceDocument, SetInfluenceAspectDocument, SetInfluenceDecayDocument,
     SetInfluenceDreamingResultDocument, SetInfluenceLocationDocument } from './operations';
@@ -115,9 +114,9 @@ export class GraphqlService {
 
     getLocationObstacles = () => this.getObjects(GET_OBSTACLES, data => data.ExpeditionObstacle);
 
-    getRites = () => this.getObjects(GET_RITES, data => data.Rite);
+    getRites = () => this.getObjects(GetRitesDocument, data => data.Rite);
 
-    getRite = (name: string) => this.getObject(name, GET_RITE);
+    getRite = (name: string) => this.getObject(name, GetRiteDocument);
 
     getTools = () => this.getObjects(GetToolsDocument, data => data.Tool);
 
@@ -179,7 +178,7 @@ export class GraphqlService {
                     }).toPromise();
                 });
             } else if (itemType === 'Rite') {
-                this.saveItem_(params, CREATE_RITE, GET_RITES);
+                this.saveItem_(params, SaveRiteDocument, GetRitesDocument);
             }
         } catch (err) {
             console.error(err);
@@ -420,7 +419,7 @@ export class GraphqlService {
                     break;
                 }
                 case 'Rite': {
-                    this.executeSaveBookReward(SET_BOOK_RITE_RESULT, book, name, GET_RITE);
+                    this.executeSaveBookReward(SET_BOOK_RITE_RESULT, book, name, GetRiteDocument);
                     break;
                 }
                 case 'Tool': {
