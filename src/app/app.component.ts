@@ -1,8 +1,7 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Entity } from './shared/model';
-
-import { debounceTime, tap, switchMap, filter, finalize, map } from 'rxjs/operators';
+import { debounceTime, tap, switchMap, filter, finalize } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { GraphqlService } from './features/graphql/graphql.service';
 import { AddItemDialogComponent } from './features/dialogs/add-item-dialog/add-item-dialog.component';
@@ -21,7 +20,7 @@ import { isEntity } from './shared/utils';
 })
 export class AppComponent implements OnInit {
   title = 'CultSim-help-guide';
-  myControl = new FormControl();
+  searchTextControl = new FormControl();
   searchResults: Observable<Entity[]>;
   isLoading = false;
 
@@ -45,7 +44,7 @@ export class AppComponent implements OnInit {
 
 
   ngOnInit(): void {
-      this.searchResults = this.myControl.valueChanges.pipe(
+      this.searchResults = this.searchTextControl.valueChanges.pipe(
           filter(value => !isEntity(value)),
           debounceTime(500),
           tap(() => {
@@ -58,16 +57,8 @@ export class AppComponent implements OnInit {
       );
   }
 
-
-
-  onKey(event): void {
-      if (event.key === 'Enter') {
-          this.addItemToBoard();
-      }
-  }
-
-  addItemToBoard() {
-      const value = this.myControl.value;
+  addItemToBoard(): void {
+      const value = this.searchTextControl.value;
       if (isEntity(value)) {
           this.boardService.addBoardItem(value);
       }
@@ -77,7 +68,7 @@ export class AppComponent implements OnInit {
       return item ? item.name : undefined;
   }
 
-  saveItem() {
+  saveItem(): void {
       this.dialogService.openDialog(AddItemDialogComponent, this.itemCreatorService.createItem);
   }
 }

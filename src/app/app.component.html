@@ -7,7 +7,7 @@
     </div>
     <mat-form-field class="toolbar-search-box" appearance="fill">
       <mat-label>Search</mat-label>
-      <input matInput #searchName [formControl]="myControl" [matAutocomplete]="auto" (keyup)="onKey($event)">
+      <input matInput #searchName [formControl]="searchTextControl" [matAutocomplete]="auto" (keyup.enter)="addItemToBoard()">
       <mat-icon matSuffix (click)="addItemToBoard()" matTooltip="Add the item to the board">add</mat-icon>
       <mat-autocomplete id="searchResults" #auto="matAutocomplete" [displayWith]="displayFn">
         <mat-option *ngFor="let item of searchResults | async" [value]="item">
