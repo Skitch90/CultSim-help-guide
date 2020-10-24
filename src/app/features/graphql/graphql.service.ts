@@ -10,7 +10,7 @@ import {
 } from './queries/ingredient-queries';
 import {
     GetLanguagesDocument, GetLanguageDocument, SetLanguageRequiresDocument, SetLanguageDreamingResultDocument,
-    SaveMansusDoorDocument, SetMansusDoorOptionDocument, GetMansusDoorDocument, GetMansusDoorOptionDocument,
+    SaveMansusDoorOptionDocument, SetMansusDoorOptionDocument, GetMansusDoorDocument, GetMansusDoorOptionDocument,
     GetToolsDocument, GetToolDocument, SetToolLocationDocument, GetRitesDocument, GetRiteDocument, SaveRiteDocument
 } from './operations';
 import {
@@ -130,14 +130,7 @@ export class GraphqlService {
         try {
             const { name, itemType, aspects } = params;
 
-            if (itemType === 'MansusDoor') {
-                await this.apollo.mutate({
-                    mutation: SaveMansusDoorDocument,
-                    variables: {
-                        door: name
-                    }
-                }).toPromise();
-            } else if (itemType === 'Influence') {
+            if (itemType === 'Influence') {
                 await this.apollo.mutate({
                     mutation: SaveInfluenceDocument,
                     variables: {
@@ -248,7 +241,7 @@ export class GraphqlService {
              const { door, option } = params;
 
              await this.apollo.mutate({
-                 mutation: SaveMansusDoorDocument,
+                 mutation: SaveMansusDoorOptionDocument,
                  variables: {
                      option
                  }

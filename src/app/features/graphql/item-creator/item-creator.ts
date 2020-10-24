@@ -15,7 +15,8 @@ import { SaveFollowerGQL, AddAspectToFollowerGQL, GetEntitiesByAspectDocument, S
     SetIngredientAspectGQL,
     GetIngredientsDocument,
     SaveLanguageGQL,
-    GetLanguagesDocument} from '../operations';
+    GetLanguagesDocument,
+    SaveMansusDoorGQL} from '../operations';
 import { Injector } from '@angular/core';
 import { AspectInfo } from '../graphql.types';
 import { Mutation } from 'apollo-angular';
@@ -227,10 +228,22 @@ export class LanguageCreator implements ItemCreator {
         this.saveLanguageGQL = injector.get(SaveLanguageGQL);
     }
 
-    createItem = async ({ name }: SaveItemInput): Promise<void> => {
+    createItem = async ({ name: language}: SaveItemInput): Promise<void> => {
         await this.saveLanguageGQL.mutate(
-            { language: name },
+            { language },
             { refetchQueries: [{ query: GetLanguagesDocument }] }
         ).toPromise();
+    }
+}
+
+export class MansusDoorCreator implements ItemCreator {
+    private saveMansusDoorGQL: SaveMansusDoorGQL;
+
+    constructor(injector: Injector) {
+        this.saveMansusDoorGQL = injector.get(SaveMansusDoorGQL);
+    }
+
+    createItem = async ({ name: door }: SaveItemInput): Promise<void> => {
+        await this.saveMansusDoorGQL.mutate({ door }).toPromise();
     }
 }
