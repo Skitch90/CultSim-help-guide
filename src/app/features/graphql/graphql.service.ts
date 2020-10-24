@@ -18,10 +18,10 @@ import {
 import {
     GET_LORES, GET_LORE, SET_LORE_EXPLORING_LOCATION, SET_LORE_DREAMING_RESULT, SET_LORE_UPGRADE
 } from './queries/lore-queries';
-import { SaveLocationRewardInput, SaveItemInput, SaveMansusDoorOptionInput, Reward } from './graphql.types';
+import { SaveLocationRewardInput, SaveMansusDoorOptionInput, Reward } from './graphql.types';
 import { Entity } from 'src/app/shared/model';
 import { GET_DESIRES, ADD_DESIRE_CHANGE } from './queries/desire-queries';
-import { GetInfluenceDocument, GetInfluencesDocument, SaveInfluenceDocument, SetInfluenceAspectDocument, SetInfluenceDecayDocument,
+import { GetInfluenceDocument, GetInfluencesDocument, SetInfluenceDecayDocument,
     SetInfluenceDreamingResultDocument, SetInfluenceLocationDocument } from './operations';
 
 @Injectable({
@@ -124,46 +124,6 @@ export class GraphqlService {
     getMansusDoor = (name: string) => this.getObject(name, GetMansusDoorDocument);
 
     getMansusDoorOption = (name: string) => this.getObject(name, GetMansusDoorOptionDocument);
-
-    saveItem = async (params: SaveItemInput) => {
-        try {
-            const { name, itemType, aspects } = params;
-
-            if (itemType === 'Influence') {
-                await this.apollo.mutate({
-                    mutation: SaveInfluenceDocument,
-                    variables: {
-                        influence: name
-                    },
-                    refetchQueries: [{
-                        query: GetInfluencesDocument
-                    }]
-                }).toPromise();
-
-                aspects.forEach(async aspectInfo => {
-                    const { aspect, quantity } = aspectInfo;
-                    await this.apollo.mutate({
-                        mutation: SetInfluenceAspectDocument,
-                        variables: {
-                            influence: name,
-                            aspect,
-                            quantity: +quantity
-                        },
-                        refetchQueries: [
-                            {
-                                query: GET_ENTITY_WITH_ASPECT,
-                                variables: {
-                                    aspect
-                                }
-                            }
-                        ]
-                    }).toPromise();
-                });
-            }
-        } catch (err) {
-            console.error(err);
-        }
-    }
 
     async saveInfluenceDecay(params) {
         try {

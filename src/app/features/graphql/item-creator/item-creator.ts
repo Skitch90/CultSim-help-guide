@@ -18,7 +18,10 @@ import { SaveFollowerGQL, AddAspectToFollowerGQL, GetEntitiesByAspectDocument, S
     GetLanguagesDocument,
     SaveMansusDoorGQL,
     SaveRiteGQL,
-    GetRitesDocument} from '../operations';
+    GetRitesDocument,
+    SaveInfluenceGQL,
+    SetInfluenceAspectGQL,
+    GetInfluencesDocument} from '../operations';
 import { Injector } from '@angular/core';
 import { AspectInfo } from '../graphql.types';
 import { Mutation } from 'apollo-angular';
@@ -259,5 +262,35 @@ export class RiteCreator implements ItemCreator {
 
     createItem = async ({ name }: SaveItemInput): Promise<void> => {
         createItem(name, this.saveRiteGQL, GetRitesDocument);
+    }
+}
+
+export class InfluenceCreator implements ItemCreator {
+    private saveInfluenceGQL: SaveInfluenceGQL;
+    private setInfluenceAspectGQL: SetInfluenceAspectGQL;
+
+    constructor(injector: Injector) {
+        this.saveInfluenceGQL = injector.get(SaveInfluenceGQL);
+        this.setInfluenceAspectGQL = injector.get(SetInfluenceAspectGQL);
+    }
+
+    createItem = async ({ name: influence, aspects }: SaveItemInput): Promise<void> => {
+        await this.saveInfluenceGQL.mutate(
+            { influence },
+            { refetchQueries: [{ query: GetInfluencesDocument }] }
+        ).toPromise();
+
+        aspects.forEach(async aspectInfo => {
+            const { aspect, quantity } = aspectInfo;
+            await this.setInfluenceAspectGQL.mutate(
+                { influence, aspect, quantity: +quantity },
+                { refetchQueries: [
+                    {
+                        query: GetEntitiesByAspectDocument,
+                        variables: { aspect }
+                    }
+                ]}
+            ).toPromise();
+        });
     }
 }
