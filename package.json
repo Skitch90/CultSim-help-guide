@@ -38,6 +38,7 @@
     "@angular/compiler-cli": "~10.0.11",
     "@angular/language-service": "~10.0.11",
     "@graphql-codegen/cli": "1.17.8",
+    "@graphql-codegen/import-types-preset": "^1.18.0",
     "@graphql-codegen/introspection": "1.17.8",
     "@graphql-codegen/typescript": "1.17.8",
     "@graphql-codegen/typescript-apollo-angular": "^2.0.1",
@@ -58,6 +59,7 @@
     "karma-jasmine": "~3.3.0",
     "karma-jasmine-html-reporter": "^1.5.0",
     "lint-staged": "^10.4.2",
+    "prettier": "2.1.2",
     "protractor": "~7.0.0",
     "stylelint": "^13.7.2",
     "stylelint-config-standard": "^20.0.0",
@@ -83,8 +85,8 @@
     ]
   },
   "husky": {
-      "hooks": {
-        "pre-commit": "lint-staged"
-      }
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }

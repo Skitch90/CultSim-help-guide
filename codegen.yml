@@ -1,14 +1,14 @@
 overwrite: true
 schema: "http://localhost:4000/api"
-# hooks:
-  # afterAllFileWrite:
-    # - prettier --write
-    # - eslint --fix
 generates:
   src/app/features/graphql/types.ts:
     documents: "src/app/features/graphql/queries/*.graphql"
     plugins:
       - "typescript"
+    hooks:
+      afterAllFileWrite:
+        - prettier --write
+        - eslint --fix
   src/app/features/graphql/operations.ts:
     documents: "src/app/features/graphql/queries/*.graphql"
     preset: import-types
@@ -17,6 +17,10 @@ generates:
     plugins:
       - "typescript-operations"
       - "typescript-apollo-angular"
+    hooks:
+      afterOneFileWrite:
+        - prettier --write
+        - eslint --fix
   ./graphql.schema.json:
     plugins:
       - "introspection"
