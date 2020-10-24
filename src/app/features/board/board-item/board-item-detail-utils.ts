@@ -16,17 +16,6 @@ const convertToGroupItem = (item): EntitiesGroupItem => {
     return groupItem;
 };
 
-const createAspectGroupItem = (aspectItem): EntitiesGroupItem => {
-    const { Aspect, quantity } = aspectItem;
-    const { _id, name, __typename } = Aspect;
-    return {
-        id: _id,
-        name,
-        label: __typename,
-        aspectQuantity: quantity
-    };
-};
-
 export const getGroupsFromRite = (rite: any): EntitiesGroup[] => {
     const groups: EntitiesGroup[] = [];
     const { fromBook } = rite;
@@ -34,27 +23,6 @@ export const getGroupsFromRite = (rite: any): EntitiesGroup[] => {
         groups.push({
             label: 'From book',
             entities: fromBook.map(book => convertToGroupItem(book))
-        });
-    }
-    return groups;
-};
-
-export const getGroupsFromTool = (tool: any): EntitiesGroup[] => {
-    const groups: EntitiesGroup[] = [];
-    const { aspects, foundInLocation, fromBook } = tool;
-    if (aspects.length > 0) {
-        groups.push({
-            label: 'Aspects',
-            entities: aspects.map(aspect => createAspectGroupItem(aspect))
-        });
-    }
-    if (foundInLocation.length || fromBook.length) {
-        groups.push({
-            label: 'Found From',
-            entities: [
-                ...foundInLocation.map(location => convertToGroupItem(location.Location)),
-                ...fromBook.map(book => convertToGroupItem(book))
-            ]
         });
     }
     return groups;

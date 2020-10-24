@@ -270,3 +270,17 @@ export type MansusDoorOption = {
     languageRewards: LanguageBase[];
     loreRewards: LoreBase[];
 };
+
+type ToolFoundInLocation = ({
+    __typename?: '_ToolFoundInLocation';
+} & Pick<Model._ToolFoundInLocation, 'chance'> & {
+    Location?: LocationName;
+});
+
+export type Tool = {
+    __typename?: 'Tool';
+} & Pick<Model.Tool, 'name'> & {
+    aspects?: ToolAspect[];
+    foundInLocation?: ToolFoundInLocation[];
+    fromBook: BookBase[];
+};

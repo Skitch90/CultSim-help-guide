@@ -2,10 +2,10 @@ import { Injector } from '@angular/core';
 import { map, tap } from 'rxjs/operators';
 import { EntitiesGroup, EntitiesGroupItem } from '../../../shared/model';
 import { GetBookGQL, GetEntitiesByAspectGQL, GetFollowerGQL, GetInfluenceGQL, GetIngredientGQL, GetLanguageGQL,
-    GetLocationGQL, GetLoreGQL, GetMansusDoorGQL, GetMansusDoorOptionGQL } from '../operations';
+    GetLocationGQL, GetLoreGQL, GetMansusDoorGQL, GetMansusDoorOptionGQL, GetToolGQL } from '../operations';
 import { convertToGroupItem, createAspectGroupItem, createSimpleAspectGroupItem } from './board-item-initiator-utils';
 import { AspectSearchGroupResult, Book, Follower, Influence, Ingredient, ItemInitResult, Language, Location, Lore, MansusDoor,
-    MansusDoorOption } from './board-item-initiator.types';
+    MansusDoorOption, Tool} from './board-item-initiator.types';
 
 export interface ItemInitiator {
     initBoardItem(name: string): ItemInitResult;
@@ -462,6 +462,46 @@ export class MansusDoorOptionInitiator implements ItemInitiator {
             groups.push({
                 label: 'Rewards',
                 entities: rewards.map(reward => convertToGroupItem(reward))
+            });
+        }
+        return groups;
+    }
+}
+
+export class ToolInitiator implements ItemInitiator {
+    private getToolGQL: GetToolGQL;
+
+    constructor(injector: Injector) {
+        this.getToolGQL = injector.get(GetToolGQL);
+    }
+
+    initBoardItem(name: string): ItemInitResult {
+        return {
+            entityGroups: this.getToolGQL.watch({ name }).valueChanges.pipe(
+                map(result => result.data.Tool[0]),
+                map(tool => this.getGroupsFromTool(tool))
+            ),
+            secretHistoriesLore: false,
+            vaultLocation: false
+        };
+    }
+
+    private getGroupsFromTool(tool: Tool): EntitiesGroup[] {
+        const groups: EntitiesGroup[] = [];
+        const { aspects, foundInLocation, fromBook } = tool;
+        if (aspects.length > 0) {
+            groups.push({
+                label: 'Aspects',
+                entities: aspects.map(aspect => createAspectGroupItem(aspect))
+            });
+        }
+        if (foundInLocation.length || fromBook.length) {
+            groups.push({
+                label: 'Found From',
+                entities: [
+                    ...foundInLocation.map(location => convertToGroupItem(location.Location)),
+                    ...fromBook.map(book => convertToGroupItem(book))
+                ]
             });
         }
         return groups;

@@ -10,7 +10,8 @@ import {
 } from './queries/ingredient-queries';
 import {
     GetLanguagesDocument, SaveLanguageDocument, GetLanguageDocument, SetLanguageRequiresDocument, SetLanguageDreamingResultDocument,
-    SaveMansusDoorDocument, SetMansusDoorOptionDocument, GetMansusDoorDocument, GetMansusDoorOptionDocument
+    SaveMansusDoorDocument, SetMansusDoorOptionDocument, GetMansusDoorDocument, GetMansusDoorOptionDocument,
+    GetToolsDocument, GetToolDocument, SetToolLocationDocument
 } from './operations';
 import {
     GET_LOCATIONS, GET_LOCATION, SET_LOCATION_OBSTACLE,
@@ -18,7 +19,6 @@ import {
 import {
     GET_LORES, GET_LORE, SET_LORE_EXPLORING_LOCATION, SET_LORE_DREAMING_RESULT, SET_LORE_UPGRADE
 } from './queries/lore-queries';
-import { GET_TOOLS, SET_TOOL_LOCATION, GET_TOOL } from './queries/tool-queries';
 import { SaveLocationRewardInput, SaveItemInput, SaveMansusDoorOptionInput, Reward } from './graphql.types';
 import { Entity } from 'src/app/shared/model';
 import { GET_RITES, CREATE_RITE, GET_RITE } from './queries/rite-queries';
@@ -119,9 +119,9 @@ export class GraphqlService {
 
     getRite = (name: string) => this.getObject(name, GET_RITE);
 
-    getTools = () => this.getObjects(GET_TOOLS, data => data.Tool);
+    getTools = () => this.getObjects(GetToolsDocument, data => data.Tool);
 
-    getTool = (name: string) => this.getObject(name, GET_TOOL);
+    getTool = (name: string) => this.getObject(name, GetToolDocument);
 
     getMansusDoor = (name: string) => this.getObject(name, GetMansusDoorDocument);
 
@@ -351,7 +351,7 @@ export class GraphqlService {
                 } else if (type === 'Influence') {
                     this.executeSaveLocationReward(reward, location, chance, SetInfluenceLocationDocument, GetInfluenceDocument);
                 } else if (type === 'Tool') {
-                    this.executeSaveLocationReward(reward, location, chance, SET_TOOL_LOCATION, GET_TOOL);
+                    this.executeSaveLocationReward(reward, location, chance, SetToolLocationDocument, GetToolDocument);
                 }
             });
         } catch (err) {
@@ -424,7 +424,7 @@ export class GraphqlService {
                     break;
                 }
                 case 'Tool': {
-                    this.executeSaveBookReward(SET_BOOK_TOOL_RESULT, book, name, GET_TOOL);
+                    this.executeSaveBookReward(SET_BOOK_TOOL_RESULT, book, name, GetToolDocument);
                     break;
                 }
                 default: {
