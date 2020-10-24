@@ -1,5 +1,5 @@
 import { EntitiesGroup } from 'src/app/shared/model';
-import * as Model from '../model';
+import * as Model from '../types';
 import { Observable } from 'rxjs';
 
 export type ItemInitResult = {

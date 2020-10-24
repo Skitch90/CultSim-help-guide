@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators, FormArray, ValidatorFn } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { GraphqlService } from '../../graphql/graphql.service';
-import { GetAspectsGQL } from '../../graphql/model';
+import { GetAspectsGQL } from '../../graphql/operations';
 
 const followerAspectRequiredValidator: ValidatorFn = (fg: FormGroup) => {
   const itemType = fg.get('itemType').value;

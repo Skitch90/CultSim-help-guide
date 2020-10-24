@@ -1,8 +1,7 @@
 import { Injector } from '@angular/core';
-import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { EntitiesGroup } from '../../../shared/model';
-import { GetBookGQL, GetEntitiesByAspectGQL, GetFollowerGQL, GetIngredientGQL, GetLocationGQL } from '../model';
+import { GetBookGQL, GetEntitiesByAspectGQL, GetFollowerGQL, GetIngredientGQL, GetLocationGQL } from '../operations';
 import { convertToGroupItem, createAspectGroupItem, createSimpleAspectGroupItem } from './board-item-initiator-utils';
 import { AspectSearchGroupResult, Book, Follower, Ingredient, ItemInitResult, Location } from './board-item-initiator.types';
 

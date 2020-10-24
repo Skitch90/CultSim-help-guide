@@ -13,7 +13,7 @@ import { SaveFollowerGQL, AddAspectToFollowerGQL, GetEntitiesByAspectDocument, S
     GetLoresDocument,
     SaveIngredientGQL,
     SetIngredientAspectGQL,
-    GetIngredientsDocument} from '../model';
+    GetIngredientsDocument} from '../operations';
 import { Injector } from '@angular/core';
 import { AspectInfo } from '../graphql.types';
 import { Mutation } from 'apollo-angular';

@@ -1,10 +1,20 @@
 overwrite: true
 schema: "http://localhost:4000/api"
-documents: "src/app/features/graphql/queries/*.graphql"
+# hooks:
+  # afterAllFileWrite:
+    # - prettier --write
+    # - eslint --fix
 generates:
-  src/app/features/graphql/model.ts:
+  src/app/features/graphql/types.ts:
+    documents: "src/app/features/graphql/queries/*.graphql"
     plugins:
       - "typescript"
+  src/app/features/graphql/operations.ts:
+    documents: "src/app/features/graphql/queries/*.graphql"
+    preset: import-types
+    presetConfig:
+      typesPath: ./types
+    plugins:
       - "typescript-operations"
       - "typescript-apollo-angular"
   ./graphql.schema.json:
