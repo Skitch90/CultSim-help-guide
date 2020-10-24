@@ -62,7 +62,7 @@ type ExpeditionObstacle = {
     defeatedWith: AspectName[];
 };
 
-type BookAsReward = {
+type BookBase = {
     __typename?: 'Book';
 } & Pick<Model.Book, '_id' | 'name'>;
 
@@ -72,21 +72,13 @@ type InfluenceAspect = ({
     Aspect?: Aspect;
 });
 
-type InfluenceAsReward = ({
-    __typename?: 'Influence';
-} & {
-    __typename?: 'Influence';
-} & Pick<Model.Influence, '_id' | 'name'> & {
-    aspects?: InfluenceAspect[];
-});
-
 type IngredientAspect = ({
     __typename?: '_IngredientAspects';
 } & Pick<Model._IngredientAspects, 'quantity'> & {
     Aspect?: Aspect;
 });
 
-type IngredientAsReward = ({
+type IngredientBase = ({
     __typename?: 'Ingredient';
 } & {
     __typename?: 'Ingredient';
@@ -100,21 +92,15 @@ type ToolAspect = ({
     Aspect?: Aspect;
 });
 
-type ToolAsReward = ({
-    __typename?: 'Tool';
-} & Pick<Model.Tool, '_id' | 'name'> & {
-    aspects?: ToolAspect[];
-});
-
 export type Location = {
     __typename?: 'Location';
 } & Pick<Model.Location, '_id' | 'name' | 'vault'> & {
     histories: HistoriesLore[];
     obstacles: ExpeditionObstacle[];
-    bookRewards: BookAsReward[];
-    influenceRewards: InfluenceAsReward[];
-    ingredientRewards: IngredientAsReward[];
-    toolRewards: ToolAsReward[];
+    bookRewards: BookBase[];
+    influenceRewards: InfluenceBase[];
+    ingredientRewards: IngredientBase[];
+    toolRewards: ToolBase[];
 };
 
 type AspectSearchEntity = ({
@@ -137,7 +123,7 @@ type IngredientFoundInLocation = ({
     Location?: LocationName;
 });
 
-type MansusDoorOptionSimple = ({
+type MansusDoorOptionBase = ({
     __typename?: 'MansusDoorOption';
 } & {
     __typename?: 'MansusDoorOption';
@@ -151,7 +137,7 @@ export type Ingredient = {
     __typename?: 'Ingredient';
 } & {
     foundInLocation?: IngredientFoundInLocation[];
-    fromDreamingIn: MansusDoorOptionSimple[];
+    fromDreamingIn: MansusDoorOptionBase[];
 } & {
     __typename?: 'Ingredient';
 } & Pick<Model.Ingredient, 'name' | '_id'> & {
@@ -168,7 +154,7 @@ type BookFoundInLocation = ({
     Location?: LocationNameId;
 });
 
-type LanguageName = {
+type LanguageBase = {
     __typename?: 'Language';
 } & Pick<Model.Language, 'name' | '_id'>;
 
@@ -178,7 +164,7 @@ type LoreAspect = ({
     Aspect?: Aspect;
 });
 
-type LoreSimple = ({
+type LoreBase = ({
     __typename?: 'Lore';
 } & {
     __typename?: 'Lore';
@@ -186,11 +172,11 @@ type LoreSimple = ({
     aspects?: LoreAspect[];
 });
 
-type RiteName = {
+type RiteBase = {
     __typename?: 'Rite';
 } & Pick<Model.Rite, 'name' | '_id'>;
 
-type BaseTool = {
+type ToolBase = {
     __typename?: 'Tool';
 } & {
     __typename?: 'Tool';
@@ -198,7 +184,7 @@ type BaseTool = {
     aspects?: ToolAspect[];
 };
 
-type BaseInfluence = ({
+type InfluenceBase = ({
     __typename?: 'Influence';
 } & {
     __typename?: 'Influence';
@@ -210,12 +196,12 @@ export type Book = {
     __typename?: 'Book';
 } & Pick<Model.Book, 'name' | '_id'> & {
     foundInLocation?: BookFoundInLocation[];
-    language?: LanguageName;
-    studiedIntoLore: LoreSimple[];
-    teachesRite?: RiteName;
-    teachesLanguage?: LanguageName;
-    resultsInInfluence: BaseInfluence[];
-    resultsInTool?: BaseTool;
+    language?: LanguageBase;
+    studiedIntoLore: LoreBase[];
+    teachesRite?: RiteBase;
+    teachesLanguage?: LanguageBase;
+    resultsInInfluence: InfluenceBase[];
+    resultsInTool?: ToolBase;
 };
 
 
@@ -223,10 +209,10 @@ export type Lore = {
     __typename?: 'Lore';
 } & {
     exploreResults: LocationNameId[];
-    fromBook: BookAsReward[];
-    fromDreamingIn: MansusDoorOptionSimple[];
-    upgradesTo?: LoreSimple;
-    upgradedFrom?: LoreSimple;
+    fromBook: BookBase[];
+    fromDreamingIn: MansusDoorOptionBase[];
+    upgradesTo?: LoreBase;
+    upgradedFrom?: LoreBase;
 } & {
     __typename?: 'Lore';
 } & Pick<Model.Lore, '_id' | 'name'> & {
@@ -243,12 +229,20 @@ export type Influence = {
     __typename?: 'Influence';
 } & {
     foundInLocation?: InfluenceFoundInLocation[];
-    fromDreamingIn: MansusDoorOptionSimple[];
-    fromBook: BookAsReward[];
-    decaysTo?: BaseInfluence;
-    decaysFrom: BaseInfluence[];
+    fromDreamingIn: MansusDoorOptionBase[];
+    fromBook: BookBase[];
+    decaysTo?: InfluenceBase;
+    decaysFrom: InfluenceBase[];
 } & {
     __typename?: 'Influence';
 } & Pick<Model.Influence, 'name' | '_id'> & {
     aspects?: InfluenceAspect[];
+};
+
+export type Language = {
+    __typename?: 'Language';
+} & Pick<Model.Language, 'name'> & {
+    requires?: LanguageBase;
+    fromBook?: BookBase;
+    fromDreamingIn?: MansusDoorOptionBase;
 };

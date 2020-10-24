@@ -1,22 +1,21 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import {
-    GET_BOOKS, GET_BOOK, CREATE_BOOK, SET_BOOK_LANGUAGE, SET_BOOK_LOCATION,
+    GET_BOOKS, GET_BOOK, SET_BOOK_LOCATION,
     SET_BOOK_INFLUENCE_RESULT, SET_BOOK_LANGUAGE_RESULT, SET_BOOK_LORE_RESULT, SET_BOOK_RITE_RESULT, SET_BOOK_TOOL_RESULT
 } from './queries/book-queries';
 import { GET_ENTITY, GET_ENTITY_WITH_ASPECT } from './queries/entity-queries';
 import {
-    GET_INGREDIENTS, CREATE_INGREDIENT, SET_INGREDIENT_ASPECT, SET_INGREDIENT_LOCATION, SET_INGREDIENT_DREAMING_RESULT, GET_INGREDIENT
+    GET_INGREDIENTS, SET_INGREDIENT_LOCATION, SET_INGREDIENT_DREAMING_RESULT, GET_INGREDIENT
 } from './queries/ingredient-queries';
 import {
-    GET_LANGUAGES, CREATE_LANGUAGE, SET_LANGUAGE_DREAMING_RESULT, SET_LANGUAGE_REQUIRES, GET_LANGUAGE
-} from './queries/language-queries';
+    GetLanguagesDocument, SaveLanguageDocument, GetLanguageDocument, SetLanguageRequiresDocument, SetLanguageDreamingResultDocument
+} from './operations';
 import {
-    GET_LOCATIONS, GET_LOCATION, CREATE_LOCATION, SET_LOCATION_OBSTACLE,
-    GET_OBSTACLES, CREATE_OBSTACLE, SET_OBSTACLE_ASPECT
-} from './queries/location-queries';
+    GET_LOCATIONS, GET_LOCATION, SET_LOCATION_OBSTACLE,
+    GET_OBSTACLES} from './queries/location-queries';
 import {
-    GET_LORES, GET_LORE, CREATE_LORE, SET_LORE_ASPECT, SET_LORE_EXPLORING_LOCATION, SET_LORE_DREAMING_RESULT, SET_LORE_UPGRADE
+    GET_LORES, GET_LORE, SET_LORE_EXPLORING_LOCATION, SET_LORE_DREAMING_RESULT, SET_LORE_UPGRADE
 } from './queries/lore-queries';
 import {
     CREATE_MANSUS_DOOR, CREATE_MANSUS_DOOR_OPTION, SET_MANSUS_DOOR_OPTION, GET_MANSUS_DOOR, GET_MANSUS_DOOR_OPTION
@@ -77,9 +76,9 @@ export class GraphqlService {
 
     private getObject = (name: string, query) => this.apollo.watchQuery<any>({ query, variables: { name } });
 
-    getLanguages = () => this.getObjects(GET_LANGUAGES, data => data.Language);
+    getLanguages = () => this.getObjects(GetLanguagesDocument, data => data.Language);
 
-    getLanguage = (name: string) => this.getObject(name, GET_LANGUAGE);
+    getLanguage = (name: string) => this.getObject(name, GetLanguageDocument);
 
     async getLocations() {
         const { data } = await this.apollo.query<any>({
@@ -129,18 +128,18 @@ export class GraphqlService {
 
     getMansusDoorOption = (name: string) => this.getObject(name, GET_MANSUS_DOOR_OPTION);
 
-    private saveItem = async (params: SaveItemInput) => {
+    saveItem = async (params: SaveItemInput) => {
         try {
             const { name, itemType, aspects } = params;
 
             if (itemType === 'Language') {
                 await this.apollo.mutate({
-                    mutation: CREATE_LANGUAGE,
+                    mutation: SaveLanguageDocument,
                     variables: {
                         language: name
                     },
                     refetchQueries: [{
-                        query: GET_LANGUAGES
+                        query: GetLanguagesDocument
                     }]
                 }).toPromise();
             } else if (itemType === 'MansusDoor') {
@@ -201,36 +200,6 @@ export class GraphqlService {
         }).toPromise();
     }
 
-    private async saveItemWithAspects(data: SaveItemInput, createMutation, createRefetchQuery, setAspectMutation) {
-        const { name, aspects } = data;
-        await this.apollo.mutate({
-            mutation: createMutation,
-            variables: {
-                name
-            },
-            refetchQueries: [{
-                query: createRefetchQuery
-            }]
-        }).toPromise();
-
-        aspects.forEach(async aspectInfo => {
-            const { aspect, quantity } = aspectInfo;
-            await this.apollo.mutate({
-                mutation: setAspectMutation,
-                variables: {
-                    name,
-                    aspect,
-                    quantity: +quantity
-                },
-                refetchQueries: [{
-                    query: GET_ENTITY_WITH_ASPECT,
-                    variables: {
-                        aspect
-                    }
-                }]
-            }).toPromise();
-        });
-    }
 
     async saveInfluenceDecay(params) {
         try {
@@ -430,17 +399,17 @@ export class GraphqlService {
                     break;
                 }
                 case 'Language': {
-                    const saveResult = await this.executeSaveBookReward(SET_BOOK_LANGUAGE_RESULT, book, name, GET_LANGUAGE);
+                    const saveResult = await this.executeSaveBookReward(SET_BOOK_LANGUAGE_RESULT, book, name, GetLanguageDocument);
                     const requiredLang = saveResult.data.AddBookTeachesLanguage.from.language.name;
                     await this.apollo.mutate({
-                        mutation: SET_LANGUAGE_REQUIRES,
+                        mutation: SetLanguageRequiresDocument,
                         variables: {
                             language: name,
                             requiredLanguage: requiredLang
                         },
                         refetchQueries: [
                             {
-                                query: GET_LANGUAGE,
+                                query: GetLanguageDocument,
                                 variables: { name }
                             }
                         ]
@@ -500,7 +469,7 @@ export class GraphqlService {
             };
             if (rewardType === 'Language') {
                 await this.apollo.mutate({
-                    mutation: SET_LANGUAGE_DREAMING_RESULT,
+                    mutation: SetLanguageDreamingResultDocument,
                     variables: {
                         door,
                         language
@@ -508,7 +477,7 @@ export class GraphqlService {
                     refetchQueries: [
                         getMansusDoorOptionQuery,
                         {
-                            query: GET_LANGUAGE,
+                            query: GetLanguageDocument,
                             variables: { name: language }
                         }
                     ]

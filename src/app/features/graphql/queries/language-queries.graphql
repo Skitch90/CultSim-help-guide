@@ -1,0 +1,46 @@
+query getLanguages {
+  Language(orderBy: name_asc) {
+    name
+  }
+}
+
+query getLanguage($name: String!) {
+  Language(name: $name) {
+    name
+    requires {
+      _id
+      name
+    }
+    fromBook {
+      _id
+      name
+    }
+    fromDreamingIn {
+      ...CommonMansusOptionData
+    }
+  }
+}
+
+mutation saveLanguage($language: String!) {
+  CreateLanguage(name: $language) {
+    name
+  }
+}
+
+mutation setLanguageDreamingResult($door: String!, $language: String!) {
+  AddLanguageFromDreamingIn(from: { name: $door }, to: { name: $language }) {
+    from {
+      name
+    }
+    to {
+      name
+    }
+  }
+}
+
+mutation setLanguageRequires($language: String!, $requiredLanguage: String!) {
+  setLanguageRequires(language: $language, requiredLanguage: $requiredLanguage) {
+    language
+    requiredLanguage
+  }
+}

@@ -27,31 +27,6 @@ const createAspectGroupItem = (aspectItem): EntitiesGroupItem => {
     };
 };
 
-export const getGroupsFromLanguage = (language: any): EntitiesGroup[] => {
-    const groups: EntitiesGroup[] = [];
-    const { requires, fromBook, fromDreamingIn } = language;
-    if (requires) {
-        groups.push({
-            label: 'Requires language',
-            entities: [ convertToGroupItem(requires) ]
-        });
-    }
-    if (fromBook || fromDreamingIn) {
-        const entities: EntitiesGroupItem[] = [];
-        if (fromBook) {
-            entities.push(convertToGroupItem(fromBook));
-        }
-        if (fromDreamingIn) {
-            entities.push(convertToGroupItem(fromDreamingIn));
-        }
-        groups.push({
-            label: 'Found From',
-            entities
-        });
-    }
-    return groups;
-};
-
 export const getGroupsFromMansusDoor = (door: any): EntitiesGroup[] => {
     const groups: EntitiesGroup[] = [];
     const { options } = door;

@@ -651,6 +651,85 @@ export type SetIngredientBreamingResultMutation = {
   >;
 };
 
+export type GetLanguagesQueryVariables = Types.Exact<{ [key: string]: never }>;
+
+export type GetLanguagesQuery = { __typename?: 'Query' } & {
+  Language?: Types.Maybe<
+    Array<
+      Types.Maybe<{ __typename?: 'Language' } & Pick<Types.Language, 'name'>>
+    >
+  >;
+};
+
+export type GetLanguageQueryVariables = Types.Exact<{
+  name: Types.Scalars['String'];
+}>;
+
+export type GetLanguageQuery = { __typename?: 'Query' } & {
+  Language?: Types.Maybe<
+    Array<
+      Types.Maybe<
+        { __typename?: 'Language' } & Pick<Types.Language, 'name'> & {
+            requires?: Types.Maybe<
+              { __typename?: 'Language' } & Pick<Types.Language, '_id' | 'name'>
+            >;
+            fromBook?: Types.Maybe<
+              { __typename?: 'Book' } & Pick<Types.Book, '_id' | 'name'>
+            >;
+            fromDreamingIn?: Types.Maybe<
+              {
+                __typename?: 'MansusDoorOption';
+              } & CommonMansusOptionDataFragment
+            >;
+          }
+      >
+    >
+  >;
+};
+
+export type SaveLanguageMutationVariables = Types.Exact<{
+  language: Types.Scalars['String'];
+}>;
+
+export type SaveLanguageMutation = { __typename?: 'Mutation' } & {
+  CreateLanguage?: Types.Maybe<
+    { __typename?: 'Language' } & Pick<Types.Language, 'name'>
+  >;
+};
+
+export type SetLanguageDreamingResultMutationVariables = Types.Exact<{
+  door: Types.Scalars['String'];
+  language: Types.Scalars['String'];
+}>;
+
+export type SetLanguageDreamingResultMutation = { __typename?: 'Mutation' } & {
+  AddLanguageFromDreamingIn?: Types.Maybe<
+    { __typename?: '_AddLanguageFromDreamingInPayload' } & {
+      from?: Types.Maybe<
+        { __typename?: 'MansusDoorOption' } & Pick<
+          Types.MansusDoorOption,
+          'name'
+        >
+      >;
+      to?: Types.Maybe<
+        { __typename?: 'Language' } & Pick<Types.Language, 'name'>
+      >;
+    }
+  >;
+};
+
+export type SetLanguageRequiresMutationVariables = Types.Exact<{
+  language: Types.Scalars['String'];
+  requiredLanguage: Types.Scalars['String'];
+}>;
+
+export type SetLanguageRequiresMutation = { __typename?: 'Mutation' } & {
+  setLanguageRequires: { __typename?: 'SetLanguageRequiresOut' } & Pick<
+    Types.SetLanguageRequiresOut,
+    'language' | 'requiredLanguage'
+  >;
+};
+
 export type GetLocationsQueryVariables = Types.Exact<{ [key: string]: never }>;
 
 export type GetLocationsQuery = { __typename?: 'Query' } & {
@@ -1976,6 +2055,132 @@ export class SetIngredientBreamingResultGQL extends Apollo.Mutation<
   SetIngredientBreamingResultMutationVariables
 > {
   document = SetIngredientBreamingResultDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+  }
+}
+export const GetLanguagesDocument = gql`
+  query getLanguages {
+    Language(orderBy: name_asc) {
+      name
+    }
+  }
+`;
+
+@Injectable({
+    providedIn: 'root',
+})
+export class GetLanguagesGQL extends Apollo.Query<
+  GetLanguagesQuery,
+  GetLanguagesQueryVariables
+> {
+  document = GetLanguagesDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+  }
+}
+export const GetLanguageDocument = gql`
+  query getLanguage($name: String!) {
+    Language(name: $name) {
+      name
+      requires {
+        _id
+        name
+      }
+      fromBook {
+        _id
+        name
+      }
+      fromDreamingIn {
+        ...CommonMansusOptionData
+      }
+    }
+  }
+  ${CommonMansusOptionDataFragmentDoc}
+`;
+
+@Injectable({
+    providedIn: 'root',
+})
+export class GetLanguageGQL extends Apollo.Query<
+  GetLanguageQuery,
+  GetLanguageQueryVariables
+> {
+  document = GetLanguageDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+  }
+}
+export const SaveLanguageDocument = gql`
+  mutation saveLanguage($language: String!) {
+    CreateLanguage(name: $language) {
+      name
+    }
+  }
+`;
+
+@Injectable({
+    providedIn: 'root',
+})
+export class SaveLanguageGQL extends Apollo.Mutation<
+  SaveLanguageMutation,
+  SaveLanguageMutationVariables
+> {
+  document = SaveLanguageDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+  }
+}
+export const SetLanguageDreamingResultDocument = gql`
+  mutation setLanguageDreamingResult($door: String!, $language: String!) {
+    AddLanguageFromDreamingIn(from: { name: $door }, to: { name: $language }) {
+      from {
+        name
+      }
+      to {
+        name
+      }
+    }
+  }
+`;
+
+@Injectable({
+    providedIn: 'root',
+})
+export class SetLanguageDreamingResultGQL extends Apollo.Mutation<
+  SetLanguageDreamingResultMutation,
+  SetLanguageDreamingResultMutationVariables
+> {
+  document = SetLanguageDreamingResultDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+  }
+}
+export const SetLanguageRequiresDocument = gql`
+  mutation setLanguageRequires($language: String!, $requiredLanguage: String!) {
+    setLanguageRequires(
+      language: $language
+      requiredLanguage: $requiredLanguage
+    ) {
+      language
+      requiredLanguage
+    }
+  }
+`;
+
+@Injectable({
+    providedIn: 'root',
+})
+export class SetLanguageRequiresGQL extends Apollo.Mutation<
+  SetLanguageRequiresMutation,
+  SetLanguageRequiresMutationVariables
+> {
+  document = SetLanguageRequiresDocument;
 
   constructor(apollo: Apollo.Apollo) {
       super(apollo);

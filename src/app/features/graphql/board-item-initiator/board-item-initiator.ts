@@ -1,9 +1,10 @@
 import { Injector } from '@angular/core';
 import { map, tap } from 'rxjs/operators';
-import { EntitiesGroup } from '../../../shared/model';
-import { GetBookGQL, GetEntitiesByAspectGQL, GetFollowerGQL, GetInfluenceGQL, GetIngredientGQL, GetLocationGQL, GetLoreGQL } from '../operations';
+import { EntitiesGroup, EntitiesGroupItem } from '../../../shared/model';
+import { GetBookGQL, GetEntitiesByAspectGQL, GetFollowerGQL, GetInfluenceGQL, GetIngredientGQL, GetLanguageGQL,
+    GetLocationGQL, GetLoreGQL } from '../operations';
 import { convertToGroupItem, createAspectGroupItem, createSimpleAspectGroupItem } from './board-item-initiator-utils';
-import { AspectSearchGroupResult, Book, Follower, Influence, Ingredient, ItemInitResult, Location, Lore } from './board-item-initiator.types';
+import { AspectSearchGroupResult, Book, Follower, Influence, Ingredient, ItemInitResult, Language, Location, Lore } from './board-item-initiator.types';
 
 export interface ItemInitiator {
     initBoardItem(name: string): ItemInitResult;
@@ -300,8 +301,6 @@ export class LoreInitiator implements ItemInitiator {
     }
 }
 
-
-
 export class InfluenceInitiator implements ItemInitiator {
     private getInfluenceGQL: GetInfluenceGQL;
 
@@ -350,6 +349,50 @@ export class InfluenceInitiator implements ItemInitiator {
             groups.push({
                 label: 'Decays from',
                 entities: decaysFrom.map(influenceOrig => convertToGroupItem(influenceOrig))
+            });
+        }
+        return groups;
+    }
+}
+
+export class LanguageInitiator implements ItemInitiator {
+    private getLanguageGQL: GetLanguageGQL;
+
+    constructor(injector: Injector) {
+        this.getLanguageGQL = injector.get(GetLanguageGQL);
+    }
+
+    initBoardItem(name: string): ItemInitResult {
+        return {
+            entityGroups: this.getLanguageGQL.watch({ name }).valueChanges.pipe(
+                map((result) => result.data.Language[0]),
+                map(language => this.getGroupsFromLanguage(language))
+            ),
+            secretHistoriesLore: false,
+            vaultLocation: false
+        };
+    }
+
+    private getGroupsFromLanguage(language: Language): EntitiesGroup[] {
+        const groups: EntitiesGroup[] = [];
+        const { requires, fromBook, fromDreamingIn } = language;
+        if (requires) {
+            groups.push({
+                label: 'Requires language',
+                entities: [ convertToGroupItem(requires) ]
+            });
+        }
+        if (fromBook || fromDreamingIn) {
+            const entities: EntitiesGroupItem[] = [];
+            if (fromBook) {
+                entities.push(convertToGroupItem(fromBook));
+            }
+            if (fromDreamingIn) {
+                entities.push(convertToGroupItem(fromDreamingIn));
+            }
+            groups.push({
+                label: 'Found From',
+                entities
             });
         }
         return groups;

@@ -15,7 +15,8 @@ import { DialogService } from '../../dialogs/dialog.service';
 import { BoardItemInitiatorService } from '../../graphql/board-item-initiator/board-item-initiator.service';
 import { AddLoreUpgradeDialogComponent } from '../../dialogs/add-lore-upgrade-dialog/add-lore-upgrade-dialog.component';
 import { AddDesireChangeDialogComponent } from '../../dialogs/add-desire-change-dialog/add-desire-change-dialog.component';
-import { AspectInitiator, BookInitiator, FollowerInitiator, InfluenceInitiator, IngredientInitiator, LocationInitiator, LoreInitiator } from '../../graphql/board-item-initiator/board-item-initiator';
+import { AspectInitiator, BookInitiator, FollowerInitiator, InfluenceInitiator, IngredientInitiator, LanguageInitiator,
+    LocationInitiator, LoreInitiator } from '../../graphql/board-item-initiator/board-item-initiator';
 
 @Component({
     selector: 'app-board-item',
@@ -39,6 +40,7 @@ export class BoardItemComponent implements OnInit {
       itemInitService.addItemInitiator('Book', new BookInitiator(injector));
       itemInitService.addItemInitiator('Lore', new LoreInitiator(injector));
       itemInitService.addItemInitiator('Influence', new InfluenceInitiator(injector));
+      itemInitService.addItemInitiator('Language', new LanguageInitiator(injector));
   }
 
   ngOnInit(): void {
@@ -49,12 +51,6 @@ export class BoardItemComponent implements OnInit {
           this.secretHistoriesLore = initResult.secretHistoriesLore;
       }
       // const { name, label } = this.item;
-      // if (label === 'Language') {
-      //   this.entities = this.service.getLanguage(name).valueChanges.pipe(
-      //     map(result => result.data.Language[0]),
-      //     map(language => getGroupsFromLanguage(language))
-      //   );
-      // }
       // if (label === 'MansusDoor') {
       //   this.entities = this.service.getMansusDoor(name).valueChanges.pipe(
       //     map(result => result.data.MansusDoor[0]),
