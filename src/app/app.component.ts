@@ -9,7 +9,7 @@ import { BoardService } from './features/board/board.service';
 import { DialogService } from './features/dialogs/dialog.service';
 import { ItemCreatorService } from './features/graphql/item-creator/item-creator.service';
 import { FollowerCreator, AspectCreator, ToolCreator, DesireCreator, ChangeLessonCreator, LocationCreator,
-    ExpeditionObstacleCreator, BookCreator, LoreCreator, IngredientCreator, LanguageCreator, MansusDoorCreator
+    ExpeditionObstacleCreator, BookCreator, LoreCreator, IngredientCreator, LanguageCreator, MansusDoorCreator, RiteCreator
 } from './features/graphql/item-creator/item-creator';
 import { isEntity } from './shared/utils';
 
@@ -41,6 +41,7 @@ export class AppComponent implements OnInit {
       itemCreatorService.addItemCreator('Tool', new ToolCreator(injector));
       itemCreatorService.addItemCreator('Language', new LanguageCreator(injector));
       itemCreatorService.addItemCreator('MansusDoor', new MansusDoorCreator(injector));
+      itemCreatorService.addItemCreator('Rite', new RiteCreator(injector));
   }
 
 

@@ -11,8 +11,7 @@ import {
 import {
     GetLanguagesDocument, GetLanguageDocument, SetLanguageRequiresDocument, SetLanguageDreamingResultDocument,
     SaveMansusDoorOptionDocument, SetMansusDoorOptionDocument, GetMansusDoorDocument, GetMansusDoorOptionDocument,
-    GetToolsDocument, GetToolDocument, SetToolLocationDocument, GetRitesDocument, GetRiteDocument, SaveRiteDocument
-} from './operations';
+    GetToolsDocument, GetToolDocument, SetToolLocationDocument, GetRitesDocument, GetRiteDocument} from './operations';
 import {
     GET_LOCATIONS, GET_LOCATION, SET_LOCATION_OBSTACLE,
     GET_OBSTACLES} from './queries/location-queries';
@@ -160,27 +159,11 @@ export class GraphqlService {
                         ]
                     }).toPromise();
                 });
-            } else if (itemType === 'Rite') {
-                this.saveItem_(params, SaveRiteDocument, GetRitesDocument);
             }
         } catch (err) {
             console.error(err);
         }
     }
-
-    private async saveItem_(data: SaveItemInput, createMutation, createRefetchQuery) {
-        const { name } = data;
-        await this.apollo.mutate({
-            mutation: createMutation,
-            variables: {
-                name
-            },
-            refetchQueries: [{
-                query: createRefetchQuery
-            }]
-        }).toPromise();
-    }
-
 
     async saveInfluenceDecay(params) {
         try {

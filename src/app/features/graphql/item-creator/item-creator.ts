@@ -16,7 +16,9 @@ import { SaveFollowerGQL, AddAspectToFollowerGQL, GetEntitiesByAspectDocument, S
     GetIngredientsDocument,
     SaveLanguageGQL,
     GetLanguagesDocument,
-    SaveMansusDoorGQL} from '../operations';
+    SaveMansusDoorGQL,
+    SaveRiteGQL,
+    GetRitesDocument} from '../operations';
 import { Injector } from '@angular/core';
 import { AspectInfo } from '../graphql.types';
 import { Mutation } from 'apollo-angular';
@@ -245,5 +247,17 @@ export class MansusDoorCreator implements ItemCreator {
 
     createItem = async ({ name: door }: SaveItemInput): Promise<void> => {
         await this.saveMansusDoorGQL.mutate({ door }).toPromise();
+    }
+}
+
+export class RiteCreator implements ItemCreator {
+    private saveRiteGQL: SaveRiteGQL;
+
+    constructor(injector: Injector) {
+        this.saveRiteGQL = injector.get(SaveRiteGQL);
+    }
+
+    createItem = async ({ name }: SaveItemInput): Promise<void> => {
+        createItem(name, this.saveRiteGQL, GetRitesDocument);
     }
 }
