@@ -246,3 +246,13 @@ export type Language = {
     fromBook?: BookBase;
     fromDreamingIn?: MansusDoorOptionBase;
 };
+
+type MansusDoorOptionName = ({
+    __typename?: 'MansusDoorOption';
+} & Pick<Model.MansusDoorOption, 'name' | '_id'>);
+
+export type MansusDoor = {
+    __typename?: 'MansusDoor';
+} & Pick<Model.MansusDoor, 'name'> & {
+    options?: MansusDoorOptionName[];
+};

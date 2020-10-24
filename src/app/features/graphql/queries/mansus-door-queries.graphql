@@ -1,0 +1,55 @@
+mutation saveMansusDoor($door: String!) {
+  CreateMansusDoor(name: $door) {
+    name
+  }
+}
+
+query getMansusDoor($name: String!) {
+  MansusDoor(name: $name) {
+    name
+    options {
+      _id
+      name
+    }
+  }
+}
+
+query getMansusDoorOption($name: String!) {
+  MansusDoorOption(name: $name) {
+    name
+    door {
+      _id
+      name
+    }
+    influenceRewards {
+      ...CommonInfluenceData
+    }
+    ingredientRewards {
+      ...CommonIngredientData
+    }
+    languageRewards {
+      _id
+      name
+    }
+    loreRewards {
+      ...CommonLoreData
+    }
+  }
+}
+
+mutation saveMansusDoorOption($option: String!) {
+  CreateMansusDoorOption(name: $option) {
+    name
+  }
+}
+
+mutation setMansusDoorOption($door: String!, $option: String!) {
+  AddMansusDoorOptions(from: { name: $door }, to: { name: $option }) {
+    from {
+      name
+    }
+    to {
+      name
+    }
+  }
+}

@@ -9,7 +9,8 @@ import {
     GET_INGREDIENTS, SET_INGREDIENT_LOCATION, SET_INGREDIENT_DREAMING_RESULT, GET_INGREDIENT
 } from './queries/ingredient-queries';
 import {
-    GetLanguagesDocument, SaveLanguageDocument, GetLanguageDocument, SetLanguageRequiresDocument, SetLanguageDreamingResultDocument
+    GetLanguagesDocument, SaveLanguageDocument, GetLanguageDocument, SetLanguageRequiresDocument, SetLanguageDreamingResultDocument,
+    SaveMansusDoorDocument, SetMansusDoorOptionDocument, GetMansusDoorDocument, GetMansusDoorOptionDocument
 } from './operations';
 import {
     GET_LOCATIONS, GET_LOCATION, SET_LOCATION_OBSTACLE,
@@ -17,9 +18,6 @@ import {
 import {
     GET_LORES, GET_LORE, SET_LORE_EXPLORING_LOCATION, SET_LORE_DREAMING_RESULT, SET_LORE_UPGRADE
 } from './queries/lore-queries';
-import {
-    CREATE_MANSUS_DOOR, CREATE_MANSUS_DOOR_OPTION, SET_MANSUS_DOOR_OPTION, GET_MANSUS_DOOR, GET_MANSUS_DOOR_OPTION
-} from './queries/mansus-door-queries';
 import { GET_TOOLS, SET_TOOL_LOCATION, GET_TOOL } from './queries/tool-queries';
 import { SaveLocationRewardInput, SaveItemInput, SaveMansusDoorOptionInput, Reward } from './graphql.types';
 import { Entity } from 'src/app/shared/model';
@@ -124,9 +122,9 @@ export class GraphqlService {
 
     getTool = (name: string) => this.getObject(name, GET_TOOL);
 
-    getMansusDoor = (name: string) => this.getObject(name, GET_MANSUS_DOOR);
+    getMansusDoor = (name: string) => this.getObject(name, GetMansusDoorDocument);
 
-    getMansusDoorOption = (name: string) => this.getObject(name, GET_MANSUS_DOOR_OPTION);
+    getMansusDoorOption = (name: string) => this.getObject(name, GetMansusDoorOptionDocument);
 
     saveItem = async (params: SaveItemInput) => {
         try {
@@ -144,7 +142,7 @@ export class GraphqlService {
                 }).toPromise();
             } else if (itemType === 'MansusDoor') {
                 await this.apollo.mutate({
-                    mutation: CREATE_MANSUS_DOOR,
+                    mutation: SaveMansusDoorDocument,
                     variables: {
                         door: name
                     }
@@ -260,24 +258,24 @@ export class GraphqlService {
              const { door, option } = params;
 
              await this.apollo.mutate({
-                 mutation: CREATE_MANSUS_DOOR_OPTION,
+                 mutation: SaveMansusDoorDocument,
                  variables: {
                      option
                  }
              }).toPromise();
              await this.apollo.mutate({
-                 mutation: SET_MANSUS_DOOR_OPTION,
+                 mutation: SetMansusDoorOptionDocument,
                  variables: {
                      door,
                      option
                  },
                  refetchQueries: [
                      {
-                         query: GET_MANSUS_DOOR,
+                         query: GetMansusDoorDocument,
                          variables: { name: door }
                      },
                      {
-                         query: GET_MANSUS_DOOR_OPTION,
+                         query: GetMansusDoorOptionDocument,
                          variables: { name: option }
                      }
                  ]
@@ -464,7 +462,7 @@ export class GraphqlService {
         try {
             const { door, rewardType, lore, influence, language, ingredient } = params;
             const getMansusDoorOptionQuery = {
-                query: GET_MANSUS_DOOR_OPTION,
+                query: GetMansusDoorOptionDocument,
                 variables: { name: door }
             };
             if (rewardType === 'Language') {

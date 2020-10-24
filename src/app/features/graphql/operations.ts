@@ -1003,6 +1003,108 @@ export type SetLoreUpgradeMutation = { __typename?: 'Mutation' } & {
   >;
 };
 
+export type SaveMansusDoorMutationVariables = Types.Exact<{
+  door: Types.Scalars['String'];
+}>;
+
+export type SaveMansusDoorMutation = { __typename?: 'Mutation' } & {
+  CreateMansusDoor?: Types.Maybe<
+    { __typename?: 'MansusDoor' } & Pick<Types.MansusDoor, 'name'>
+  >;
+};
+
+export type GetMansusDoorQueryVariables = Types.Exact<{
+  name: Types.Scalars['String'];
+}>;
+
+export type GetMansusDoorQuery = { __typename?: 'Query' } & {
+  MansusDoor?: Types.Maybe<
+    Array<
+      Types.Maybe<
+        { __typename?: 'MansusDoor' } & Pick<Types.MansusDoor, 'name'> & {
+            options?: Types.Maybe<
+              Array<
+                Types.Maybe<
+                  { __typename?: 'MansusDoorOption' } & Pick<
+                    Types.MansusDoorOption,
+                    '_id' | 'name'
+                  >
+                >
+              >
+            >;
+          }
+      >
+    >
+  >;
+};
+
+export type GetMansusDoorOptionQueryVariables = Types.Exact<{
+  name: Types.Scalars['String'];
+}>;
+
+export type GetMansusDoorOptionQuery = { __typename?: 'Query' } & {
+  MansusDoorOption?: Types.Maybe<
+    Array<
+      Types.Maybe<
+        { __typename?: 'MansusDoorOption' } & Pick<
+          Types.MansusDoorOption,
+          'name'
+        > & {
+            door?: Types.Maybe<
+              { __typename?: 'MansusDoor' } & Pick<
+                Types.MansusDoor,
+                '_id' | 'name'
+              >
+            >;
+            influenceRewards: Array<
+              { __typename?: 'Influence' } & CommonInfluenceDataFragment
+            >;
+            ingredientRewards: Array<
+              { __typename?: 'Ingredient' } & CommonIngredientDataFragment
+            >;
+            languageRewards: Array<
+              { __typename?: 'Language' } & Pick<Types.Language, '_id' | 'name'>
+            >;
+            loreRewards: Array<
+              { __typename?: 'Lore' } & CommonLoreDataFragment
+            >;
+          }
+      >
+    >
+  >;
+};
+
+export type SaveMansusDoorOptionMutationVariables = Types.Exact<{
+  option: Types.Scalars['String'];
+}>;
+
+export type SaveMansusDoorOptionMutation = { __typename?: 'Mutation' } & {
+  CreateMansusDoorOption?: Types.Maybe<
+    { __typename?: 'MansusDoorOption' } & Pick<Types.MansusDoorOption, 'name'>
+  >;
+};
+
+export type SetMansusDoorOptionMutationVariables = Types.Exact<{
+  door: Types.Scalars['String'];
+  option: Types.Scalars['String'];
+}>;
+
+export type SetMansusDoorOptionMutation = { __typename?: 'Mutation' } & {
+  AddMansusDoorOptions?: Types.Maybe<
+    { __typename?: '_AddMansusDoorOptionsPayload' } & {
+      from?: Types.Maybe<
+        { __typename?: 'MansusDoor' } & Pick<Types.MansusDoor, 'name'>
+      >;
+      to?: Types.Maybe<
+        { __typename?: 'MansusDoorOption' } & Pick<
+          Types.MansusDoorOption,
+          'name'
+        >
+      >;
+    }
+  >;
+};
+
 export type GetToolsQueryVariables = Types.Exact<{ [key: string]: never }>;
 
 export type GetToolsQuery = { __typename?: 'Query' } & {
@@ -2566,6 +2668,140 @@ export class SetLoreUpgradeGQL extends Apollo.Mutation<
   SetLoreUpgradeMutationVariables
 > {
   document = SetLoreUpgradeDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+  }
+}
+export const SaveMansusDoorDocument = gql`
+  mutation saveMansusDoor($door: String!) {
+    CreateMansusDoor(name: $door) {
+      name
+    }
+  }
+`;
+
+@Injectable({
+    providedIn: 'root',
+})
+export class SaveMansusDoorGQL extends Apollo.Mutation<
+  SaveMansusDoorMutation,
+  SaveMansusDoorMutationVariables
+> {
+  document = SaveMansusDoorDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+  }
+}
+export const GetMansusDoorDocument = gql`
+  query getMansusDoor($name: String!) {
+    MansusDoor(name: $name) {
+      name
+      options {
+        _id
+        name
+      }
+    }
+  }
+`;
+
+@Injectable({
+    providedIn: 'root',
+})
+export class GetMansusDoorGQL extends Apollo.Query<
+  GetMansusDoorQuery,
+  GetMansusDoorQueryVariables
+> {
+  document = GetMansusDoorDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+  }
+}
+export const GetMansusDoorOptionDocument = gql`
+  query getMansusDoorOption($name: String!) {
+    MansusDoorOption(name: $name) {
+      name
+      door {
+        _id
+        name
+      }
+      influenceRewards {
+        ...CommonInfluenceData
+      }
+      ingredientRewards {
+        ...CommonIngredientData
+      }
+      languageRewards {
+        _id
+        name
+      }
+      loreRewards {
+        ...CommonLoreData
+      }
+    }
+  }
+  ${CommonInfluenceDataFragmentDoc}
+  ${CommonIngredientDataFragmentDoc}
+  ${CommonLoreDataFragmentDoc}
+`;
+
+@Injectable({
+    providedIn: 'root',
+})
+export class GetMansusDoorOptionGQL extends Apollo.Query<
+  GetMansusDoorOptionQuery,
+  GetMansusDoorOptionQueryVariables
+> {
+  document = GetMansusDoorOptionDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+  }
+}
+export const SaveMansusDoorOptionDocument = gql`
+  mutation saveMansusDoorOption($option: String!) {
+    CreateMansusDoorOption(name: $option) {
+      name
+    }
+  }
+`;
+
+@Injectable({
+    providedIn: 'root',
+})
+export class SaveMansusDoorOptionGQL extends Apollo.Mutation<
+  SaveMansusDoorOptionMutation,
+  SaveMansusDoorOptionMutationVariables
+> {
+  document = SaveMansusDoorOptionDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+  }
+}
+export const SetMansusDoorOptionDocument = gql`
+  mutation setMansusDoorOption($door: String!, $option: String!) {
+    AddMansusDoorOptions(from: { name: $door }, to: { name: $option }) {
+      from {
+        name
+      }
+      to {
+        name
+      }
+    }
+  }
+`;
+
+@Injectable({
+    providedIn: 'root',
+})
+export class SetMansusDoorOptionGQL extends Apollo.Mutation<
+  SetMansusDoorOptionMutation,
+  SetMansusDoorOptionMutationVariables
+> {
+  document = SetMansusDoorOptionDocument;
 
   constructor(apollo: Apollo.Apollo) {
       super(apollo);
