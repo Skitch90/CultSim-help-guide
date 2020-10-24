@@ -9,7 +9,7 @@ import {
     GET_INGREDIENTS, SET_INGREDIENT_LOCATION, SET_INGREDIENT_DREAMING_RESULT, GET_INGREDIENT
 } from './queries/ingredient-queries';
 import {
-    GetLanguagesDocument, SaveLanguageDocument, GetLanguageDocument, SetLanguageRequiresDocument, SetLanguageDreamingResultDocument,
+    GetLanguagesDocument, GetLanguageDocument, SetLanguageRequiresDocument, SetLanguageDreamingResultDocument,
     SaveMansusDoorDocument, SetMansusDoorOptionDocument, GetMansusDoorDocument, GetMansusDoorOptionDocument,
     GetToolsDocument, GetToolDocument, SetToolLocationDocument, GetRitesDocument, GetRiteDocument, SaveRiteDocument
 } from './operations';
@@ -130,17 +130,7 @@ export class GraphqlService {
         try {
             const { name, itemType, aspects } = params;
 
-            if (itemType === 'Language') {
-                await this.apollo.mutate({
-                    mutation: SaveLanguageDocument,
-                    variables: {
-                        language: name
-                    },
-                    refetchQueries: [{
-                        query: GetLanguagesDocument
-                    }]
-                }).toPromise();
-            } else if (itemType === 'MansusDoor') {
+            if (itemType === 'MansusDoor') {
                 await this.apollo.mutate({
                     mutation: SaveMansusDoorDocument,
                     variables: {

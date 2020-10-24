@@ -10,14 +10,14 @@ import { BoardService } from './features/board/board.service';
 import { DialogService } from './features/dialogs/dialog.service';
 import { ItemCreatorService } from './features/graphql/item-creator/item-creator.service';
 import { FollowerCreator, AspectCreator, ToolCreator, DesireCreator, ChangeLessonCreator, LocationCreator,
-          ExpeditionObstacleCreator, BookCreator, LoreCreator, IngredientCreator
+    ExpeditionObstacleCreator, BookCreator, LoreCreator, IngredientCreator, LanguageCreator
 } from './features/graphql/item-creator/item-creator';
 import { isEntity } from './shared/utils';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
   title = 'CultSim-help-guide';
@@ -30,53 +30,54 @@ export class AppComponent implements OnInit {
               private injector: Injector,
               private boardService: BoardService,
               private itemCreatorService: ItemCreatorService) {
-    itemCreatorService.addItemCreator('Aspect', new AspectCreator(injector));
-    itemCreatorService.addItemCreator('Book', new BookCreator(injector));
-    itemCreatorService.addItemCreator('ChangeLesson', new ChangeLessonCreator(injector));
-    itemCreatorService.addItemCreator('Desire', new DesireCreator(injector));
-    itemCreatorService.addItemCreator('ExpeditionObstacle', new ExpeditionObstacleCreator(injector));
-    itemCreatorService.addItemCreator('Follower', new FollowerCreator(this.injector));
-    itemCreatorService.addItemCreator('Ingredient', new IngredientCreator(injector));
-    itemCreatorService.addItemCreator('Location', new LocationCreator(injector));
-    itemCreatorService.addItemCreator('Lore', new LoreCreator(injector));
-    itemCreatorService.addItemCreator('Tool', new ToolCreator(injector));
+      itemCreatorService.addItemCreator('Aspect', new AspectCreator(injector));
+      itemCreatorService.addItemCreator('Book', new BookCreator(injector));
+      itemCreatorService.addItemCreator('ChangeLesson', new ChangeLessonCreator(injector));
+      itemCreatorService.addItemCreator('Desire', new DesireCreator(injector));
+      itemCreatorService.addItemCreator('ExpeditionObstacle', new ExpeditionObstacleCreator(injector));
+      itemCreatorService.addItemCreator('Follower', new FollowerCreator(this.injector));
+      itemCreatorService.addItemCreator('Ingredient', new IngredientCreator(injector));
+      itemCreatorService.addItemCreator('Location', new LocationCreator(injector));
+      itemCreatorService.addItemCreator('Lore', new LoreCreator(injector));
+      itemCreatorService.addItemCreator('Tool', new ToolCreator(injector));
+      itemCreatorService.addItemCreator('Language', new LanguageCreator(injector));
   }
 
 
   ngOnInit(): void {
-    this.searchResults = this.myControl.valueChanges.pipe(
-      filter(value => !isEntity(value)),
-      debounceTime(500),
-      tap(() => {
-        this.isLoading = true;
-      }),
-      switchMap(value => this.service.getEntities(value)),
-      finalize(() => {
-        this.isLoading = false;
-      })
-    );
+      this.searchResults = this.myControl.valueChanges.pipe(
+          filter(value => !isEntity(value)),
+          debounceTime(500),
+          tap(() => {
+              this.isLoading = true;
+          }),
+          switchMap(value => this.service.getEntities(value)),
+          finalize(() => {
+              this.isLoading = false;
+          })
+      );
   }
 
 
 
   onKey(event): void {
-    if (event.key === 'Enter') {
-      this.addItemToBoard();
-    }
+      if (event.key === 'Enter') {
+          this.addItemToBoard();
+      }
   }
 
   addItemToBoard() {
-    const value = this.myControl.value;
-    if (isEntity(value)) {
-      this.boardService.addBoardItem(value);
-    }
+      const value = this.myControl.value;
+      if (isEntity(value)) {
+          this.boardService.addBoardItem(value);
+      }
   }
 
   displayFn(item?: Entity): string | undefined {
-    return item ? item.name : undefined;
+      return item ? item.name : undefined;
   }
 
   saveItem() {
-    this.dialogService.openDialog(AddItemDialogComponent, this.itemCreatorService.createItem);
+      this.dialogService.openDialog(AddItemDialogComponent, this.itemCreatorService.createItem);
   }
 }

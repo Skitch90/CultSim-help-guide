@@ -13,7 +13,9 @@ import { SaveFollowerGQL, AddAspectToFollowerGQL, GetEntitiesByAspectDocument, S
     GetLoresDocument,
     SaveIngredientGQL,
     SetIngredientAspectGQL,
-    GetIngredientsDocument} from '../operations';
+    GetIngredientsDocument,
+    SaveLanguageGQL,
+    GetLanguagesDocument} from '../operations';
 import { Injector } from '@angular/core';
 import { AspectInfo } from '../graphql.types';
 import { Mutation } from 'apollo-angular';
@@ -27,8 +29,8 @@ const createItem = async (itemName: string, createMutation: Mutation, createRefe
 };
 
 const createItemWithAspects = async (
-        itemName: string, aspects: AspectInfo[], createMutation: Mutation, createRefetchQuery: DocumentNode, setAspectMutation: Mutation
-    ) => {
+    itemName: string, aspects: AspectInfo[], createMutation: Mutation, createRefetchQuery: DocumentNode, setAspectMutation: Mutation
+) => {
     await createItem(itemName, createMutation, createRefetchQuery);
 
     aspects.forEach(async ({ aspect, quantity }: AspectInfo) => {
@@ -64,9 +66,10 @@ export class FollowerCreator implements ItemCreator {
             name
         }).toPromise();
 
-        await this.addAspectToFollowerGQL.mutate({
-            name,
-            aspect: followerAspect
+        await this.addAspectToFollowerGQL.mutate(
+            {
+                name,
+                aspect: followerAspect
             },
             {
                 refetchQueries: [{
@@ -88,7 +91,7 @@ export class AspectCreator implements ItemCreator {
         this.saveAspectGQL = injector.get(SaveAspectGQL);
     }
 
-    createItem = async ({ name }): Promise<void> => createItem(name, this.saveAspectGQL, GetAspectsDocument);
+    createItem = async ({ name }: SaveItemInput): Promise<void> => createItem(name, this.saveAspectGQL, GetAspectsDocument);
 }
 
 export class ToolCreator implements ItemCreator {
@@ -111,7 +114,7 @@ export class DesireCreator implements ItemCreator {
         this.saveDesireGQL = injector.get(SaveDesireGQL);
     }
 
-    createItem = async ({ name }): Promise<void> => createItem(name, this.saveDesireGQL, GetDesiresDocument);
+    createItem = async ({ name }: SaveItemInput): Promise<void> => createItem(name, this.saveDesireGQL, GetDesiresDocument);
 }
 
 export class ChangeLessonCreator implements ItemCreator {
@@ -121,7 +124,7 @@ export class ChangeLessonCreator implements ItemCreator {
         this.saveChangeLessonGQL = injector.get(SaveChangeLessonGQL);
     }
 
-    createItem = async ({ name }): Promise<void> => {
+    createItem = async ({ name }: SaveItemInput): Promise<void> => {
         await this.saveChangeLessonGQL.mutate({ name }).toPromise();
     }
 }
@@ -214,5 +217,20 @@ export class IngredientCreator implements ItemCreator {
 
     createItem = async ({ name, aspects }: SaveItemInput): Promise<void> => {
         createItemWithAspects(name, aspects, this.saveIngredientGQL, GetIngredientsDocument, this.setIngredientAspectGQL);
+    }
+}
+
+export class LanguageCreator implements ItemCreator {
+    private saveLanguageGQL: SaveLanguageGQL;
+
+    constructor(injector: Injector) {
+        this.saveLanguageGQL = injector.get(SaveLanguageGQL);
+    }
+
+    createItem = async ({ name }: SaveItemInput): Promise<void> => {
+        await this.saveLanguageGQL.mutate(
+            { language: name },
+            { refetchQueries: [{ query: GetLanguagesDocument }] }
+        ).toPromise();
     }
 }
