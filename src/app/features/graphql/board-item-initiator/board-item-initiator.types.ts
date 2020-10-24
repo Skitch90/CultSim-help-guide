@@ -256,3 +256,17 @@ export type MansusDoor = {
 } & Pick<Model.MansusDoor, 'name'> & {
     options?: MansusDoorOptionName[];
 };
+
+type MansusDoorName = {
+    __typename?: 'MansusDoor';
+} & Pick<Model.MansusDoor, 'name' | '_id'>;
+
+export type MansusDoorOption = {
+    __typename?: 'MansusDoorOption';
+} & Pick<Model.MansusDoorOption, 'name'> & {
+    door?: MansusDoorName;
+    influenceRewards: InfluenceBase[];
+    ingredientRewards: IngredientBase[];
+    languageRewards: LanguageBase[];
+    loreRewards: LoreBase[];
+};

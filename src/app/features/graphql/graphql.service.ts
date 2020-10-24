@@ -23,7 +23,8 @@ import { SaveLocationRewardInput, SaveItemInput, SaveMansusDoorOptionInput, Rewa
 import { Entity } from 'src/app/shared/model';
 import { GET_RITES, CREATE_RITE, GET_RITE } from './queries/rite-queries';
 import { GET_DESIRES, ADD_DESIRE_CHANGE } from './queries/desire-queries';
-import { GetInfluenceDocument, GetInfluencesDocument, SaveInfluenceDocument, SetInfluenceAspectDocument, SetInfluenceDecayDocument, SetInfluenceDreamingResultDocument, SetInfluenceLocationDocument } from './operations';
+import { GetInfluenceDocument, GetInfluencesDocument, SaveInfluenceDocument, SetInfluenceAspectDocument, SetInfluenceDecayDocument,
+    SetInfluenceDreamingResultDocument, SetInfluenceLocationDocument } from './operations';
 
 @Injectable({
     providedIn: 'root'

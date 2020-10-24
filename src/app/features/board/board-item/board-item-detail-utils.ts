@@ -27,25 +27,6 @@ const createAspectGroupItem = (aspectItem): EntitiesGroupItem => {
     };
 };
 
-export const getGroupsFromMansusDoorOption = (doorOption: any): EntitiesGroup[] => {
-    const groups: EntitiesGroup[] = [];
-    const { door, influenceRewards, ingredientRewards, languageRewards, loreRewards } = doorOption;
-    if (door) {
-        groups.push({
-            label: 'Door',
-            entities: [ convertToGroupItem(door) ]
-        });
-    }
-    if (influenceRewards.length || ingredientRewards.length || languageRewards.length || loreRewards.length) {
-        const rewards = [ ...influenceRewards, ...ingredientRewards, ...languageRewards, ...loreRewards ];
-        groups.push({
-            label: 'Rewards',
-            entities: rewards.map(reward => convertToGroupItem(reward))
-        });
-    }
-    return groups;
-};
-
 export const getGroupsFromRite = (rite: any): EntitiesGroup[] => {
     const groups: EntitiesGroup[] = [];
     const { fromBook } = rite;

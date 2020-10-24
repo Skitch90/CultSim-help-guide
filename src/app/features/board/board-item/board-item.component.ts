@@ -16,7 +16,7 @@ import { BoardItemInitiatorService } from '../../graphql/board-item-initiator/bo
 import { AddLoreUpgradeDialogComponent } from '../../dialogs/add-lore-upgrade-dialog/add-lore-upgrade-dialog.component';
 import { AddDesireChangeDialogComponent } from '../../dialogs/add-desire-change-dialog/add-desire-change-dialog.component';
 import { AspectInitiator, BookInitiator, FollowerInitiator, InfluenceInitiator, IngredientInitiator, LanguageInitiator,
-    LocationInitiator, LoreInitiator, MansusDoorInitiator } from '../../graphql/board-item-initiator/board-item-initiator';
+    LocationInitiator, LoreInitiator, MansusDoorInitiator, MansusDoorOptionInitiator } from '../../graphql/board-item-initiator/board-item-initiator';
 
 @Component({
     selector: 'app-board-item',
@@ -42,6 +42,7 @@ export class BoardItemComponent implements OnInit {
       itemInitService.addItemInitiator('Influence', new InfluenceInitiator(injector));
       itemInitService.addItemInitiator('Language', new LanguageInitiator(injector));
       itemInitService.addItemInitiator('MansusDoor', new MansusDoorInitiator(injector));
+      itemInitService.addItemInitiator('MansusDoorOption', new MansusDoorOptionInitiator(injector));
   }
 
   ngOnInit(): void {
@@ -52,12 +53,6 @@ export class BoardItemComponent implements OnInit {
           this.secretHistoriesLore = initResult.secretHistoriesLore;
       }
       // const { name, label } = this.item;
-      // if (label === 'MansusDoorOption') {
-      //   this.entities = this.service.getMansusDoorOption(name).valueChanges.pipe(
-      //     map(result => result.data.MansusDoorOption[0]),
-      //     map(doorOption => getGroupsFromMansusDoorOption(doorOption))
-      //   );
-      // }
       // if (label === 'Rite') {
       //   this.entities = this.service.getRite(name).valueChanges.pipe(
       //     map(result => result.data.Rite[0]),
