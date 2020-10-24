@@ -1,9 +1,9 @@
 import { Injector } from '@angular/core';
 import { map, tap } from 'rxjs/operators';
 import { EntitiesGroup } from '../../../shared/model';
-import { GetBookGQL, GetEntitiesByAspectGQL, GetFollowerGQL, GetIngredientGQL, GetLocationGQL, GetLoreGQL } from '../operations';
+import { GetBookGQL, GetEntitiesByAspectGQL, GetFollowerGQL, GetInfluenceGQL, GetIngredientGQL, GetLocationGQL, GetLoreGQL } from '../operations';
 import { convertToGroupItem, createAspectGroupItem, createSimpleAspectGroupItem } from './board-item-initiator-utils';
-import { AspectSearchGroupResult, Book, Follower, Ingredient, ItemInitResult, Location, Lore } from './board-item-initiator.types';
+import { AspectSearchGroupResult, Book, Follower, Influence, Ingredient, ItemInitResult, Location, Lore } from './board-item-initiator.types';
 
 export interface ItemInitiator {
     initBoardItem(name: string): ItemInitResult;
@@ -294,6 +294,62 @@ export class LoreInitiator implements ItemInitiator {
             groups.push({
                 label: 'Vaults',
                 entities: exploreResults.map(vault => convertToGroupItem(vault))
+            });
+        }
+        return groups;
+    }
+}
+
+
+
+export class InfluenceInitiator implements ItemInitiator {
+    private getInfluenceGQL: GetInfluenceGQL;
+
+    constructor(injector: Injector) {
+        this.getInfluenceGQL = injector.get(GetInfluenceGQL);
+    }
+
+    initBoardItem(name: string): ItemInitResult {
+        return {
+            entityGroups: this.getInfluenceGQL.watch({ name }).valueChanges.pipe(
+                map(result => result.data.Influence[0]),
+                map(influence => this.getGroupsFromInfluence(influence))
+            ),
+            secretHistoriesLore: false,
+            vaultLocation: false
+        };
+
+
+    }
+
+    private getGroupsFromInfluence(influence: Influence): EntitiesGroup[] {
+        const groups: EntitiesGroup[] = [];
+        const { aspects, foundInLocation, fromDreamingIn, fromBook, decaysTo, decaysFrom } = influence;
+        if (aspects.length > 0) {
+            groups.push({
+                label: 'Aspects',
+                entities: aspects.map(aspect => createAspectGroupItem(aspect))
+            });
+        }
+        if (foundInLocation.length || fromDreamingIn.length || fromBook.length) {
+            const locations = foundInLocation.map(location => convertToGroupItem(location.Location));
+            const fromDreaming = fromDreamingIn.map(location => convertToGroupItem(location));
+            const books = fromBook.map(book => convertToGroupItem(book));
+            groups.push({
+                label: 'Found From',
+                entities: [ ...locations, ...fromDreaming, ...books ]
+            });
+        }
+        if (decaysTo) {
+            groups.push({
+                label: 'Decays to',
+                entities: [ convertToGroupItem(decaysTo) ]
+            });
+        }
+        if (decaysFrom.length) {
+            groups.push({
+                label: 'Decays from',
+                entities: decaysFrom.map(influenceOrig => convertToGroupItem(influenceOrig))
             });
         }
         return groups;

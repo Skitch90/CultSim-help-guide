@@ -232,3 +232,23 @@ export type Lore = {
 } & Pick<Model.Lore, '_id' | 'name'> & {
     aspects?: LoreAspect[];
 };
+
+type InfluenceFoundInLocation = ({
+    __typename?: '_InfluenceFoundInLocation';
+} & {
+    Location?: LocationNameId;
+});
+
+export type Influence = {
+    __typename?: 'Influence';
+} & {
+    foundInLocation?: InfluenceFoundInLocation[];
+    fromDreamingIn: MansusDoorOptionSimple[];
+    fromBook: BookAsReward[];
+    decaysTo?: BaseInfluence;
+    decaysFrom: BaseInfluence[];
+} & {
+    __typename?: 'Influence';
+} & Pick<Model.Influence, 'name' | '_id'> & {
+    aspects?: InfluenceAspect[];
+};

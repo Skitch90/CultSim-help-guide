@@ -52,39 +52,6 @@ export const getGroupsFromLanguage = (language: any): EntitiesGroup[] => {
     return groups;
 };
 
-export const getGroupsFromInfluence = (influence: any): EntitiesGroup[] => {
-    const groups: EntitiesGroup[] = [];
-    const { aspects, foundInLocation, fromDreamingIn, fromBook, decaysTo, decaysFrom } = influence;
-    if (aspects.length > 0) {
-        groups.push({
-            label: 'Aspects',
-            entities: aspects.map(aspect => createAspectGroupItem(aspect))
-        });
-    }
-    if (foundInLocation.length || fromDreamingIn.length || fromBook.length) {
-        const locations = foundInLocation.map(location => convertToGroupItem(location.Location));
-        const fromDreaming = fromDreamingIn.map(location => convertToGroupItem(location));
-        const books = fromBook.map(book => convertToGroupItem(book));
-        groups.push({
-            label: 'Found From',
-            entities: [ ...locations, ...fromDreaming, ...books ]
-        });
-    }
-    if (decaysTo) {
-        groups.push({
-            label: 'Decays to',
-            entities: [ convertToGroupItem(decaysTo) ]
-        });
-    }
-    if (decaysFrom.length) {
-        groups.push({
-            label: 'Decays from',
-            entities: decaysFrom.map(influenceOrig => convertToGroupItem(influenceOrig))
-        });
-    }
-    return groups;
-};
-
 export const getGroupsFromMansusDoor = (door: any): EntitiesGroup[] => {
     const groups: EntitiesGroup[] = [];
     const { options } = door;

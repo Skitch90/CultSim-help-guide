@@ -15,7 +15,7 @@ import { DialogService } from '../../dialogs/dialog.service';
 import { BoardItemInitiatorService } from '../../graphql/board-item-initiator/board-item-initiator.service';
 import { AddLoreUpgradeDialogComponent } from '../../dialogs/add-lore-upgrade-dialog/add-lore-upgrade-dialog.component';
 import { AddDesireChangeDialogComponent } from '../../dialogs/add-desire-change-dialog/add-desire-change-dialog.component';
-import { AspectInitiator, BookInitiator, FollowerInitiator, IngredientInitiator, LocationInitiator, LoreInitiator } from '../../graphql/board-item-initiator/board-item-initiator';
+import { AspectInitiator, BookInitiator, FollowerInitiator, InfluenceInitiator, IngredientInitiator, LocationInitiator, LoreInitiator } from '../../graphql/board-item-initiator/board-item-initiator';
 
 @Component({
     selector: 'app-board-item',
@@ -38,9 +38,10 @@ export class BoardItemComponent implements OnInit {
       itemInitService.addItemInitiator('Location', new LocationInitiator(injector));
       itemInitService.addItemInitiator('Book', new BookInitiator(injector));
       itemInitService.addItemInitiator('Lore', new LoreInitiator(injector));
+      itemInitService.addItemInitiator('Influence', new InfluenceInitiator(injector));
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
       const initResult = this.itemInitService.initItem(this.item);
       if (initResult) {
           this.entities = initResult.entityGroups;
@@ -48,12 +49,6 @@ export class BoardItemComponent implements OnInit {
           this.secretHistoriesLore = initResult.secretHistoriesLore;
       }
       // const { name, label } = this.item;
-      // if (label === 'Influence') {
-      //   this.entities = this.service.getInfluence(name).valueChanges.pipe(
-      //     map(result => result.data.Influence[0]),
-      //     map(influence => getGroupsFromInfluence(influence))
-      //   );
-      // }
       // if (label === 'Language') {
       //   this.entities = this.service.getLanguage(name).valueChanges.pipe(
       //     map(result => result.data.Language[0]),
@@ -86,11 +81,11 @@ export class BoardItemComponent implements OnInit {
       // }
   }
 
-  removeFromBoard(item: Entity) {
+  removeFromBoard(item: Entity): void {
       this.boardService.removeBoardItem(item);
   }
 
-  openAddRewardDialog(itemName: string, itemLabel: string) {
+  openAddRewardDialog(itemName: string, itemLabel: string): void {
       const dialogConfig = new MatDialogConfig();
 
       dialogConfig.disableClose = true;
@@ -116,19 +111,19 @@ export class BoardItemComponent implements OnInit {
 
   }
 
-  openAddOptionDialog(itemName) {
+  openAddOptionDialog(itemName: string): void {
       this.dialogService.openDialog(AddDoorOptionDialogComponent,
           this.service.saveMansusDoorOption,
           { mansusDoor: itemName });
   }
 
-  openAddDesireChangeDialog(itemName: string) {
+  openAddDesireChangeDialog(itemName: string): void {
       this.dialogService.openDialog(AddDesireChangeDialogComponent,
           this.service.saveDesireChange,
           { desire: itemName});
   }
 
-  openAddInfluenceDecay(influence) {
+  openAddInfluenceDecay(influence: string): void {
       const dialogConfig = new MatDialogConfig();
       dialogConfig.disableClose = true;
       dialogConfig.autoFocus = true;
@@ -145,15 +140,15 @@ export class BoardItemComponent implements OnInit {
       });
   }
 
-  openAddLocationDialog(itemName) {
+  openAddLocationDialog(itemName: string): void {
       this.dialogService.openDialog(AddLocationDialogComponent, this.service.saveSecretHistoryLocation, { secretHistory: itemName });
   }
 
-  openAddObstaclesDialog(itemName: string) {
+  openAddObstaclesDialog(itemName: string): void {
       this.dialogService.openDialog(AddObstacleLocationDialogComponent, this.service.saveLocationObstacle, { vault: itemName });
   }
 
-  openAddUpgradeDialog(itemName: string) {
+  openAddUpgradeDialog(itemName: string): void {
       this.dialogService.openDialog(AddLoreUpgradeDialogComponent, this.service.setLoreUpgrade, { lore: itemName });
   }
 }

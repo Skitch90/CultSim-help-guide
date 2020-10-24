@@ -398,6 +398,143 @@ export type CommonToolDataFragment = { __typename?: 'Tool' } & Pick<
     >;
   };
 
+export type GetInfluencesQueryVariables = Types.Exact<{ [key: string]: never }>;
+
+export type GetInfluencesQuery = { __typename?: 'Query' } & {
+  Influence?: Types.Maybe<
+    Array<
+      Types.Maybe<{ __typename?: 'Influence' } & Pick<Types.Influence, 'name'>>
+    >
+  >;
+};
+
+export type GetInfluenceQueryVariables = Types.Exact<{
+  name: Types.Scalars['String'];
+}>;
+
+export type GetInfluenceQuery = { __typename?: 'Query' } & {
+  Influence?: Types.Maybe<
+    Array<
+      Types.Maybe<
+        { __typename?: 'Influence' } & {
+          foundInLocation?: Types.Maybe<
+            Array<
+              Types.Maybe<
+                { __typename?: '_InfluenceFoundInLocation' } & {
+                  Location?: Types.Maybe<
+                    { __typename?: 'Location' } & Pick<
+                      Types.Location,
+                      '_id' | 'name'
+                    >
+                  >;
+                }
+              >
+            >
+          >;
+          fromDreamingIn: Array<
+            { __typename?: 'MansusDoorOption' } & CommonMansusOptionDataFragment
+          >;
+          fromBook: Array<
+            { __typename?: 'Book' } & Pick<Types.Book, '_id' | 'name'>
+          >;
+          decaysTo?: Types.Maybe<
+            { __typename?: 'Influence' } & CommonInfluenceDataFragment
+          >;
+          decaysFrom: Array<
+            { __typename?: 'Influence' } & CommonInfluenceDataFragment
+          >;
+        } & CommonInfluenceDataFragment
+      >
+    >
+  >;
+};
+
+export type SaveInfluenceMutationVariables = Types.Exact<{
+  influence: Types.Scalars['String'];
+}>;
+
+export type SaveInfluenceMutation = { __typename?: 'Mutation' } & {
+  CreateInfluence?: Types.Maybe<
+    { __typename?: 'Influence' } & Pick<Types.Influence, 'name'>
+  >;
+};
+
+export type SetInfluenceAspectMutationVariables = Types.Exact<{
+  influence: Types.Scalars['String'];
+  aspect: Types.Scalars['String'];
+  quantity: Types.Scalars['Int'];
+}>;
+
+export type SetInfluenceAspectMutation = { __typename?: 'Mutation' } & {
+  AddInfluenceAspects?: Types.Maybe<
+    { __typename?: '_AddInfluenceAspectsPayload' } & Pick<
+      Types._AddInfluenceAspectsPayload,
+      'quantity'
+    >
+  >;
+};
+
+export type SetInfluenceDecayMutationVariables = Types.Exact<{
+  originInfluence: Types.Scalars['String'];
+  influence: Types.Scalars['String'];
+}>;
+
+export type SetInfluenceDecayMutation = { __typename?: 'Mutation' } & {
+  AddInfluenceDecaysTo?: Types.Maybe<
+    { __typename?: '_AddInfluenceDecaysToPayload' } & {
+      from?: Types.Maybe<
+        { __typename?: 'Influence' } & Pick<Types.Influence, 'name'>
+      >;
+      to?: Types.Maybe<
+        { __typename?: 'Influence' } & Pick<Types.Influence, 'name'>
+      >;
+    }
+  >;
+};
+
+export type SetInfluenceDreamingResultMutationVariables = Types.Exact<{
+  door: Types.Scalars['String'];
+  influence: Types.Scalars['String'];
+}>;
+
+export type SetInfluenceDreamingResultMutation = { __typename?: 'Mutation' } & {
+  AddInfluenceFromDreamingIn?: Types.Maybe<
+    { __typename?: '_AddInfluenceFromDreamingInPayload' } & {
+      from?: Types.Maybe<
+        { __typename?: 'MansusDoorOption' } & Pick<
+          Types.MansusDoorOption,
+          'name'
+        >
+      >;
+      to?: Types.Maybe<
+        { __typename?: 'Influence' } & Pick<Types.Influence, 'name'>
+      >;
+    }
+  >;
+};
+
+export type SetInfluenceLocationMutationVariables = Types.Exact<{
+  name: Types.Scalars['String'];
+  location: Types.Scalars['String'];
+  chance: Types.Scalars['Boolean'];
+}>;
+
+export type SetInfluenceLocationMutation = { __typename?: 'Mutation' } & {
+  AddInfluenceFoundInLocation?: Types.Maybe<
+    { __typename?: '_AddInfluenceFoundInLocationPayload' } & Pick<
+      Types._AddInfluenceFoundInLocationPayload,
+      'chance'
+    > & {
+        from?: Types.Maybe<
+          { __typename?: 'Influence' } & Pick<Types.Influence, 'name'>
+        >;
+        to?: Types.Maybe<
+          { __typename?: 'Location' } & Pick<Types.Location, 'name'>
+        >;
+      }
+  >;
+};
+
 export type GetIngredientsQueryVariables = Types.Exact<{
   [key: string]: never;
 }>;
@@ -1466,6 +1603,212 @@ export class AddAspectToFollowerGQL extends Apollo.Mutation<
   AddAspectToFollowerMutationVariables
 > {
   document = AddAspectToFollowerDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+  }
+}
+export const GetInfluencesDocument = gql`
+  query getInfluences {
+    Influence(orderBy: name_asc) {
+      name
+    }
+  }
+`;
+
+@Injectable({
+    providedIn: 'root',
+})
+export class GetInfluencesGQL extends Apollo.Query<
+  GetInfluencesQuery,
+  GetInfluencesQueryVariables
+> {
+  document = GetInfluencesDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+  }
+}
+export const GetInfluenceDocument = gql`
+  query getInfluence($name: String!) {
+    Influence(name: $name) {
+      ...CommonInfluenceData
+      foundInLocation {
+        Location {
+          _id
+          name
+        }
+      }
+      fromDreamingIn {
+        ...CommonMansusOptionData
+      }
+      fromBook {
+        _id
+        name
+      }
+      decaysTo {
+        ...CommonInfluenceData
+      }
+      decaysFrom {
+        ...CommonInfluenceData
+      }
+    }
+  }
+  ${CommonInfluenceDataFragmentDoc}
+  ${CommonMansusOptionDataFragmentDoc}
+`;
+
+@Injectable({
+    providedIn: 'root',
+})
+export class GetInfluenceGQL extends Apollo.Query<
+  GetInfluenceQuery,
+  GetInfluenceQueryVariables
+> {
+  document = GetInfluenceDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+  }
+}
+export const SaveInfluenceDocument = gql`
+  mutation saveInfluence($influence: String!) {
+    CreateInfluence(name: $influence) {
+      name
+    }
+  }
+`;
+
+@Injectable({
+    providedIn: 'root',
+})
+export class SaveInfluenceGQL extends Apollo.Mutation<
+  SaveInfluenceMutation,
+  SaveInfluenceMutationVariables
+> {
+  document = SaveInfluenceDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+  }
+}
+export const SetInfluenceAspectDocument = gql`
+  mutation setInfluenceAspect(
+    $influence: String!
+    $aspect: String!
+    $quantity: Int!
+  ) {
+    AddInfluenceAspects(
+      from: { name: $influence }
+      to: { name: $aspect }
+      data: { quantity: $quantity }
+    ) {
+      quantity
+    }
+  }
+`;
+
+@Injectable({
+    providedIn: 'root',
+})
+export class SetInfluenceAspectGQL extends Apollo.Mutation<
+  SetInfluenceAspectMutation,
+  SetInfluenceAspectMutationVariables
+> {
+  document = SetInfluenceAspectDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+  }
+}
+export const SetInfluenceDecayDocument = gql`
+  mutation setInfluenceDecay($originInfluence: String!, $influence: String!) {
+    AddInfluenceDecaysTo(
+      from: { name: $originInfluence }
+      to: { name: $influence }
+    ) {
+      from {
+        name
+      }
+      to {
+        name
+      }
+    }
+  }
+`;
+
+@Injectable({
+    providedIn: 'root',
+})
+export class SetInfluenceDecayGQL extends Apollo.Mutation<
+  SetInfluenceDecayMutation,
+  SetInfluenceDecayMutationVariables
+> {
+  document = SetInfluenceDecayDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+  }
+}
+export const SetInfluenceDreamingResultDocument = gql`
+  mutation setInfluenceDreamingResult($door: String!, $influence: String!) {
+    AddInfluenceFromDreamingIn(
+      from: { name: $door }
+      to: { name: $influence }
+    ) {
+      from {
+        name
+      }
+      to {
+        name
+      }
+    }
+  }
+`;
+
+@Injectable({
+    providedIn: 'root',
+})
+export class SetInfluenceDreamingResultGQL extends Apollo.Mutation<
+  SetInfluenceDreamingResultMutation,
+  SetInfluenceDreamingResultMutationVariables
+> {
+  document = SetInfluenceDreamingResultDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+  }
+}
+export const SetInfluenceLocationDocument = gql`
+  mutation setInfluenceLocation(
+    $name: String!
+    $location: String!
+    $chance: Boolean!
+  ) {
+    AddInfluenceFoundInLocation(
+      from: { name: $name }
+      to: { name: $location }
+      data: { chance: $chance }
+    ) {
+      from {
+        name
+      }
+      to {
+        name
+      }
+      chance
+    }
+  }
+`;
+
+@Injectable({
+    providedIn: 'root',
+})
+export class SetInfluenceLocationGQL extends Apollo.Mutation<
+  SetInfluenceLocationMutation,
+  SetInfluenceLocationMutationVariables
+> {
+  document = SetInfluenceLocationDocument;
 
   constructor(apollo: Apollo.Apollo) {
       super(apollo);

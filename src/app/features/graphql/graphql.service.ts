@@ -6,10 +6,6 @@ import {
 } from './queries/book-queries';
 import { GET_ENTITY, GET_ENTITY_WITH_ASPECT } from './queries/entity-queries';
 import {
-    GET_INFLUENCES, CREATE_INFLUENCE, SET_INFLUENCE_ASPECT, SET_INFLUENCE_DECAY, SET_INFLUENCE_LOCATION,
-    SET_INFLUENCE_DREAMING_RESULT, GET_INFLUENCE
-} from './queries/influence-queries';
-import {
     GET_INGREDIENTS, CREATE_INGREDIENT, SET_INGREDIENT_ASPECT, SET_INGREDIENT_LOCATION, SET_INGREDIENT_DREAMING_RESULT, GET_INGREDIENT
 } from './queries/ingredient-queries';
 import {
@@ -30,6 +26,7 @@ import { SaveLocationRewardInput, SaveItemInput, SaveMansusDoorOptionInput, Rewa
 import { Entity } from 'src/app/shared/model';
 import { GET_RITES, CREATE_RITE, GET_RITE } from './queries/rite-queries';
 import { GET_DESIRES, ADD_DESIRE_CHANGE } from './queries/desire-queries';
+import { GetInfluenceDocument, GetInfluencesDocument, SaveInfluenceDocument, SetInfluenceAspectDocument, SetInfluenceDecayDocument, SetInfluenceDreamingResultDocument, SetInfluenceLocationDocument } from './operations';
 
 @Injectable({
     providedIn: 'root'
@@ -110,9 +107,9 @@ export class GraphqlService {
 
     getDesires = () => this.getObjects(GET_DESIRES, data => data.Desire);
 
-    getInfluences = () => this.getObjects(GET_INFLUENCES, data => data.Influence);
+    getInfluences = () => this.getObjects(GetInfluencesDocument, data => data.Influence);
 
-    getInfluence = (influence: string) => this.getObject(influence, GET_INFLUENCE);
+    getInfluence = (influence: string) => this.getObject(influence, GetInfluenceDocument);
 
     getIngredients = () => this.getObjects(GET_INGREDIENTS, data => data.Ingredient);
 
@@ -155,19 +152,19 @@ export class GraphqlService {
                 }).toPromise();
             } else if (itemType === 'Influence') {
                 await this.apollo.mutate({
-                    mutation: CREATE_INFLUENCE,
+                    mutation: SaveInfluenceDocument,
                     variables: {
                         influence: name
                     },
                     refetchQueries: [{
-                        query: GET_INFLUENCES
+                        query: GetInfluencesDocument
                     }]
                 }).toPromise();
 
                 aspects.forEach(async aspectInfo => {
                     const { aspect, quantity } = aspectInfo;
                     await this.apollo.mutate({
-                        mutation: SET_INFLUENCE_ASPECT,
+                        mutation: SetInfluenceAspectDocument,
                         variables: {
                             influence: name,
                             aspect,
@@ -239,20 +236,20 @@ export class GraphqlService {
         try {
             const { originInfluence, influence } = params;
             await this.apollo.mutate({
-                mutation: SET_INFLUENCE_DECAY,
+                mutation: SetInfluenceDecayDocument,
                 variables: {
                     originInfluence,
                     influence
                 },
                 refetchQueries: [
                     {
-                        query: GET_INFLUENCE,
+                        query: GetInfluenceDocument,
                         variables: {
                             name: originInfluence
                         }
                     },
                     {
-                        query: GET_INFLUENCE,
+                        query: GetInfluenceDocument,
                         variables: {
                             name: influence
                         }
@@ -290,36 +287,36 @@ export class GraphqlService {
     }
 
      saveMansusDoorOption = async (params: SaveMansusDoorOptionInput) => {
-        try {
-            const { door, option } = params;
+         try {
+             const { door, option } = params;
 
-            await this.apollo.mutate({
-                mutation: CREATE_MANSUS_DOOR_OPTION,
-                variables: {
-                    option
-                }
-            }).toPromise();
-            await this.apollo.mutate({
-                mutation: SET_MANSUS_DOOR_OPTION,
-                variables: {
-                    door,
-                    option
-                },
-                refetchQueries: [
-                    {
-                        query: GET_MANSUS_DOOR,
-                        variables: { name: door }
-                    },
-                    {
-                        query: GET_MANSUS_DOOR_OPTION,
-                        variables: { name: option }
-                    }
-                ]
-            }).toPromise();
-        } catch (err) {
-            console.error(err);
-        }
-    }
+             await this.apollo.mutate({
+                 mutation: CREATE_MANSUS_DOOR_OPTION,
+                 variables: {
+                     option
+                 }
+             }).toPromise();
+             await this.apollo.mutate({
+                 mutation: SET_MANSUS_DOOR_OPTION,
+                 variables: {
+                     door,
+                     option
+                 },
+                 refetchQueries: [
+                     {
+                         query: GET_MANSUS_DOOR,
+                         variables: { name: door }
+                     },
+                     {
+                         query: GET_MANSUS_DOOR_OPTION,
+                         variables: { name: option }
+                     }
+                 ]
+             }).toPromise();
+         } catch (err) {
+             console.error(err);
+         }
+     }
 
     saveSecretHistoryLocation = async (params) => {
         const { history, location } = params;
@@ -384,7 +381,7 @@ export class GraphqlService {
                 } else if (type === 'Ingredient') {
                     this.executeSaveLocationReward(reward, location, chance, SET_INGREDIENT_LOCATION, GET_INGREDIENT);
                 } else if (type === 'Influence') {
-                    this.executeSaveLocationReward(reward, location, chance, SET_INFLUENCE_LOCATION, GET_INFLUENCE);
+                    this.executeSaveLocationReward(reward, location, chance, SetInfluenceLocationDocument, GetInfluenceDocument);
                 } else if (type === 'Tool') {
                     this.executeSaveLocationReward(reward, location, chance, SET_TOOL_LOCATION, GET_TOOL);
                 }
@@ -428,43 +425,43 @@ export class GraphqlService {
             rewards.forEach(async reward => {
                 const { type, name } = reward;
                 switch (type) {
-                    case 'Influence': {
-                        this.executeSaveBookReward(SET_BOOK_INFLUENCE_RESULT, book, name, GET_INFLUENCE);
-                        break;
-                    }
-                    case 'Language': {
-                        const saveResult = await this.executeSaveBookReward(SET_BOOK_LANGUAGE_RESULT, book, name, GET_LANGUAGE);
-                        const requiredLang = saveResult.data.AddBookTeachesLanguage.from.language.name;
-                        await this.apollo.mutate({
-                            mutation: SET_LANGUAGE_REQUIRES,
-                            variables: {
-                                language: name,
-                                requiredLanguage: requiredLang
-                            },
-                            refetchQueries: [
-                                {
-                                    query: GET_LANGUAGE,
-                                    variables: { name }
-                                }
-                            ]
-                        }).toPromise();
-                        break;
-                    }
-                    case 'Lore': {
-                        this.executeSaveBookReward(SET_BOOK_LORE_RESULT, book, name, GET_LORE);
-                        break;
-                    }
-                    case 'Rite': {
-                        this.executeSaveBookReward(SET_BOOK_RITE_RESULT, book, name, GET_RITE);
-                        break;
-                    }
-                    case 'Tool': {
-                        this.executeSaveBookReward(SET_BOOK_TOOL_RESULT, book, name, GET_TOOL);
-                        break;
-                    }
-                    default: {
-                        console.error('Book reward type', type, 'not managed');
-                    }
+                case 'Influence': {
+                    this.executeSaveBookReward(SET_BOOK_INFLUENCE_RESULT, book, name, GetInfluenceDocument);
+                    break;
+                }
+                case 'Language': {
+                    const saveResult = await this.executeSaveBookReward(SET_BOOK_LANGUAGE_RESULT, book, name, GET_LANGUAGE);
+                    const requiredLang = saveResult.data.AddBookTeachesLanguage.from.language.name;
+                    await this.apollo.mutate({
+                        mutation: SET_LANGUAGE_REQUIRES,
+                        variables: {
+                            language: name,
+                            requiredLanguage: requiredLang
+                        },
+                        refetchQueries: [
+                            {
+                                query: GET_LANGUAGE,
+                                variables: { name }
+                            }
+                        ]
+                    }).toPromise();
+                    break;
+                }
+                case 'Lore': {
+                    this.executeSaveBookReward(SET_BOOK_LORE_RESULT, book, name, GET_LORE);
+                    break;
+                }
+                case 'Rite': {
+                    this.executeSaveBookReward(SET_BOOK_RITE_RESULT, book, name, GET_RITE);
+                    break;
+                }
+                case 'Tool': {
+                    this.executeSaveBookReward(SET_BOOK_TOOL_RESULT, book, name, GET_TOOL);
+                    break;
+                }
+                default: {
+                    console.error('Book reward type', type, 'not managed');
+                }
                 }
             });
         } catch (err) {
@@ -533,7 +530,7 @@ export class GraphqlService {
                 }).toPromise();
             } else if (rewardType === 'Influence') {
                 await this.apollo.mutate({
-                    mutation: SET_INFLUENCE_DREAMING_RESULT,
+                    mutation: SetInfluenceDreamingResultDocument,
                     variables: {
                         door,
                         influence
@@ -541,7 +538,7 @@ export class GraphqlService {
                     refetchQueries: [
                         getMansusDoorOptionQuery,
                         {
-                            query: GET_INFLUENCE,
+                            query: GetInfluenceDocument,
                             variables: {
                                 name: influence
                             }

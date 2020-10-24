@@ -1,0 +1,76 @@
+query getInfluences {
+  Influence(orderBy: name_asc) {
+    name
+  }
+}
+
+query getInfluence($name: String!) {
+  Influence(name: $name) {
+    ...CommonInfluenceData
+		foundInLocation {
+      Location {
+        _id
+        name
+      }
+    }
+    fromDreamingIn {
+      ...CommonMansusOptionData
+    }
+    fromBook {
+      _id
+      name
+    }
+    decaysTo {
+      ...CommonInfluenceData
+    }
+    decaysFrom {
+      ...CommonInfluenceData
+    }
+  }
+}
+
+mutation saveInfluence($influence: String!) {
+  CreateInfluence(name: $influence) {
+    name
+  }
+}
+
+mutation setInfluenceAspect($influence: String!, $aspect: String!, $quantity: Int!) {
+  AddInfluenceAspects(from: { name: $influence }, to: { name: $aspect }, data: { quantity: $quantity }) {
+    quantity
+  }
+}
+
+mutation setInfluenceDecay($originInfluence: String!, $influence: String!) {
+  AddInfluenceDecaysTo(from: { name: $originInfluence }, to: { name: $influence }) {
+    from {
+      name
+    }
+    to {
+      name
+    }
+  }
+}
+
+mutation setInfluenceDreamingResult($door: String!, $influence: String!) {
+  AddInfluenceFromDreamingIn(from: { name: $door }, to: { name: $influence }) {
+    from {
+      name
+    }
+    to {
+      name
+    }
+  }
+}
+
+mutation setInfluenceLocation($name: String!, $location: String!, $chance: Boolean!) {
+  AddInfluenceFoundInLocation(from: {name: $name}, to: {name: $location}, data: {chance: $chance}) {
+    from {
+      name
+    }
+    to {
+      name
+    }
+    chance
+  }
+}
