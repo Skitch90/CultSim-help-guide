@@ -33,7 +33,7 @@
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.1000.7",
+    "@angular-devkit/build-angular": "^0.1002.0",
     "@angular/cli": "~10.0.7",
     "@angular/compiler-cli": "~10.0.11",
     "@angular/language-service": "~10.0.11",
@@ -45,7 +45,11 @@
     "@types/jasmine": "^3.5.13",
     "@types/jasminewd2": "^2.0.8",
     "@types/node": "^12.11.1",
+    "@typescript-eslint/eslint-plugin": "^4.5.0",
+    "@typescript-eslint/parser": "^4.5.0",
     "codelyzer": "^6.0.0",
+    "eslint": "^7.12.0",
+    "husky": "^4.3.0",
     "jasmine-core": "~3.5.0",
     "jasmine-spec-reporter": "~5.0.0",
     "karma": "~5.0.0",
@@ -53,7 +57,10 @@
     "karma-coverage-istanbul-reporter": "~3.0.2",
     "karma-jasmine": "~3.3.0",
     "karma-jasmine-html-reporter": "^1.5.0",
+    "lint-staged": "^10.4.2",
     "protractor": "~7.0.0",
+    "stylelint": "^13.7.2",
+    "stylelint-config-standard": "^20.0.0",
     "ts-node": "~7.0.0",
     "tslint": "~6.1.0",
     "typescript": "~3.9.7"
@@ -61,5 +68,23 @@
   "graphql-inspector": {
     "branch": "master",
     "schema": "schema.graphql.json"
+  },
+  "stylelint": {
+    "extends": "stylelint-config-standard"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "./node_modules/.bin/eslint --fix",
+      "git add"
+    ],
+    "*.{css,less,sass,scss}": [
+      "./node_modules/.bin/stylelint --fix",
+      "git add"
+    ]
+  },
+  "husky": {
+      "hooks": {
+        "pre-commit": "lint-staged"
+      }
   }
 }
