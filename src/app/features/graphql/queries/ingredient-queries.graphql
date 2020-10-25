@@ -43,7 +43,7 @@ mutation setIngredientLocation($name: String!, $location: String!, $chance: Bool
   }
 }
 
-mutation setIngredientBreamingResult($door: String!, $ingredient: String!) {
+mutation setIngredientDreamingResult($door: String!, $ingredient: String!) {
   AddIngredientFromDreamingIn(from: { name: $door }, to: { name: $ingredient }) {
     from {
       name

@@ -247,6 +247,26 @@ export type SaveChangeLessonMutation = { __typename?: 'Mutation' } & {
   >;
 };
 
+export type GetEntityQueryVariables = Types.Exact<{
+  name: Types.Scalars['String'];
+}>;
+
+export type GetEntityQuery = { __typename?: 'Query' } & {
+  entityWithName: Array<
+    { __typename?: 'SearchEntity' } & Pick<
+      Types.SearchEntity,
+      '_id' | 'name' | 'label'
+    > & {
+        aspects: Array<
+          { __typename?: 'AspectQuantity' } & Pick<
+            Types.AspectQuantity,
+            'aspect' | 'quantity'
+          >
+        >;
+      }
+  >;
+};
+
 export type GetEntitiesByAspectQueryVariables = Types.Exact<{
   aspect: Types.Scalars['String'];
 }>;
@@ -628,12 +648,12 @@ export type SetIngredientLocationMutation = { __typename?: 'Mutation' } & {
   >;
 };
 
-export type SetIngredientBreamingResultMutationVariables = Types.Exact<{
+export type SetIngredientDreamingResultMutationVariables = Types.Exact<{
   door: Types.Scalars['String'];
   ingredient: Types.Scalars['String'];
 }>;
 
-export type SetIngredientBreamingResultMutation = {
+export type SetIngredientDreamingResultMutation = {
   __typename?: 'Mutation';
 } & {
   AddIngredientFromDreamingIn?: Types.Maybe<
@@ -1728,6 +1748,33 @@ export class SaveChangeLessonGQL extends Apollo.Mutation<
       super(apollo);
   }
 }
+export const GetEntityDocument = gql`
+  query getEntity($name: String!) {
+    entityWithName(name: $name) {
+      _id
+      name
+      label
+      aspects {
+        aspect
+        quantity
+      }
+    }
+  }
+`;
+
+@Injectable({
+    providedIn: 'root',
+})
+export class GetEntityGQL extends Apollo.Query<
+  GetEntityQuery,
+  GetEntityQueryVariables
+> {
+  document = GetEntityDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+  }
+}
 export const GetEntitiesByAspectDocument = gql`
   query getEntitiesByAspect($aspect: String!) {
     entityWithAspect(aspect: $aspect) {
@@ -2169,8 +2216,8 @@ export class SetIngredientLocationGQL extends Apollo.Mutation<
       super(apollo);
   }
 }
-export const SetIngredientBreamingResultDocument = gql`
-  mutation setIngredientBreamingResult($door: String!, $ingredient: String!) {
+export const SetIngredientDreamingResultDocument = gql`
+  mutation setIngredientDreamingResult($door: String!, $ingredient: String!) {
     AddIngredientFromDreamingIn(
       from: { name: $door }
       to: { name: $ingredient }
@@ -2188,11 +2235,11 @@ export const SetIngredientBreamingResultDocument = gql`
 @Injectable({
     providedIn: 'root',
 })
-export class SetIngredientBreamingResultGQL extends Apollo.Mutation<
-  SetIngredientBreamingResultMutation,
-  SetIngredientBreamingResultMutationVariables
+export class SetIngredientDreamingResultGQL extends Apollo.Mutation<
+  SetIngredientDreamingResultMutation,
+  SetIngredientDreamingResultMutationVariables
 > {
-  document = SetIngredientBreamingResultDocument;
+  document = SetIngredientDreamingResultDocument;
 
   constructor(apollo: Apollo.Apollo) {
       super(apollo);

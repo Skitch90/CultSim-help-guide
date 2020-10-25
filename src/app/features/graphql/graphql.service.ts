@@ -1,28 +1,28 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
-import {
-    GET_BOOKS, GET_BOOK, SET_BOOK_LOCATION,
-    SET_BOOK_INFLUENCE_RESULT, SET_BOOK_LANGUAGE_RESULT, SET_BOOK_LORE_RESULT, SET_BOOK_RITE_RESULT, SET_BOOK_TOOL_RESULT
-} from './queries/book-queries';
-import { GET_ENTITY, GET_ENTITY_WITH_ASPECT } from './queries/entity-queries';
-import {
-    GET_INGREDIENTS, SET_INGREDIENT_LOCATION, SET_INGREDIENT_DREAMING_RESULT, GET_INGREDIENT
-} from './queries/ingredient-queries';
-import {
+import { GetInfluenceDocument, GetInfluencesDocument, SetInfluenceDecayDocument,
+    SetInfluenceDreamingResultDocument, SetInfluenceLocationDocument,
     GetLanguagesDocument, GetLanguageDocument, SetLanguageRequiresDocument, SetLanguageDreamingResultDocument,
     SaveMansusDoorOptionDocument, SetMansusDoorOptionDocument, GetMansusDoorDocument, GetMansusDoorOptionDocument,
-    GetToolsDocument, GetToolDocument, SetToolLocationDocument, GetRitesDocument, GetRiteDocument} from './operations';
-import {
-    GET_LOCATIONS, GET_LOCATION, SET_LOCATION_OBSTACLE,
-    GET_OBSTACLES} from './queries/location-queries';
-import {
-    GET_LORES, GET_LORE, SET_LORE_EXPLORING_LOCATION, SET_LORE_DREAMING_RESULT, SET_LORE_UPGRADE
-} from './queries/lore-queries';
+    GetToolsDocument, GetToolDocument, SetToolLocationDocument, GetRitesDocument, GetRiteDocument, GetBooksDocument,
+    GetBookDocument, SetBookLocationDocument, SetBookInfluenceResultDocument, SetBookLanguageDocument, SetBookLoreResultDocument,
+    SetBookRiteResultDocument, SetBookToolResultDocument, GetDesiresDocument, AddDesireChangeDocument, GetEntityDocument,
+    GetEntitiesByAspectDocument,
+    GetIngredientsDocument,
+    GetIngredientDocument,
+    SetIngredientLocationDocument,
+    SetIngredientDreamingResultDocument,
+    GetLocationsDocument,
+    GetLocationDocument,
+    SetLocationObstacleDocument,
+    GetObstaclesDocument,
+    GetLoresDocument,
+    GetLoreDocument,
+    SetLoreUpgradeDocument,
+    SetLoreExploringLocationDocument,
+    SetLoreDreamingResultDocument} from './operations';
 import { SaveLocationRewardInput, SaveMansusDoorOptionInput, Reward } from './graphql.types';
 import { Entity } from 'src/app/shared/model';
-import { GET_DESIRES, ADD_DESIRE_CHANGE } from './queries/desire-queries';
-import { GetInfluenceDocument, GetInfluencesDocument, SetInfluenceDecayDocument,
-    SetInfluenceDreamingResultDocument, SetInfluenceLocationDocument } from './operations';
 
 @Injectable({
     providedIn: 'root'
@@ -34,7 +34,7 @@ export class GraphqlService {
 
     async getEntities(name: string): Promise<Entity[]> {
         const { data } = await this.apollo.query<any>({
-            query: GET_ENTITY,
+            query: GetEntityDocument,
             variables: {
                 name
             }
@@ -59,7 +59,7 @@ export class GraphqlService {
 
     getEntitiesByAspect(aspect: string) {
         return this.apollo.watchQuery<any>({
-            query: GET_ENTITY_WITH_ASPECT,
+            query: GetEntitiesByAspectDocument,
             variables: {
                 aspect
             }
@@ -79,39 +79,39 @@ export class GraphqlService {
 
     async getLocations() {
         const { data } = await this.apollo.query<any>({
-            query: GET_LOCATIONS
+            query: GetLocationsDocument
         }).toPromise();
         return data.Location;
     }
 
     getLocation(name: string) {
         return this.apollo.watchQuery<any>({
-            query: GET_LOCATION,
+            query: GetLocationDocument,
             variables: {
                 location: name
             }
         });
     }
 
-    getLores = () => this.getObjects(GET_LORES, data => data.Lore);
+    getLores = () => this.getObjects(GetLoresDocument, data => data.Lore);
 
-    getLore = (name: string) => this.getObject(name, GET_LORE);
+    getLore = (name: string) => this.getObject(name, GetLoreDocument);
 
-    getBooks = () => this.getObjects(GET_BOOKS, data => data.Book);
+    getBooks = () => this.getObjects(GetBooksDocument, data => data.Book);
 
-    getBook = (title: string) => this.getObject(title, GET_BOOK);
+    getBook = (title: string) => this.getObject(title, GetBookDocument);
 
-    getDesires = () => this.getObjects(GET_DESIRES, data => data.Desire);
+    getDesires = () => this.getObjects(GetDesiresDocument, data => data.Desire);
 
     getInfluences = () => this.getObjects(GetInfluencesDocument, data => data.Influence);
 
     getInfluence = (influence: string) => this.getObject(influence, GetInfluenceDocument);
 
-    getIngredients = () => this.getObjects(GET_INGREDIENTS, data => data.Ingredient);
+    getIngredients = () => this.getObjects(GetIngredientsDocument, data => data.Ingredient);
 
-    getIngredient = (name: string) => this.getObject(name, GET_INGREDIENT);
+    getIngredient = (name: string) => this.getObject(name, GetIngredientDocument);
 
-    getLocationObstacles = () => this.getObjects(GET_OBSTACLES, data => data.ExpeditionObstacle);
+    getLocationObstacles = () => this.getObjects(GetObstaclesDocument, data => data.ExpeditionObstacle);
 
     getRites = () => this.getObjects(GetRitesDocument, data => data.Rite);
 
@@ -158,18 +158,18 @@ export class GraphqlService {
         try {
             const { startLore, lore } = params;
             await this.apollo.mutate({
-                mutation: SET_LORE_UPGRADE,
+                mutation: SetLoreUpgradeDocument,
                 variables: {
                     startLore,
                     lore
                 },
                 refetchQueries: [
                     {
-                        query: GET_LORE,
+                        query: GetLoreDocument,
                         variables: { name: startLore }
                     },
                     {
-                        query: GET_LORE,
+                        query: GetLoreDocument,
                         variables: { name: lore }
                     }
                 ]
@@ -215,20 +215,20 @@ export class GraphqlService {
         const { history, location } = params;
         try {
             await this.apollo.mutate({
-                mutation: SET_LORE_EXPLORING_LOCATION,
+                mutation: SetLoreExploringLocationDocument,
                 variables: {
                     lore: history,
                     location
                 },
                 refetchQueries: [
                     {
-                        query: GET_LOCATION,
+                        query: GetLocationDocument,
                         variables: {
                             location
                         }
                     },
                     {
-                        query: GET_LORE,
+                        query: GetLoreDocument,
                         variables: {
                             name: history
                         }
@@ -246,13 +246,13 @@ export class GraphqlService {
             const obstacles = new Set(params.obstacles.map(item => item.obstacle));
             obstacles.forEach(async obstacle => {
                 this.apollo.mutate({
-                    mutation: SET_LOCATION_OBSTACLE,
+                    mutation: SetLocationObstacleDocument,
                     variables: {
                         location,
                         obstacle
                     },
                     refetchQueries: [{
-                        query: GET_LOCATION,
+                        query: GetLocationDocument,
                         variables: {
                             location
                         }
@@ -270,9 +270,9 @@ export class GraphqlService {
             rewards.forEach(async reward => {
                 const { type } = reward;
                 if (type === 'Book') {
-                    this.executeSaveLocationReward(reward, location, chance, SET_BOOK_LOCATION, GET_BOOK);
+                    this.executeSaveLocationReward(reward, location, chance, SetBookLocationDocument, GetBookDocument);
                 } else if (type === 'Ingredient') {
-                    this.executeSaveLocationReward(reward, location, chance, SET_INGREDIENT_LOCATION, GET_INGREDIENT);
+                    this.executeSaveLocationReward(reward, location, chance, SetIngredientLocationDocument, GetIngredientDocument);
                 } else if (type === 'Influence') {
                     this.executeSaveLocationReward(reward, location, chance, SetInfluenceLocationDocument, GetInfluenceDocument);
                 } else if (type === 'Tool') {
@@ -287,7 +287,7 @@ export class GraphqlService {
     private async executeSaveLocationReward(reward: Reward, location: string, chance: boolean, mutation: any, refetchQuery?: any) {
         const name = reward.name;
         const refetchQueries: any[] = [{
-            query: GET_LOCATION,
+            query: GetLocationDocument,
             variables: {
                 location
             }
@@ -319,11 +319,11 @@ export class GraphqlService {
                 const { type, name } = reward;
                 switch (type) {
                 case 'Influence': {
-                    this.executeSaveBookReward(SET_BOOK_INFLUENCE_RESULT, book, name, GetInfluenceDocument);
+                    this.executeSaveBookReward(SetBookInfluenceResultDocument, book, name, GetInfluenceDocument);
                     break;
                 }
                 case 'Language': {
-                    const saveResult = await this.executeSaveBookReward(SET_BOOK_LANGUAGE_RESULT, book, name, GetLanguageDocument);
+                    const saveResult = await this.executeSaveBookReward(SetBookLanguageDocument, book, name, GetLanguageDocument);
                     const requiredLang = saveResult.data.AddBookTeachesLanguage.from.language.name;
                     await this.apollo.mutate({
                         mutation: SetLanguageRequiresDocument,
@@ -341,15 +341,15 @@ export class GraphqlService {
                     break;
                 }
                 case 'Lore': {
-                    this.executeSaveBookReward(SET_BOOK_LORE_RESULT, book, name, GET_LORE);
+                    this.executeSaveBookReward(SetBookLoreResultDocument, book, name, GetLoreDocument);
                     break;
                 }
                 case 'Rite': {
-                    this.executeSaveBookReward(SET_BOOK_RITE_RESULT, book, name, GetRiteDocument);
+                    this.executeSaveBookReward(SetBookRiteResultDocument, book, name, GetRiteDocument);
                     break;
                 }
                 case 'Tool': {
-                    this.executeSaveBookReward(SET_BOOK_TOOL_RESULT, book, name, GetToolDocument);
+                    this.executeSaveBookReward(SetBookToolResultDocument, book, name, GetToolDocument);
                     break;
                 }
                 default: {
@@ -364,7 +364,7 @@ export class GraphqlService {
 
     private async executeSaveBookReward(mutation: any, bookTitle: string, rewardName: string, refetchQuery?: any) {
         const refetchQueries = [{
-            query: GET_BOOK,
+            query: GetBookDocument,
             variables: { name: bookTitle }
         }];
         if (refetchQuery) {
@@ -408,7 +408,7 @@ export class GraphqlService {
                 }).toPromise();
             } else if (rewardType === 'Lore') {
                 await this.apollo.mutate({
-                    mutation: SET_LORE_DREAMING_RESULT,
+                    mutation: SetLoreDreamingResultDocument,
                     variables: {
                         door,
                         lore
@@ -416,7 +416,7 @@ export class GraphqlService {
                     refetchQueries: [
                         getMansusDoorOptionQuery,
                         {
-                            query: GET_LORE,
+                            query: GetLoreDocument,
                             variables: { name: lore }
                         }
                     ]
@@ -440,7 +440,7 @@ export class GraphqlService {
                 }).toPromise();
             } else if (rewardType === 'Ingredient') {
                 await this.apollo.mutate({
-                    mutation: SET_INGREDIENT_DREAMING_RESULT,
+                    mutation: SetIngredientDreamingResultDocument,
                     variables: {
                         door,
                         ingredient
@@ -448,7 +448,7 @@ export class GraphqlService {
                     refetchQueries: [
                         getMansusDoorOptionQuery,
                         {
-                            query: GET_INGREDIENT,
+                            query: GetIngredientDocument,
                             variables: { name: ingredient }
                         }
                     ]
@@ -466,7 +466,7 @@ export class GraphqlService {
         try {
             const { startDesire, desire, ingredient1, ingredient2 } = params;
             await this.apollo.mutate({
-                mutation: ADD_DESIRE_CHANGE,
+                mutation: AddDesireChangeDocument,
                 variables: {
                     fromDesire: startDesire,
                     toDesire: desire,
