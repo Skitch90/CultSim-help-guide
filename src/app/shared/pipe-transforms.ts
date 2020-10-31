@@ -16,7 +16,8 @@ export class OutputLabelPipe implements PipeTransform {
 
 @Pipe({ name: 'labelIcon' })
 export class IconLabelPipe implements PipeTransform {
-    iconsConf = {
+    private readonly DEFAULT_ICON = 'extension';
+    private readonly iconsConf = {
         Aspect: 'category',
         Book: 'book',
         Follower: 'person',
@@ -27,12 +28,7 @@ export class IconLabelPipe implements PipeTransform {
         Tool: 'build',
     };
 
-    transform(label: string) {
-        const icon = this.iconsConf[label];
-        if (icon) {
-            return icon;
-        }
-
-        return 'extension';
+    transform(label: string): string{
+        return this.iconsConf[label] || this.DEFAULT_ICON;
     }
 }
