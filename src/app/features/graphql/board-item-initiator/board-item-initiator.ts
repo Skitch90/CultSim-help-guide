@@ -376,7 +376,7 @@ export class LanguageInitiator implements ItemInitiator {
 
     private getGroupsFromLanguage(language: Language): EntitiesGroup[] {
         const groups: EntitiesGroup[] = [];
-        const { requires, fromBook, fromDreamingIn } = language;
+        const { requires, fromBook, fromDreamingIn, fromTutor } = language;
         if (requires) {
             groups.push({
                 label: 'Requires language',
@@ -394,6 +394,12 @@ export class LanguageInitiator implements ItemInitiator {
             groups.push({
                 label: 'Found From',
                 entities
+            });
+        }
+        if (fromTutor.length) {
+            groups.push({
+                label: 'Taught By',
+                entities: fromTutor.map(tutor => convertToGroupItem(tutor))
             });
         }
         return groups;

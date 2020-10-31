@@ -701,6 +701,9 @@ export type GetLanguageQuery = { __typename?: 'Query' } & {
                 __typename?: 'MansusDoorOption';
               } & CommonMansusOptionDataFragment
             >;
+            fromTutor: Array<
+              { __typename?: 'Tutor' } & Pick<Types.Tutor, '_id' | 'name'>
+            >;
           }
       >
     >
@@ -2300,6 +2303,10 @@ export const GetLanguageDocument = gql`
       }
       fromDreamingIn {
         ...CommonMansusOptionData
+      }
+      fromTutor {
+        _id
+        name
       }
     }
   }
