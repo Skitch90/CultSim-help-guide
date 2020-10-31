@@ -1,11 +1,15 @@
 query getTutor($name: String!) {
-    Tutor(name: $name) {
-        name
+  Tutor(name: $name) {
+    name
+    teachesLanguage {
+      _id
+      name
     }
+  }
 }
 
 mutation saveTutor($name: String!) {
-    CreateTutor(name: $name) {
-        name
-    }
+  CreateTutor(name: $name) {
+    name
+  }
 }

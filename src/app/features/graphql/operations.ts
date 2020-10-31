@@ -1270,7 +1270,15 @@ export type GetTutorQueryVariables = Types.Exact<{
 
 export type GetTutorQuery = { __typename?: 'Query' } & {
   Tutor?: Types.Maybe<
-    Array<Types.Maybe<{ __typename?: 'Tutor' } & Pick<Types.Tutor, 'name'>>>
+    Array<
+      Types.Maybe<
+        { __typename?: 'Tutor' } & Pick<Types.Tutor, 'name'> & {
+            teachesLanguage?: Types.Maybe<
+              { __typename?: 'Language' } & Pick<Types.Language, '_id' | 'name'>
+            >;
+          }
+      >
+    >
   >;
 };
 
@@ -3128,6 +3136,10 @@ export const GetTutorDocument = gql`
   query getTutor($name: String!) {
     Tutor(name: $name) {
       name
+      teachesLanguage {
+        _id
+        name
+      }
     }
   }
 `;

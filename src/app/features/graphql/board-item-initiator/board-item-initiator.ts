@@ -5,7 +5,7 @@ import { GetBookGQL, GetEntitiesByAspectGQL, GetFollowerGQL, GetInfluenceGQL, Ge
     GetLocationGQL, GetLoreGQL, GetMansusDoorGQL, GetMansusDoorOptionGQL, GetRiteGQL, GetToolGQL, GetTutorGQL } from '../operations';
 import { convertToGroupItem, createAspectGroupItem, createSimpleAspectGroupItem } from './board-item-initiator-utils';
 import { AspectSearchGroupResult, Book, Follower, Influence, Ingredient, ItemInitResult, Language, Location, Lore, MansusDoor,
-    MansusDoorOption, Rite, Tool} from './board-item-initiator.types';
+    MansusDoorOption, Rite, Tool, Tutor} from './board-item-initiator.types';
 
 export interface ItemInitiator {
     initBoardItem(name: string): ItemInitResult;
@@ -556,14 +556,21 @@ export class TutorInitiator implements ItemInitiator {
         return {
             entityGroups: this.getTutorGQL.watch({ name }).valueChanges.pipe(
                 map((result) => result.data.Tutor[0]),
-                map(() => this.getGroupsFromTutor())
+                map((tutor) => this.getGroupsFromTutor(tutor))
             ),
             secretHistoriesLore: false,
             vaultLocation: false
         };
     }
 
-    private getGroupsFromTutor(): EntitiesGroup[] {
-        return [];
+    private getGroupsFromTutor({ teachesLanguage }: Tutor): EntitiesGroup[] {
+        const groups: EntitiesGroup[] = [];
+        if (teachesLanguage) {
+            groups.push({
+                label: 'Teaches',
+                entities: [ convertToGroupItem(teachesLanguage) ]
+            });
+        }
+        return groups;
     }
 }

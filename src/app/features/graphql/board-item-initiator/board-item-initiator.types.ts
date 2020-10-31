@@ -243,6 +243,12 @@ type TutorBase = {
     __typename?: 'Tutor';
 } & Pick<Model.Tutor, '_id' | 'name'>;
 
+export type Tutor = {
+    __typename?: 'Tutor';
+} & Pick<Model.Tutor, 'name'> & {
+    teachesLanguage?: LanguageBase;
+};
+
 export type Language = {
     __typename?: 'Language';
 } & Pick<Model.Language, 'name'> & {
