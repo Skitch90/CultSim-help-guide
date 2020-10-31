@@ -1,3 +1,9 @@
+query getTutor($name: String!) {
+    Tutor(name: $name) {
+        name
+    }
+}
+
 mutation saveTutor($name: String!) {
     CreateTutor(name: $name) {
         name

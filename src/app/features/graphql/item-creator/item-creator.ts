@@ -299,7 +299,7 @@ export class InfluenceCreator implements ItemCreator {
 export class TutorCreator implements ItemCreator {
     private readonly saveTutorGQL: SaveTutorGQL;
 
-    constructor(private readonly injector: Injector) {
+    constructor(readonly injector: Injector) {
         this.saveTutorGQL = injector.get(SaveTutorGQL);
     }
 

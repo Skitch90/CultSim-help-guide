@@ -16,7 +16,7 @@ import { BoardItemInitiatorService } from '../../graphql/board-item-initiator/bo
 import { AddLoreUpgradeDialogComponent } from '../../dialogs/add-lore-upgrade-dialog/add-lore-upgrade-dialog.component';
 import { AddDesireChangeDialogComponent } from '../../dialogs/add-desire-change-dialog/add-desire-change-dialog.component';
 import { AspectInitiator, BookInitiator, FollowerInitiator, InfluenceInitiator, IngredientInitiator, LanguageInitiator,
-    LocationInitiator, LoreInitiator, MansusDoorInitiator, MansusDoorOptionInitiator, RiteInitiator, ToolInitiator } from '../../graphql/board-item-initiator/board-item-initiator';
+    LocationInitiator, LoreInitiator, MansusDoorInitiator, MansusDoorOptionInitiator, RiteInitiator, ToolInitiator, TutorInitiator } from '../../graphql/board-item-initiator/board-item-initiator';
 
 @Component({
     selector: 'app-board-item',
@@ -45,6 +45,7 @@ export class BoardItemComponent implements OnInit {
       itemInitService.addItemInitiator('MansusDoorOption', new MansusDoorOptionInitiator(injector));
       itemInitService.addItemInitiator('Tool', new ToolInitiator(injector));
       itemInitService.addItemInitiator('Rite', new RiteInitiator(injector));
+      itemInitService.addItemInitiator('Tutor', new TutorInitiator(injector));
   }
 
   ngOnInit(): void {
