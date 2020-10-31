@@ -25,6 +25,7 @@ export class IconLabelPipe implements PipeTransform {
         MansusDoor: 'cloud_upload',
         MansusDoorOption: 'cloud',
         Tool: 'build',
+        Tutor: 'school'
     };
 
     transform(label: string) {

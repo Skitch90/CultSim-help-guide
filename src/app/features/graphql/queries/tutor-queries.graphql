@@ -1,0 +1,5 @@
+mutation saveTutor($name: String!) {
+    CreateTutor(name: $name) {
+        name
+    }
+}

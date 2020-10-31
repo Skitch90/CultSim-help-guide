@@ -10,7 +10,7 @@ import { DialogService } from './features/dialogs/dialog.service';
 import { ItemCreatorService } from './features/graphql/item-creator/item-creator.service';
 import { FollowerCreator, AspectCreator, ToolCreator, DesireCreator, ChangeLessonCreator, LocationCreator,
     ExpeditionObstacleCreator, BookCreator, LoreCreator, IngredientCreator, LanguageCreator, MansusDoorCreator,
-    RiteCreator, InfluenceCreator
+    RiteCreator, InfluenceCreator, TutorCreator
 } from './features/graphql/item-creator/item-creator';
 import { isEntity } from './shared/utils';
 
@@ -44,6 +44,7 @@ export class AppComponent implements OnInit {
       itemCreatorService.addItemCreator('MansusDoor', new MansusDoorCreator(injector));
       itemCreatorService.addItemCreator('Rite', new RiteCreator(injector));
       itemCreatorService.addItemCreator('Influence', new InfluenceCreator(injector));
+      itemCreatorService.addItemCreator('Tutor', new TutorCreator(injector));
   }
 
 

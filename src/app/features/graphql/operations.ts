@@ -1261,6 +1261,16 @@ export type SetToolLocationMutation = { __typename?: 'Mutation' } & {
   >;
 };
 
+export type SaveTutorMutationVariables = Types.Exact<{
+  name: Types.Scalars['String'];
+}>;
+
+export type SaveTutorMutation = { __typename?: 'Mutation' } & {
+  CreateTutor?: Types.Maybe<
+    { __typename?: 'Tutor' } & Pick<Types.Tutor, 'name'>
+  >;
+};
+
 export const CommonInfluenceDataFragmentDoc = gql`
   fragment CommonInfluenceData on Influence {
     _id
@@ -3092,6 +3102,27 @@ export class SetToolLocationGQL extends Apollo.Mutation<
   SetToolLocationMutationVariables
 > {
   document = SetToolLocationDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+  }
+}
+export const SaveTutorDocument = gql`
+  mutation saveTutor($name: String!) {
+    CreateTutor(name: $name) {
+      name
+    }
+  }
+`;
+
+@Injectable({
+    providedIn: 'root',
+})
+export class SaveTutorGQL extends Apollo.Mutation<
+  SaveTutorMutation,
+  SaveTutorMutationVariables
+> {
+  document = SaveTutorDocument;
 
   constructor(apollo: Apollo.Apollo) {
       super(apollo);
