@@ -18,6 +18,10 @@ query getLanguage($name: String!) {
     fromDreamingIn {
       ...CommonMansusOptionData
     }
+    fromTutor {
+      _id
+      name
+    }
   }
 }
 

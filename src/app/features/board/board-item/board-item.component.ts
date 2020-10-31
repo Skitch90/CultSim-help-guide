@@ -17,6 +17,7 @@ import { AddLoreUpgradeDialogComponent } from '../../dialogs/add-lore-upgrade-di
 import { AddDesireChangeDialogComponent } from '../../dialogs/add-desire-change-dialog/add-desire-change-dialog.component';
 import { AspectInitiator, BookInitiator, FollowerInitiator, InfluenceInitiator, IngredientInitiator, LanguageInitiator,
     LocationInitiator, LoreInitiator, MansusDoorInitiator, MansusDoorOptionInitiator, RiteInitiator, ToolInitiator, TutorInitiator } from '../../graphql/board-item-initiator/board-item-initiator';
+import { AddTutorTeachesDialogComponent, processTutorTeachesDialogResult } from '../../dialogs/add-tutor-teaches-dialog/add-tutor-teaches-dialog/add-tutor-teaches-dialog.component';
 
 @Component({
     selector: 'app-board-item',
@@ -32,7 +33,7 @@ export class BoardItemComponent implements OnInit {
 
   constructor(private dialogService: DialogService, private dialog: MatDialog,
               private service: GraphqlService, private boardService: BoardService,
-              private itemInitService: BoardItemInitiatorService, injector: Injector) {
+              private itemInitService: BoardItemInitiatorService, private injector: Injector) {
       itemInitService.addItemInitiator('Aspect', new AspectInitiator(injector));
       itemInitService.addItemInitiator('Follower', new FollowerInitiator(injector));
       itemInitService.addItemInitiator('Ingredient', new IngredientInitiator(injector));
@@ -126,5 +127,9 @@ export class BoardItemComponent implements OnInit {
 
   openAddUpgradeDialog(itemName: string): void {
       this.dialogService.openDialog(AddLoreUpgradeDialogComponent, this.service.setLoreUpgrade, { lore: itemName });
+  }
+
+  openTutorTeachesDialog(tutor: string): void {
+      this.dialogService.openDialog(AddTutorTeachesDialogComponent, processTutorTeachesDialogResult.bind(null, this.injector), { tutor });
   }
 }

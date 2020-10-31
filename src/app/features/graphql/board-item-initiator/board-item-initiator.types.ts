@@ -239,12 +239,23 @@ export type Influence = {
     aspects?: InfluenceAspect[];
 };
 
+type TutorBase = {
+    __typename?: 'Tutor';
+} & Pick<Model.Tutor, '_id' | 'name'>;
+
+export type Tutor = {
+    __typename?: 'Tutor';
+} & Pick<Model.Tutor, 'name'> & {
+    teachesLanguage?: LanguageBase;
+};
+
 export type Language = {
     __typename?: 'Language';
 } & Pick<Model.Language, 'name'> & {
     requires?: LanguageBase;
     fromBook?: BookBase;
     fromDreamingIn?: MansusDoorOptionBase;
+    fromTutor?: TutorBase[];
 };
 
 type MansusDoorOptionName = ({

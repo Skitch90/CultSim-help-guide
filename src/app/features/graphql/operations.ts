@@ -701,6 +701,9 @@ export type GetLanguageQuery = { __typename?: 'Query' } & {
                 __typename?: 'MansusDoorOption';
               } & CommonMansusOptionDataFragment
             >;
+            fromTutor: Array<
+              { __typename?: 'Tutor' } & Pick<Types.Tutor, '_id' | 'name'>
+            >;
           }
       >
     >
@@ -1267,7 +1270,15 @@ export type GetTutorQueryVariables = Types.Exact<{
 
 export type GetTutorQuery = { __typename?: 'Query' } & {
   Tutor?: Types.Maybe<
-    Array<Types.Maybe<{ __typename?: 'Tutor' } & Pick<Types.Tutor, 'name'>>>
+    Array<
+      Types.Maybe<
+        { __typename?: 'Tutor' } & Pick<Types.Tutor, 'name'> & {
+            teachesLanguage?: Types.Maybe<
+              { __typename?: 'Language' } & Pick<Types.Language, '_id' | 'name'>
+            >;
+          }
+      >
+    >
   >;
 };
 
@@ -1278,6 +1289,19 @@ export type SaveTutorMutationVariables = Types.Exact<{
 export type SaveTutorMutation = { __typename?: 'Mutation' } & {
   CreateTutor?: Types.Maybe<
     { __typename?: 'Tutor' } & Pick<Types.Tutor, 'name'>
+  >;
+};
+
+export type SetLanguageFromTutorMutationVariables = Types.Exact<{
+  tutor: Types.Scalars['String'];
+  language: Types.Scalars['String'];
+}>;
+
+export type SetLanguageFromTutorMutation = { __typename?: 'Mutation' } & {
+  AddLanguageFromTutor?: Types.Maybe<
+    { __typename?: '_AddLanguageFromTutorPayload' } & {
+      from?: Types.Maybe<{ __typename?: 'Tutor' } & Pick<Types.Tutor, 'name'>>;
+    }
   >;
 };
 
@@ -2301,6 +2325,10 @@ export const GetLanguageDocument = gql`
       fromDreamingIn {
         ...CommonMansusOptionData
       }
+      fromTutor {
+        _id
+        name
+      }
     }
   }
   ${CommonMansusOptionDataFragmentDoc}
@@ -3121,6 +3149,10 @@ export const GetTutorDocument = gql`
   query getTutor($name: String!) {
     Tutor(name: $name) {
       name
+      teachesLanguage {
+        _id
+        name
+      }
     }
   }
 `;
@@ -3154,6 +3186,29 @@ export class SaveTutorGQL extends Apollo.Mutation<
   SaveTutorMutationVariables
 > {
   document = SaveTutorDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+  }
+}
+export const SetLanguageFromTutorDocument = gql`
+  mutation setLanguageFromTutor($tutor: String!, $language: String!) {
+    AddLanguageFromTutor(from: { name: $tutor }, to: { name: $language }) {
+      from {
+        name
+      }
+    }
+  }
+`;
+
+@Injectable({
+    providedIn: 'root',
+})
+export class SetLanguageFromTutorGQL extends Apollo.Mutation<
+  SetLanguageFromTutorMutation,
+  SetLanguageFromTutorMutationVariables
+> {
+  document = SetLanguageFromTutorDocument;
 
   constructor(apollo: Apollo.Apollo) {
       super(apollo);

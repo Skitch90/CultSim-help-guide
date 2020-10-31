@@ -1,11 +1,23 @@
 query getTutor($name: String!) {
-    Tutor(name: $name) {
-        name
+  Tutor(name: $name) {
+    name
+    teachesLanguage {
+      _id
+      name
     }
+  }
 }
 
 mutation saveTutor($name: String!) {
-    CreateTutor(name: $name) {
-        name
+  CreateTutor(name: $name) {
+    name
+  }
+}
+
+mutation setLanguageFromTutor($tutor: String!, $language: String!) {
+  AddLanguageFromTutor(from: {name: $tutor}, to: { name: $language}) {
+    from {
+      name
     }
+  }
 }
