@@ -13,3 +13,11 @@ mutation saveTutor($name: String!) {
     name
   }
 }
+
+mutation setLanguageFromTutor($tutor: String!, $language: String!) {
+  AddLanguageFromTutor(from: {name: $tutor}, to: { name: $language}) {
+    from {
+      name
+    }
+  }
+}

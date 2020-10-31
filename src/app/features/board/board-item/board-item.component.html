@@ -32,6 +32,7 @@
         <button mat-button *ngIf="item.label === 'Desire'" (click)="openAddDesireChangeDialog(item.name)">
             ADD CHANGE
         </button>
+        <button mat-button *ngIf="item.label === 'Tutor'" (click)="openTutorTeachesDialog(item.name)">TEACHES</button>
         <button mat-button (click)="removeFromBoard(item)">REMOVE</button>
     </mat-card-actions>
 </mat-card>

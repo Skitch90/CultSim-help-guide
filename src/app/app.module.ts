@@ -24,37 +24,39 @@ import { EntityGroupItemComponent } from './features/entity-group/entity-group-i
 import { AddObstacleLocationDialogComponent } from './features/dialogs/add-obstacle-location-dialog/add-obstacle-location-dialog.component';
 import { AddLoreUpgradeDialogComponent } from './features/dialogs/add-lore-upgrade-dialog/add-lore-upgrade-dialog.component';
 import { AddDesireChangeDialogComponent } from './features/dialogs/add-desire-change-dialog/add-desire-change-dialog.component';
+import { AddTutorTeachesDialogComponent } from './features/dialogs/add-tutor-teaches-dialog/add-tutor-teaches-dialog/add-tutor-teaches-dialog.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    OutputLabelPipe,
-    IconLabelPipe,
-    BoardComponent,
-    AddRewardLocationDialogComponent,
-    AddItemDialogComponent,
-    AddRewardBookDialogComponent,
-    AddRewardMansusDialogComponent,
-    AddInfluenceDecayDialogComponent,
-    BoardItemComponent,
-    EntityGroupComponent,
-    AddLocationDialogComponent,
-    EntityGroupItemComponent,
-    AddObstacleLocationDialogComponent,
-    AddLoreUpgradeDialogComponent,
-    AddDesireChangeDialogComponent,
-    AddDoorOptionDialogComponent
-  ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MaterialModule,
-    GraphQLModule,
-    HttpClientModule
-  ],
-  providers: [GraphqlService],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        OutputLabelPipe,
+        IconLabelPipe,
+        BoardComponent,
+        AddRewardLocationDialogComponent,
+        AddItemDialogComponent,
+        AddRewardBookDialogComponent,
+        AddRewardMansusDialogComponent,
+        AddInfluenceDecayDialogComponent,
+        BoardItemComponent,
+        EntityGroupComponent,
+        AddLocationDialogComponent,
+        EntityGroupItemComponent,
+        AddObstacleLocationDialogComponent,
+        AddLoreUpgradeDialogComponent,
+        AddDesireChangeDialogComponent,
+        AddDoorOptionDialogComponent,
+        AddTutorTeachesDialogComponent
+    ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MaterialModule,
+        GraphQLModule,
+        HttpClientModule
+    ],
+    providers: [GraphqlService],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

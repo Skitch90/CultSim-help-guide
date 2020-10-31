@@ -1292,6 +1292,19 @@ export type SaveTutorMutation = { __typename?: 'Mutation' } & {
   >;
 };
 
+export type SetLanguageFromTutorMutationVariables = Types.Exact<{
+  tutor: Types.Scalars['String'];
+  language: Types.Scalars['String'];
+}>;
+
+export type SetLanguageFromTutorMutation = { __typename?: 'Mutation' } & {
+  AddLanguageFromTutor?: Types.Maybe<
+    { __typename?: '_AddLanguageFromTutorPayload' } & {
+      from?: Types.Maybe<{ __typename?: 'Tutor' } & Pick<Types.Tutor, 'name'>>;
+    }
+  >;
+};
+
 export const CommonInfluenceDataFragmentDoc = gql`
   fragment CommonInfluenceData on Influence {
     _id
@@ -3173,6 +3186,29 @@ export class SaveTutorGQL extends Apollo.Mutation<
   SaveTutorMutationVariables
 > {
   document = SaveTutorDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+  }
+}
+export const SetLanguageFromTutorDocument = gql`
+  mutation setLanguageFromTutor($tutor: String!, $language: String!) {
+    AddLanguageFromTutor(from: { name: $tutor }, to: { name: $language }) {
+      from {
+        name
+      }
+    }
+  }
+`;
+
+@Injectable({
+    providedIn: 'root',
+})
+export class SetLanguageFromTutorGQL extends Apollo.Mutation<
+  SetLanguageFromTutorMutation,
+  SetLanguageFromTutorMutationVariables
+> {
+  document = SetLanguageFromTutorDocument;
 
   constructor(apollo: Apollo.Apollo) {
       super(apollo);

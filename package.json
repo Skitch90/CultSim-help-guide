@@ -72,7 +72,10 @@
     "schema": "schema.graphql.json"
   },
   "stylelint": {
-    "extends": "stylelint-config-standard"
+    "extends": "stylelint-config-standard",
+    "rules": {
+      "selector-type-no-unknown": [true, { "ignoreTypes": ["/^mat-/"] }]
+   }
   },
   "lint-staged": {
     "*.{ts,tsx}": [
