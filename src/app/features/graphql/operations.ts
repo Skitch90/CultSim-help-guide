@@ -1261,6 +1261,26 @@ export type SetToolLocationMutation = { __typename?: 'Mutation' } & {
   >;
 };
 
+export type GetTutorQueryVariables = Types.Exact<{
+  name: Types.Scalars['String'];
+}>;
+
+export type GetTutorQuery = { __typename?: 'Query' } & {
+  Tutor?: Types.Maybe<
+    Array<Types.Maybe<{ __typename?: 'Tutor' } & Pick<Types.Tutor, 'name'>>>
+  >;
+};
+
+export type SaveTutorMutationVariables = Types.Exact<{
+  name: Types.Scalars['String'];
+}>;
+
+export type SaveTutorMutation = { __typename?: 'Mutation' } & {
+  CreateTutor?: Types.Maybe<
+    { __typename?: 'Tutor' } & Pick<Types.Tutor, 'name'>
+  >;
+};
+
 export const CommonInfluenceDataFragmentDoc = gql`
   fragment CommonInfluenceData on Influence {
     _id
@@ -3092,6 +3112,48 @@ export class SetToolLocationGQL extends Apollo.Mutation<
   SetToolLocationMutationVariables
 > {
   document = SetToolLocationDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+  }
+}
+export const GetTutorDocument = gql`
+  query getTutor($name: String!) {
+    Tutor(name: $name) {
+      name
+    }
+  }
+`;
+
+@Injectable({
+    providedIn: 'root',
+})
+export class GetTutorGQL extends Apollo.Query<
+  GetTutorQuery,
+  GetTutorQueryVariables
+> {
+  document = GetTutorDocument;
+
+  constructor(apollo: Apollo.Apollo) {
+      super(apollo);
+  }
+}
+export const SaveTutorDocument = gql`
+  mutation saveTutor($name: String!) {
+    CreateTutor(name: $name) {
+      name
+    }
+  }
+`;
+
+@Injectable({
+    providedIn: 'root',
+})
+export class SaveTutorGQL extends Apollo.Mutation<
+  SaveTutorMutation,
+  SaveTutorMutationVariables
+> {
+  document = SaveTutorDocument;
 
   constructor(apollo: Apollo.Apollo) {
       super(apollo);

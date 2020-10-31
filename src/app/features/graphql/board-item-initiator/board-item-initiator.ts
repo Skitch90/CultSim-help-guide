@@ -2,7 +2,7 @@ import { Injector } from '@angular/core';
 import { map, tap } from 'rxjs/operators';
 import { EntitiesGroup, EntitiesGroupItem } from '../../../shared/model';
 import { GetBookGQL, GetEntitiesByAspectGQL, GetFollowerGQL, GetInfluenceGQL, GetIngredientGQL, GetLanguageGQL,
-    GetLocationGQL, GetLoreGQL, GetMansusDoorGQL, GetMansusDoorOptionGQL, GetRiteGQL, GetToolGQL } from '../operations';
+    GetLocationGQL, GetLoreGQL, GetMansusDoorGQL, GetMansusDoorOptionGQL, GetRiteGQL, GetToolGQL, GetTutorGQL } from '../operations';
 import { convertToGroupItem, createAspectGroupItem, createSimpleAspectGroupItem } from './board-item-initiator-utils';
 import { AspectSearchGroupResult, Book, Follower, Influence, Ingredient, ItemInitResult, Language, Location, Lore, MansusDoor,
     MansusDoorOption, Rite, Tool} from './board-item-initiator.types';
@@ -536,5 +536,28 @@ export class RiteInitiator implements ItemInitiator {
             });
         }
         return groups;
+    }
+}
+
+export class TutorInitiator implements ItemInitiator {
+    private readonly getTutorGQL: GetTutorGQL;
+
+    constructor(readonly injector: Injector) {
+        this.getTutorGQL = injector.get(GetTutorGQL);
+    }
+
+    initBoardItem(name: string): ItemInitResult {
+        return {
+            entityGroups: this.getTutorGQL.watch({ name }).valueChanges.pipe(
+                map((result) => result.data.Tutor[0]),
+                map(() => this.getGroupsFromTutor())
+            ),
+            secretHistoriesLore: false,
+            vaultLocation: false
+        };
+    }
+
+    private getGroupsFromTutor(): EntitiesGroup[] {
+        return [];
     }
 }

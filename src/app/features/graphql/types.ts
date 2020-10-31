@@ -35,6 +35,7 @@ export type Query = {
   Tool?: Maybe<Array<Maybe<Tool>>>;
   Rite?: Maybe<Array<Maybe<Rite>>>;
   RiteComponent?: Maybe<Array<Maybe<RiteComponent>>>;
+  Tutor?: Maybe<Array<Maybe<Tutor>>>;
 };
 
 
@@ -281,6 +282,16 @@ export type QueryRiteComponentArgs = {
   offset?: Maybe<Scalars['Int']>;
   orderBy?: Maybe<Array<Maybe<_RiteComponentOrdering>>>;
   filter?: Maybe<_RiteComponentFilter>;
+};
+
+
+export type QueryTutorArgs = {
+  name?: Maybe<Scalars['String']>;
+  _id?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<Maybe<_TutorOrdering>>>;
+  filter?: Maybe<_TutorFilter>;
 };
 
 export enum _SearchEntityOrdering {
@@ -1851,6 +1862,34 @@ export enum _RiteOrdering {
   IdDesc = '_id_desc'
 }
 
+export enum _TutorOrdering {
+  NameAsc = 'name_asc',
+  NameDesc = 'name_desc',
+  IdAsc = '_id_asc',
+  IdDesc = '_id_desc'
+}
+
+export type _TutorFilter = {
+  AND?: Maybe<Array<_TutorFilter>>;
+  OR?: Maybe<Array<_TutorFilter>>;
+  name?: Maybe<Scalars['String']>;
+  name_not?: Maybe<Scalars['String']>;
+  name_in?: Maybe<Array<Scalars['String']>>;
+  name_not_in?: Maybe<Array<Scalars['String']>>;
+  name_contains?: Maybe<Scalars['String']>;
+  name_not_contains?: Maybe<Scalars['String']>;
+  name_starts_with?: Maybe<Scalars['String']>;
+  name_not_starts_with?: Maybe<Scalars['String']>;
+  name_ends_with?: Maybe<Scalars['String']>;
+  name_not_ends_with?: Maybe<Scalars['String']>;
+};
+
+export type Tutor = {
+  __typename?: 'Tutor';
+  name: Scalars['String'];
+  _id?: Maybe<Scalars['String']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   setLanguageRequires: SetLanguageRequiresOut;
@@ -1996,6 +2035,8 @@ export type Mutation = {
   CreateRiteComponent?: Maybe<RiteComponent>;
   UpdateRiteComponent?: Maybe<RiteComponent>;
   DeleteRiteComponent?: Maybe<RiteComponent>;
+  CreateTutor?: Maybe<Tutor>;
+  DeleteTutor?: Maybe<Tutor>;
 };
 
 
@@ -2829,6 +2870,16 @@ export type MutationUpdateRiteComponentArgs = {
 
 
 export type MutationDeleteRiteComponentArgs = {
+  name: Scalars['String'];
+};
+
+
+export type MutationCreateTutorArgs = {
+  name: Scalars['String'];
+};
+
+
+export type MutationDeleteTutorArgs = {
   name: Scalars['String'];
 };
 
@@ -3704,5 +3755,9 @@ export type _VerbInput = {
 };
 
 export type _ChangeLessonInput = {
+  name: Scalars['String'];
+};
+
+export type _TutorInput = {
   name: Scalars['String'];
 };

@@ -20,7 +20,7 @@ const followerAspectRequiredValidator: ValidatorFn = (fg: FormGroup) => {
 })
 export class AddItemDialogComponent implements OnInit {
   itemTypes: string[] = [ 'Aspect', 'Book', 'ChangeLesson', 'Desire', 'ExpeditionObstacle', 'Follower', 'Influence', 'Ingredient',
-      'Language', 'Location', 'Lore', 'MansusDoor', 'Rite', 'Tool' ];
+      'Language', 'Location', 'Lore', 'MansusDoor', 'Rite', 'Tool', 'Tutor' ];
   itemTypesWithAspects: string[] = [ 'Influence', 'Ingredient', 'Lore', 'Tool' ];
   multipleAspects = {
       Influence: true,
