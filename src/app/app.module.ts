@@ -24,7 +24,7 @@ import { EntityGroupItemComponent } from './features/entity-group/entity-group-i
 import { AddObstacleLocationDialogComponent } from './features/dialogs/add-obstacle-location-dialog/add-obstacle-location-dialog.component';
 import { AddLoreUpgradeDialogComponent } from './features/dialogs/add-lore-upgrade-dialog/add-lore-upgrade-dialog.component';
 import { AddDesireChangeDialogComponent } from './features/dialogs/add-desire-change-dialog/add-desire-change-dialog.component';
-import { AddTutorTeachesDialogComponent } from './features/dialogs/add-tutor-teaches-dialog/add-tutor-teaches-dialog/add-tutor-teaches-dialog.component';
+import { AddTutorTeachesDialogComponent } from './features/dialogs/add-tutor-teaches-dialog/add-tutor-teaches-dialog.component';
 
 @NgModule({
     declarations: [
