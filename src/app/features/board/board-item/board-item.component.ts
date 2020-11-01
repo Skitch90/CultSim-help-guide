@@ -17,7 +17,7 @@ import { AddLoreUpgradeDialogComponent } from '../../dialogs/add-lore-upgrade-di
 import { AddDesireChangeDialogComponent } from '../../dialogs/add-desire-change-dialog/add-desire-change-dialog.component';
 import { AspectInitiator, BookInitiator, FollowerInitiator, InfluenceInitiator, IngredientInitiator, LanguageInitiator,
     LocationInitiator, LoreInitiator, MansusDoorInitiator, MansusDoorOptionInitiator, RiteInitiator, ToolInitiator, TutorInitiator } from '../../graphql/board-item-initiator/board-item-initiator';
-import { AddTutorTeachesDialogComponent, processTutorTeachesDialogResult } from '../../dialogs/add-tutor-teaches-dialog/add-tutor-teaches-dialog/add-tutor-teaches-dialog.component';
+import { AddTutorTeachesDialogComponent, processTutorTeachesDialogResult } from '../../dialogs/add-tutor-teaches-dialog/add-tutor-teaches-dialog.component';
 
 @Component({
     selector: 'app-board-item',
