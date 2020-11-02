@@ -1,6 +1,6 @@
 {
   "name": "cult-sim-help-guide",
-  "version": "0.0.0",
+  "version": "1.5.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -64,7 +64,6 @@
     "stylelint": "^13.7.2",
     "stylelint-config-standard": "^20.0.0",
     "ts-node": "~7.0.0",
-    "tslint": "~6.1.0",
     "typescript": "~3.9.7"
   },
   "graphql-inspector": {
@@ -74,8 +73,15 @@
   "stylelint": {
     "extends": "stylelint-config-standard",
     "rules": {
-      "selector-type-no-unknown": [true, { "ignoreTypes": ["/^mat-/"] }]
-   }
+      "selector-type-no-unknown": [
+        true,
+        {
+          "ignoreTypes": [
+            "/^mat-/"
+          ]
+        }
+      ]
+    }
   },
   "lint-staged": {
     "*.{ts,tsx}": [
