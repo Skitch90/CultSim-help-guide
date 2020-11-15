@@ -1,45 +1,41 @@
 import { Injector } from '@angular/core';
+import { ApolloQueryResult } from '@apollo/client';
+import { Query } from 'apollo-angular';
+import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { EntitiesGroup, EntitiesGroupItem } from '../../../shared/model';
-import { GetBookGQL, GetEntitiesByAspectGQL, GetFollowerGQL, GetInfluenceGQL, GetIngredientGQL, GetLanguageGQL,
+import { GetBookGQL, GetEntitiesByAspectGQL, GetInfluenceGQL, GetIngredientGQL, GetLanguageGQL,
     GetLocationGQL, GetLoreGQL, GetMansusDoorGQL, GetMansusDoorOptionGQL, GetRiteGQL, GetToolGQL, GetTutorGQL } from '../operations';
-import { convertToGroupItem, createAspectGroupItem, createSimpleAspectGroupItem } from './board-item-initiator-utils';
-import { AspectSearchGroupResult, Book, Follower, Influence, Ingredient, ItemInitResult, Language, Location, Lore, MansusDoor,
+import { convertToGroupItem, createAspectGroupItem } from './board-item-initiator-utils';
+import { AspectSearchGroupResult, Book, Influence, Ingredient, ItemInitResult, Language, Location, Lore, MansusDoor,
     MansusDoorOption, Rite, Tool, Tutor} from './board-item-initiator.types';
 
 export interface ItemInitiator {
     initBoardItem(name: string): ItemInitResult;
 }
 
-export class FollowerInitiator implements ItemInitiator {
-    private getFollowerGQL: GetFollowerGQL;
+export abstract class AbsItemInitiator<QT, QV, E> implements ItemInitiator {
 
-    constructor(injector: Injector) {
-        this.getFollowerGQL = injector.get(GetFollowerGQL);
-    }
+    constructor(
+        private readonly query: Query<QT, QV>,
+        private readonly getQueryParams: (name: string) => QV,
+        private readonly getResultFromData: (query: QT) => E[],
+        private readonly getGroupsFromResult: (entity: E) => EntitiesGroup[],
+        private readonly getSecretHistoryLore: (result: Observable<ApolloQueryResult<QT>>) => boolean,
+        private readonly getVaultLocation: (result: Observable<ApolloQueryResult<QT>>) => boolean
+    ) {}
 
     initBoardItem(name: string): ItemInitResult {
+        const queryResult = this.query.watch(this.getQueryParams(name)).valueChanges;
         return {
-            entityGroups: this.getFollowerGQL.watch({ name }).valueChanges.pipe(
-                map(getFollowerResult => getFollowerResult.data.Follower[0]),
-                map(follower => {
-                    return this.getGroupsFromFollower(follower);
-                })
+            loading: queryResult.pipe(map(result => result.loading)),
+            entityGroups: queryResult.pipe(
+                map(result => this.getResultFromData(result.data)[0]),
+                map(entity => this.getGroupsFromResult(entity))
             ),
-            secretHistoriesLore: false,
-            vaultLocation: false
+            secretHistoriesLore: this.getSecretHistoryLore(queryResult),
+            vaultLocation: this.getVaultLocation(queryResult)
         };
-    }
-
-    private getGroupsFromFollower({ aspects }: Follower) {
-        const groups: EntitiesGroup[] = [];
-        if (aspects && aspects.length > 0) {
-            groups.push({
-                label: 'Aspect',
-                entities: aspects.map(aspect => createSimpleAspectGroupItem(aspect))
-            });
-        }
-        return groups;
     }
 }
 

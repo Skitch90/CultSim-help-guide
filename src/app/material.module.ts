@@ -18,6 +18,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatListModule } from '@angular/material/list';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
@@ -40,7 +41,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
         MatListModule,
         MatSlideToggleModule,
         ScrollingModule,
-        MatProgressBarModule
+        MatProgressBarModule,
+        MatProgressSpinnerModule
     ],
     exports: [
         DragDropModule,
@@ -59,7 +61,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
         MatListModule,
         MatSlideToggleModule,
         ScrollingModule,
-        MatProgressBarModule
+        MatProgressBarModule,
+        MatProgressSpinnerModule
     ]
 })
 export class MaterialModule { }

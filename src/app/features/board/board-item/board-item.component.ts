@@ -10,13 +10,14 @@ import { AddInfluenceDecayDialogComponent } from '../../dialogs/add-influence-de
 import { BoardService } from '../board.service';
 import { AddLocationDialogComponent } from '../../dialogs/add-location-dialog/add-location-dialog.component';
 import { AddObstacleLocationDialogComponent } from '../../dialogs/add-obstacle-location-dialog/add-obstacle-location-dialog.component';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { DialogService } from '../../dialogs/dialog.service';
 import { BoardItemInitiatorService } from '../../graphql/board-item-initiator/board-item-initiator.service';
 import { AddLoreUpgradeDialogComponent } from '../../dialogs/add-lore-upgrade-dialog/add-lore-upgrade-dialog.component';
 import { AddDesireChangeDialogComponent } from '../../dialogs/add-desire-change-dialog/add-desire-change-dialog.component';
-import { AspectInitiator, BookInitiator, FollowerInitiator, InfluenceInitiator, IngredientInitiator, LanguageInitiator,
+import { AspectInitiator, BookInitiator, InfluenceInitiator, IngredientInitiator, LanguageInitiator,
     LocationInitiator, LoreInitiator, MansusDoorInitiator, MansusDoorOptionInitiator, RiteInitiator, ToolInitiator, TutorInitiator } from '../../graphql/board-item-initiator/board-item-initiator';
+import { FollowerInitiator } from '../../graphql/board-item-initiator/impl';
 import { AddTutorTeachesDialogComponent, processTutorTeachesDialogResult } from '../../dialogs/add-tutor-teaches-dialog/add-tutor-teaches-dialog.component';
 
 @Component({
@@ -27,7 +28,7 @@ import { AddTutorTeachesDialogComponent, processTutorTeachesDialogResult } from 
 export class BoardItemComponent implements OnInit {
   @Input() item: Entity;
   entities: Observable<EntitiesGroup[]>;
-
+  loading: Observable<boolean>;
   secretHistoriesLore = false;
   vaultLocation = false;
 
@@ -52,6 +53,7 @@ export class BoardItemComponent implements OnInit {
   ngOnInit(): void {
       const initResult = this.itemInitService.initItem(this.item);
       if (initResult) {
+          this.loading = initResult.loading || of(false);
           this.entities = initResult.entityGroups;
           this.vaultLocation = initResult.vaultLocation;
           this.secretHistoriesLore = initResult.secretHistoriesLore;
