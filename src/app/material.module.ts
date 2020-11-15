@@ -17,46 +17,49 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatListModule } from '@angular/material/list';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
-  declarations: [],
-  imports: [
-    CommonModule,
-    DragDropModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatTooltipModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatAutocompleteModule,
-    MatCardModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatSelectModule,
-    MatCheckboxModule,
-    MatExpansionModule,
-    MatListModule,
-    MatSlideToggleModule,
-    ScrollingModule
-  ],
-  exports: [
-    DragDropModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatTooltipModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatAutocompleteModule,
-    MatCardModule,
-    MatButtonModule,
-    MatDialogModule,
-    MatSelectModule,
-    MatCheckboxModule,
-    MatExpansionModule,
-    MatListModule,
-    MatSlideToggleModule,
-    ScrollingModule
-  ]
+    declarations: [],
+    imports: [
+        CommonModule,
+        DragDropModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatTooltipModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatAutocompleteModule,
+        MatCardModule,
+        MatButtonModule,
+        MatDialogModule,
+        MatSelectModule,
+        MatCheckboxModule,
+        MatExpansionModule,
+        MatListModule,
+        MatSlideToggleModule,
+        ScrollingModule,
+        MatProgressBarModule
+    ],
+    exports: [
+        DragDropModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatTooltipModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatAutocompleteModule,
+        MatCardModule,
+        MatButtonModule,
+        MatDialogModule,
+        MatSelectModule,
+        MatCheckboxModule,
+        MatExpansionModule,
+        MatListModule,
+        MatSlideToggleModule,
+        ScrollingModule,
+        MatProgressBarModule
+    ]
 })
 export class MaterialModule { }
