@@ -11,7 +11,7 @@
     </mat-card-content>
     <mat-card-actions>
         <button mat-button
-            *ngIf="vaultLocation"
+            *ngIf="vaultLocation | async"
             (click)="openAddObstaclesDialog(item.name)">
             ADD OBSTACLES
         </button>
@@ -29,7 +29,7 @@
         <button mat-button *ngIf="item.label === 'Lore'" (click)="openAddUpgradeDialog(item.name)">
             ADD UPGRADE
         </button>
-        <button mat-button *ngIf="secretHistoriesLore" (click)="openAddLocationDialog(item.name)">
+        <button mat-button *ngIf="secretHistoriesLore | async" (click)="openAddLocationDialog(item.name)">
             ADD LOCATION
         </button>
         <button mat-button *ngIf="item.label === 'Desire'" (click)="openAddDesireChangeDialog(item.name)">

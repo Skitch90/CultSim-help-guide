@@ -16,8 +16,8 @@ import { BoardItemInitiatorService } from '../../graphql/board-item-initiator/bo
 import { AddLoreUpgradeDialogComponent } from '../../dialogs/add-lore-upgrade-dialog/add-lore-upgrade-dialog.component';
 import { AddDesireChangeDialogComponent } from '../../dialogs/add-desire-change-dialog/add-desire-change-dialog.component';
 import { AspectInitiator, BookInitiator, InfluenceInitiator, IngredientInitiator, LanguageInitiator,
-    LocationInitiator, LoreInitiator, MansusDoorInitiator, MansusDoorOptionInitiator, RiteInitiator, ToolInitiator, TutorInitiator } from '../../graphql/board-item-initiator/board-item-initiator';
-import { FollowerInitiator } from '../../graphql/board-item-initiator/impl';
+    LoreInitiator, MansusDoorInitiator, MansusDoorOptionInitiator, RiteInitiator, ToolInitiator, TutorInitiator } from '../../graphql/board-item-initiator/board-item-initiator';
+import { FollowerInitiator, LocationInitiator } from '../../graphql/board-item-initiator/impl';
 import { AddTutorTeachesDialogComponent, processTutorTeachesDialogResult } from '../../dialogs/add-tutor-teaches-dialog/add-tutor-teaches-dialog.component';
 
 @Component({
@@ -29,8 +29,8 @@ export class BoardItemComponent implements OnInit {
   @Input() item: Entity;
   entities: Observable<EntitiesGroup[]>;
   loading: Observable<boolean>;
-  secretHistoriesLore = false;
-  vaultLocation = false;
+  secretHistoriesLore: Observable<boolean> = of(false);
+  vaultLocation: Observable<boolean> = of(false);
 
   constructor(private dialogService: DialogService, private dialog: MatDialog,
               private service: GraphqlService, private boardService: BoardService,
@@ -55,9 +55,16 @@ export class BoardItemComponent implements OnInit {
       if (initResult) {
           this.loading = initResult.loading || of(false);
           this.entities = initResult.entityGroups;
-          this.vaultLocation = initResult.vaultLocation;
-          this.secretHistoriesLore = initResult.secretHistoriesLore;
+          this.vaultLocation = this.convertToObservable(initResult.vaultLocation);
+          this.secretHistoriesLore = this.convertToObservable(initResult.secretHistoriesLore);
       }
+  }
+
+  private convertToObservable(input: boolean | Observable<boolean>): Observable<boolean> {
+      if (typeof input === 'boolean') {
+          return of(input);
+      }
+      return input;
   }
 
   removeFromBoard(item: Entity): void {

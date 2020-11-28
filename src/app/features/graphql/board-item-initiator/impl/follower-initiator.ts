@@ -18,6 +18,11 @@ function getGroupsFromFollower({ aspects }: Follower) {
 
 export class FollowerInitiator extends AbsItemInitiator<GetFollowerQuery, GetFollowerQueryVariables, Follower> {
     constructor(injector: Injector) {
-        super(injector.get(GetFollowerGQL), name => ({ name }), data => data.Follower, getGroupsFromFollower, () => false, () => false);
+        super({
+            query: injector.get(GetFollowerGQL),
+            getQueryParams: name => ({ name }),
+            getResultFromData: data => data.Follower,
+            getGroupsFromResult: getGroupsFromFollower
+        });
     }
 }
