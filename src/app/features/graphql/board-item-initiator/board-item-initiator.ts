@@ -4,10 +4,9 @@ import { Query } from 'apollo-angular';
 import { Observable, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { EntitiesGroup } from '../../../shared/model';
-import { GetMansusDoorGQL, GetMansusDoorOptionGQL, GetRiteGQL, GetToolGQL, GetTutorGQL } from '../operations';
+import { GetMansusDoorOptionGQL, GetRiteGQL, GetToolGQL, GetTutorGQL } from '../operations';
 import { convertToGroupItem, createAspectGroupItem } from './board-item-initiator-utils';
-import { ItemInitResult, MansusDoor,
-    MansusDoorOption, Rite, Tool, Tutor} from './board-item-initiator.types';
+import { ItemInitResult, MansusDoorOption, Rite, Tool, Tutor} from './board-item-initiator.types';
 
 export interface ItemInitiator {
     initBoardItem(name: string): ItemInitResult;
@@ -57,36 +56,6 @@ export abstract class AbsItemInitiator<QT, QV, E> implements ItemInitiator {
             secretHistoriesLore: this.getSecretHistoryLore(queryResult),
             vaultLocation: this.getVaultLocation(queryResult)
         };
-    }
-}
-
-export class MansusDoorInitiator implements ItemInitiator {
-    private getMansusDoorGQL: GetMansusDoorGQL;
-
-    constructor(injector: Injector) {
-        this.getMansusDoorGQL = injector.get(GetMansusDoorGQL);
-    }
-
-    initBoardItem(name: string): ItemInitResult {
-        return {
-            entityGroups: this.getMansusDoorGQL.watch({ name }).valueChanges.pipe(
-                map((result) => result.data.MansusDoor[0]),
-                map(mansusDoor => this.getGroupsFromMansusDoor(mansusDoor))
-            ),
-            secretHistoriesLore: false,
-            vaultLocation: false
-        };
-    }
-
-    private getGroupsFromMansusDoor({ options }: MansusDoor): EntitiesGroup[] {
-        const groups: EntitiesGroup[] = [];
-        if (options.length) {
-            groups.push({
-                label: 'Options',
-                entities: options.map(option => convertToGroupItem(option))
-            });
-        }
-        return groups;
     }
 }
 
