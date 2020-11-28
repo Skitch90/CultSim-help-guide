@@ -4,7 +4,9 @@
         <mat-card-subtitle>{{ item.label | outputLabel }}</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-        <ng-container *ngIf="loading | async"><mat-spinner></mat-spinner></ng-container>
+        <ng-container *ngIf="loading | async">
+            <mat-spinner class="detail-spinner" diameter="75"></mat-spinner>
+        </ng-container>
         <mat-accordion>
             <app-entity-group *ngFor="let group of entities | async" [group]="group" [aspect]="item.name" [type]="item.label"></app-entity-group>
         </mat-accordion>
