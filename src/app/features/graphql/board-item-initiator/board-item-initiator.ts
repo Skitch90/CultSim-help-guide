@@ -1,5 +1,5 @@
 import { Injector } from '@angular/core';
-import { ApolloQueryResult } from '@apollo/client';
+import { ApolloQueryResult } from '@apollo/client/core';
 import { Query } from 'apollo-angular';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
