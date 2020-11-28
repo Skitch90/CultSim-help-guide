@@ -15,9 +15,10 @@ import { DialogService } from '../../dialogs/dialog.service';
 import { BoardItemInitiatorService } from '../../graphql/board-item-initiator/board-item-initiator.service';
 import { AddLoreUpgradeDialogComponent } from '../../dialogs/add-lore-upgrade-dialog/add-lore-upgrade-dialog.component';
 import { AddDesireChangeDialogComponent } from '../../dialogs/add-desire-change-dialog/add-desire-change-dialog.component';
-import { InfluenceInitiator, LanguageInitiator,
+import { LanguageInitiator,
     MansusDoorInitiator, MansusDoorOptionInitiator, RiteInitiator, ToolInitiator, TutorInitiator } from '../../graphql/board-item-initiator/board-item-initiator';
-import { AspectInitiator, BookInitiator, FollowerInitiator, IngredientInitiator, LocationInitiator, LoreInitiator } from '../../graphql/board-item-initiator/impl';
+import { AspectInitiator, BookInitiator, FollowerInitiator, InfluenceInitiator, IngredientInitiator, LocationInitiator,
+    LoreInitiator } from '../../graphql/board-item-initiator/impl';
 import { AddTutorTeachesDialogComponent, processTutorTeachesDialogResult } from '../../dialogs/add-tutor-teaches-dialog/add-tutor-teaches-dialog.component';
 
 @Component({
