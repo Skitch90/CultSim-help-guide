@@ -4,10 +4,10 @@ import { Query } from 'apollo-angular';
 import { Observable, of } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
 import { EntitiesGroup, EntitiesGroupItem } from '../../../shared/model';
-import { GetBookGQL, GetInfluenceGQL, GetIngredientGQL, GetLanguageGQL,
+import { GetBookGQL, GetInfluenceGQL, GetLanguageGQL,
     GetLoreGQL, GetMansusDoorGQL, GetMansusDoorOptionGQL, GetRiteGQL, GetToolGQL, GetTutorGQL } from '../operations';
 import { convertToGroupItem, createAspectGroupItem } from './board-item-initiator-utils';
-import { Book, Influence, Ingredient, ItemInitResult, Language, Lore, MansusDoor,
+import { Book, Influence, ItemInitResult, Language, Lore, MansusDoor,
     MansusDoorOption, Rite, Tool, Tutor} from './board-item-initiator.types';
 
 export interface ItemInitiator {
@@ -59,45 +59,6 @@ export abstract class AbsItemInitiator<QT, QV, E> implements ItemInitiator {
             vaultLocation: this.getVaultLocation(queryResult)
         };
     }
-}
-
-export class IngredientInitiator implements ItemInitiator {
-    private getIngredientGQL: GetIngredientGQL;
-
-    constructor(injector: Injector) {
-        this.getIngredientGQL = injector.get(GetIngredientGQL);
-    }
-
-    initBoardItem(name: string): ItemInitResult {
-        return {
-            entityGroups: this.getIngredientGQL.watch({ name }).valueChanges.pipe(
-                map(result => result.data.Ingredient[0]),
-                map(ingredient => this.getGroupsFromIngredient(ingredient))
-            ),
-            secretHistoriesLore: false,
-            vaultLocation: false
-        };
-    }
-
-    private getGroupsFromIngredient({ aspects, foundInLocation, fromDreamingIn }: Ingredient): EntitiesGroup[] {
-        const groups: EntitiesGroup[] = [];
-        if (aspects.length > 0) {
-            groups.push({
-                label: 'Aspects',
-                entities: aspects.map(aspect => createAspectGroupItem(aspect))
-            });
-        }
-        if (foundInLocation.length > 0 || fromDreamingIn.length > 0) {
-            const locations = foundInLocation.map(location => convertToGroupItem(location.Location));
-            const fromDreaming = fromDreamingIn.map(location => convertToGroupItem(location));
-            groups.push({
-                label: 'Found From',
-                entities: [...locations, ...fromDreaming]
-            });
-        }
-        return groups;
-    }
-
 }
 
 export class BookInitiator implements ItemInitiator {
