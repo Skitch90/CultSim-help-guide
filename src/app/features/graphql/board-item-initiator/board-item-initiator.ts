@@ -4,10 +4,10 @@ import { Query } from 'apollo-angular';
 import { Observable, of } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
 import { EntitiesGroup, EntitiesGroupItem } from '../../../shared/model';
-import { GetBookGQL, GetEntitiesByAspectGQL, GetInfluenceGQL, GetIngredientGQL, GetLanguageGQL,
+import { GetBookGQL, GetInfluenceGQL, GetIngredientGQL, GetLanguageGQL,
     GetLoreGQL, GetMansusDoorGQL, GetMansusDoorOptionGQL, GetRiteGQL, GetToolGQL, GetTutorGQL } from '../operations';
 import { convertToGroupItem, createAspectGroupItem } from './board-item-initiator-utils';
-import { AspectSearchGroupResult, Book, Influence, Ingredient, ItemInitResult, Language, Lore, MansusDoor,
+import { Book, Influence, Ingredient, ItemInitResult, Language, Lore, MansusDoor,
     MansusDoorOption, Rite, Tool, Tutor} from './board-item-initiator.types';
 
 export interface ItemInitiator {
@@ -18,7 +18,8 @@ export interface InitiatorConfig<QT, QV, E> {
     query: Query<QT, QV>;
     getQueryParams: (name: string) => QV;
     getResultFromData: (query: QT) => E[];
-    getGroupsFromResult: (entity: E) => EntitiesGroup[];
+    singleResult?: boolean;
+    getGroupsFromResult: (entity: E | E[]) => EntitiesGroup[];
     getSecretHistoryLore?: (result: Observable<ApolloQueryResult<QT>>) => Observable<boolean>
     getVaultLocation?: (result: Observable<ApolloQueryResult<QT>>) => Observable<boolean>;
 }
@@ -27,14 +28,16 @@ export abstract class AbsItemInitiator<QT, QV, E> implements ItemInitiator {
     private readonly query: Query<QT, QV>;
     private readonly getQueryParams: (name: string) => QV;
     private readonly getResultFromData: (query: QT) => E[];
-    private readonly getGroupsFromResult: (entity: E) => EntitiesGroup[];
+    private readonly singleResult: boolean;
+    private readonly getGroupsFromResult: (entity: E | E[]) => EntitiesGroup[];
     private readonly getSecretHistoryLore: (result: Observable<ApolloQueryResult<QT>>) => Observable<boolean>;
     private readonly getVaultLocation: (result: Observable<ApolloQueryResult<QT>>) => Observable<boolean>;
 
-    constructor({ query, getQueryParams, getResultFromData, getGroupsFromResult, getSecretHistoryLore = () => of(false), getVaultLocation = () => of(false)}: InitiatorConfig<QT, QV, E>) {
+    constructor({ query, getQueryParams, getResultFromData, singleResult = true, getGroupsFromResult, getSecretHistoryLore = () => of(false), getVaultLocation = () => of(false)}: InitiatorConfig<QT, QV, E>) {
         this.query = query;
         this.getQueryParams = getQueryParams;
         this.getResultFromData = getResultFromData;
+        this.singleResult = singleResult;
         this.getGroupsFromResult = getGroupsFromResult;
         this.getSecretHistoryLore = getSecretHistoryLore;
         this.getVaultLocation = getVaultLocation;
@@ -46,51 +49,16 @@ export abstract class AbsItemInitiator<QT, QV, E> implements ItemInitiator {
             loading: queryResult.pipe(map(result => result.loading)),
             entityGroups: queryResult.pipe(
                 filter(result => Boolean(result.data)),
-                map(result => this.getResultFromData(result.data)[0]),
+                map(result => {
+                    const results = this.getResultFromData(result.data);
+                    return this.singleResult ? results[0] : results;
+                }),
                 map(entity => this.getGroupsFromResult(entity))
             ),
             secretHistoriesLore: this.getSecretHistoryLore(queryResult),
             vaultLocation: this.getVaultLocation(queryResult)
         };
     }
-}
-
-export class AspectInitiator implements ItemInitiator {
-    private getEntitiesByAspectGQL: GetEntitiesByAspectGQL;
-
-    constructor(injector: Injector) {
-        this.getEntitiesByAspectGQL = injector.get(GetEntitiesByAspectGQL);
-    }
-
-    initBoardItem(name: string): ItemInitResult {
-        return {
-            entityGroups: this.getEntitiesByAspectGQL.watch({ aspect: name }).valueChanges.pipe(
-                map(result => result.data.entityWithAspect),
-                map(groups => this.getGroupsFromEntities(groups))
-            ),
-            secretHistoriesLore: false,
-            vaultLocation: false
-        };
-    }
-
-    private getGroupsFromEntities(entityGroups: AspectSearchGroupResult[]): EntitiesGroup[] {
-        return entityGroups.map(entityGroup => {
-            const { label, entities } = entityGroup;
-            return {
-                label,
-                entities: entities.map(entity => {
-                    const { _id, name, type, aspectQuantity } = entity;
-                    return {
-                        id: +_id,
-                        name,
-                        label: type,
-                        aspectQuantity
-                    };
-                })
-            };
-        });
-    }
-
 }
 
 export class IngredientInitiator implements ItemInitiator {
