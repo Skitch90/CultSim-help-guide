@@ -4,7 +4,7 @@ import { GetEntitiesByAspectGQL, GetEntitiesByAspectQuery, GetEntitiesByAspectQu
 import { AbsItemInitiator } from '../board-item-initiator';
 import { AspectSearchGroupResult } from '../board-item-initiator.types';
 
-function getGroupsFromEntities(entityGroups: AspectSearchGroupResult[]): EntitiesGroup[] {
+const getGroupsFromEntities = (entityGroups: AspectSearchGroupResult[]): EntitiesGroup[] => {
     return entityGroups.map(entityGroup => {
         const { label, entities } = entityGroup;
         return {
@@ -20,7 +20,7 @@ function getGroupsFromEntities(entityGroups: AspectSearchGroupResult[]): Entitie
             })
         };
     });
-}
+};
 
 export class AspectInitiator extends AbsItemInitiator<GetEntitiesByAspectQuery, GetEntitiesByAspectQueryVariables, AspectSearchGroupResult> {
     constructor(injector: Injector) {

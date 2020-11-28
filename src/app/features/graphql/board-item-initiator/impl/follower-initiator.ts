@@ -5,7 +5,7 @@ import { createSimpleAspectGroupItem } from '../board-item-initiator-utils';
 import { Follower } from '../board-item-initiator.types';
 import { AbsItemInitiator } from '../board-item-initiator';
 
-function getGroupsFromFollower({ aspects }: Follower) {
+const getGroupsFromFollower = ({ aspects }: Follower) => {
     const groups: EntitiesGroup[] = [];
     if (aspects && aspects.length > 0) {
         groups.push({
@@ -14,7 +14,7 @@ function getGroupsFromFollower({ aspects }: Follower) {
         });
     }
     return groups;
-}
+};
 
 export class FollowerInitiator extends AbsItemInitiator<GetFollowerQuery, GetFollowerQueryVariables, Follower> {
     constructor(injector: Injector) {

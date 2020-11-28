@@ -5,7 +5,7 @@ import { AbsItemInitiator } from '../board-item-initiator';
 import { convertToGroupItem, createAspectGroupItem } from '../board-item-initiator-utils';
 import { Ingredient } from '../board-item-initiator.types';
 
-function getGroupsFromIngredient({ aspects, foundInLocation, fromDreamingIn }: Ingredient): EntitiesGroup[] {
+const getGroupsFromIngredient = ({ aspects, foundInLocation, fromDreamingIn }: Ingredient): EntitiesGroup[] => {
     const groups: EntitiesGroup[] = [];
     if (aspects.length > 0) {
         groups.push({
@@ -22,7 +22,7 @@ function getGroupsFromIngredient({ aspects, foundInLocation, fromDreamingIn }: I
         });
     }
     return groups;
-}
+};
 
 export class IngredientInitiator extends AbsItemInitiator<GetIngredientQuery, GetIngredientQueryVariables, Ingredient> {
     constructor(injector: Injector) {
