@@ -2,7 +2,7 @@ import { Injector } from '@angular/core';
 import { ApolloQueryResult } from '@apollo/client/core';
 import { Query } from 'apollo-angular';
 import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { filter, map, tap } from 'rxjs/operators';
 import { EntitiesGroup, EntitiesGroupItem } from '../../../shared/model';
 import { GetBookGQL, GetEntitiesByAspectGQL, GetInfluenceGQL, GetIngredientGQL, GetLanguageGQL,
     GetLocationGQL, GetLoreGQL, GetMansusDoorGQL, GetMansusDoorOptionGQL, GetRiteGQL, GetToolGQL, GetTutorGQL } from '../operations';
@@ -26,10 +26,11 @@ export abstract class AbsItemInitiator<QT, QV, E> implements ItemInitiator {
     ) {}
 
     initBoardItem(name: string): ItemInitResult {
-        const queryResult = this.query.watch(this.getQueryParams(name)).valueChanges;
+        const queryResult = this.query.watch(this.getQueryParams(name), { useInitialLoading: true }).valueChanges;
         return {
             loading: queryResult.pipe(map(result => result.loading)),
             entityGroups: queryResult.pipe(
+                filter(result => Boolean(result.data)),
                 map(result => this.getResultFromData(result.data)[0]),
                 map(entity => this.getGroupsFromResult(entity))
             ),
