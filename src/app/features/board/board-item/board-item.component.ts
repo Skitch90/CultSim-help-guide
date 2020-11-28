@@ -16,8 +16,8 @@ import { BoardItemInitiatorService } from '../../graphql/board-item-initiator/bo
 import { AddLoreUpgradeDialogComponent } from '../../dialogs/add-lore-upgrade-dialog/add-lore-upgrade-dialog.component';
 import { AddDesireChangeDialogComponent } from '../../dialogs/add-desire-change-dialog/add-desire-change-dialog.component';
 import { InfluenceInitiator, LanguageInitiator,
-    LoreInitiator, MansusDoorInitiator, MansusDoorOptionInitiator, RiteInitiator, ToolInitiator, TutorInitiator } from '../../graphql/board-item-initiator/board-item-initiator';
-import { AspectInitiator, BookInitiator, FollowerInitiator, IngredientInitiator, LocationInitiator } from '../../graphql/board-item-initiator/impl';
+    MansusDoorInitiator, MansusDoorOptionInitiator, RiteInitiator, ToolInitiator, TutorInitiator } from '../../graphql/board-item-initiator/board-item-initiator';
+import { AspectInitiator, BookInitiator, FollowerInitiator, IngredientInitiator, LocationInitiator, LoreInitiator } from '../../graphql/board-item-initiator/impl';
 import { AddTutorTeachesDialogComponent, processTutorTeachesDialogResult } from '../../dialogs/add-tutor-teaches-dialog/add-tutor-teaches-dialog.component';
 
 @Component({
@@ -36,17 +36,17 @@ export class BoardItemComponent implements OnInit {
               private service: GraphqlService, private boardService: BoardService,
               private itemInitService: BoardItemInitiatorService, private injector: Injector) {
       itemInitService.addItemInitiator('Aspect', new AspectInitiator(injector));
-      itemInitService.addItemInitiator('Follower', new FollowerInitiator(injector));
-      itemInitService.addItemInitiator('Ingredient', new IngredientInitiator(injector));
-      itemInitService.addItemInitiator('Location', new LocationInitiator(injector));
       itemInitService.addItemInitiator('Book', new BookInitiator(injector));
-      itemInitService.addItemInitiator('Lore', new LoreInitiator(injector));
+      itemInitService.addItemInitiator('Follower', new FollowerInitiator(injector));
       itemInitService.addItemInitiator('Influence', new InfluenceInitiator(injector));
+      itemInitService.addItemInitiator('Ingredient', new IngredientInitiator(injector));
       itemInitService.addItemInitiator('Language', new LanguageInitiator(injector));
+      itemInitService.addItemInitiator('Location', new LocationInitiator(injector));
+      itemInitService.addItemInitiator('Lore', new LoreInitiator(injector));
       itemInitService.addItemInitiator('MansusDoor', new MansusDoorInitiator(injector));
       itemInitService.addItemInitiator('MansusDoorOption', new MansusDoorOptionInitiator(injector));
-      itemInitService.addItemInitiator('Tool', new ToolInitiator(injector));
       itemInitService.addItemInitiator('Rite', new RiteInitiator(injector));
+      itemInitService.addItemInitiator('Tool', new ToolInitiator(injector));
       itemInitService.addItemInitiator('Tutor', new TutorInitiator(injector));
   }
 

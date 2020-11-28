@@ -2,12 +2,12 @@ import { Injector } from '@angular/core';
 import { ApolloQueryResult } from '@apollo/client/core';
 import { Query } from 'apollo-angular';
 import { Observable, of } from 'rxjs';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { EntitiesGroup, EntitiesGroupItem } from '../../../shared/model';
 import { GetInfluenceGQL, GetLanguageGQL,
-    GetLoreGQL, GetMansusDoorGQL, GetMansusDoorOptionGQL, GetRiteGQL, GetToolGQL, GetTutorGQL } from '../operations';
+    GetMansusDoorGQL, GetMansusDoorOptionGQL, GetRiteGQL, GetToolGQL, GetTutorGQL } from '../operations';
 import { convertToGroupItem, createAspectGroupItem } from './board-item-initiator-utils';
-import { Influence, ItemInitResult, Language, Lore, MansusDoor,
+import { Influence, ItemInitResult, Language, MansusDoor,
     MansusDoorOption, Rite, Tool, Tutor} from './board-item-initiator.types';
 
 export interface ItemInitiator {
@@ -58,64 +58,6 @@ export abstract class AbsItemInitiator<QT, QV, E> implements ItemInitiator {
             secretHistoriesLore: this.getSecretHistoryLore(queryResult),
             vaultLocation: this.getVaultLocation(queryResult)
         };
-    }
-}
-
-export class LoreInitiator implements ItemInitiator {
-    private getLoreGQL: GetLoreGQL;
-
-    constructor(injector: Injector) {
-        this.getLoreGQL = injector.get(GetLoreGQL);
-    }
-
-    initBoardItem(name: string): ItemInitResult {
-        let secretHistoriesLore = false;
-        return {
-            entityGroups: this.getLoreGQL.watch({ name }).valueChanges.pipe(
-                map(result => result.data.Lore[0]),
-                tap(lore => secretHistoriesLore = lore.aspects.some(aspect => aspect.Aspect.name === 'Secret Histories')),
-                map(lore => this.getGroupsFromLore(lore))
-            ),
-            secretHistoriesLore,
-            vaultLocation: false,
-        };
-    }
-
-    private getGroupsFromLore(lore: Lore): EntitiesGroup[] {
-        const groups: EntitiesGroup[] = [];
-        const { aspects, exploreResults, fromBook, fromDreamingIn, upgradesTo, upgradedFrom } = lore;
-        if (aspects.length > 0) {
-            groups.push({
-                label: 'Aspects',
-                entities: aspects.map(aspect => createAspectGroupItem(aspect))
-            });
-        }
-        if (fromBook.length || fromDreamingIn.length) {
-            const sources = [ ...fromBook, ...fromDreamingIn ];
-            groups.push({
-                label: 'Found From',
-                entities: sources.map(source => convertToGroupItem(source))
-            });
-        }
-        if (upgradesTo) {
-            groups.push({
-                label: 'Upgrades to',
-                entities: [ convertToGroupItem(upgradesTo) ]
-            });
-        }
-        if (upgradedFrom) {
-            groups.push({
-                label: 'Upgraded from',
-                entities: [ convertToGroupItem(upgradedFrom) ]
-            });
-        }
-        if (exploreResults.length > 0) {
-            groups.push({
-                label: 'Vaults',
-                entities: exploreResults.map(vault => convertToGroupItem(vault))
-            });
-        }
-        return groups;
     }
 }
 
