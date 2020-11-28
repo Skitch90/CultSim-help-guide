@@ -3,11 +3,10 @@ import { ApolloQueryResult } from '@apollo/client/core';
 import { Query } from 'apollo-angular';
 import { Observable, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { EntitiesGroup, EntitiesGroupItem } from '../../../shared/model';
-import { GetLanguageGQL,
-    GetMansusDoorGQL, GetMansusDoorOptionGQL, GetRiteGQL, GetToolGQL, GetTutorGQL } from '../operations';
+import { EntitiesGroup } from '../../../shared/model';
+import { GetMansusDoorGQL, GetMansusDoorOptionGQL, GetRiteGQL, GetToolGQL, GetTutorGQL } from '../operations';
 import { convertToGroupItem, createAspectGroupItem } from './board-item-initiator-utils';
-import { ItemInitResult, Language, MansusDoor,
+import { ItemInitResult, MansusDoor,
     MansusDoorOption, Rite, Tool, Tutor} from './board-item-initiator.types';
 
 export interface ItemInitiator {
@@ -58,56 +57,6 @@ export abstract class AbsItemInitiator<QT, QV, E> implements ItemInitiator {
             secretHistoriesLore: this.getSecretHistoryLore(queryResult),
             vaultLocation: this.getVaultLocation(queryResult)
         };
-    }
-}
-
-export class LanguageInitiator implements ItemInitiator {
-    private getLanguageGQL: GetLanguageGQL;
-
-    constructor(injector: Injector) {
-        this.getLanguageGQL = injector.get(GetLanguageGQL);
-    }
-
-    initBoardItem(name: string): ItemInitResult {
-        return {
-            entityGroups: this.getLanguageGQL.watch({ name }).valueChanges.pipe(
-                map((result) => result.data.Language[0]),
-                map(language => this.getGroupsFromLanguage(language))
-            ),
-            secretHistoriesLore: false,
-            vaultLocation: false
-        };
-    }
-
-    private getGroupsFromLanguage(language: Language): EntitiesGroup[] {
-        const groups: EntitiesGroup[] = [];
-        const { requires, fromBook, fromDreamingIn, fromTutor } = language;
-        if (requires) {
-            groups.push({
-                label: 'Requires language',
-                entities: [ convertToGroupItem(requires) ]
-            });
-        }
-        if (fromBook || fromDreamingIn) {
-            const entities: EntitiesGroupItem[] = [];
-            if (fromBook) {
-                entities.push(convertToGroupItem(fromBook));
-            }
-            if (fromDreamingIn) {
-                entities.push(convertToGroupItem(fromDreamingIn));
-            }
-            groups.push({
-                label: 'Found From',
-                entities
-            });
-        }
-        if (fromTutor.length) {
-            groups.push({
-                label: 'Taught By',
-                entities: fromTutor.map(tutor => convertToGroupItem(tutor))
-            });
-        }
-        return groups;
     }
 }
 
