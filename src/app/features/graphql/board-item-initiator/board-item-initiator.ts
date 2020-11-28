@@ -4,10 +4,10 @@ import { Query } from 'apollo-angular';
 import { Observable, of } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
 import { EntitiesGroup, EntitiesGroupItem } from '../../../shared/model';
-import { GetBookGQL, GetInfluenceGQL, GetLanguageGQL,
+import { GetInfluenceGQL, GetLanguageGQL,
     GetLoreGQL, GetMansusDoorGQL, GetMansusDoorOptionGQL, GetRiteGQL, GetToolGQL, GetTutorGQL } from '../operations';
 import { convertToGroupItem, createAspectGroupItem } from './board-item-initiator-utils';
-import { Book, Influence, ItemInitResult, Language, Lore, MansusDoor,
+import { Influence, ItemInitResult, Language, Lore, MansusDoor,
     MansusDoorOption, Rite, Tool, Tutor} from './board-item-initiator.types';
 
 export interface ItemInitiator {
@@ -58,73 +58,6 @@ export abstract class AbsItemInitiator<QT, QV, E> implements ItemInitiator {
             secretHistoriesLore: this.getSecretHistoryLore(queryResult),
             vaultLocation: this.getVaultLocation(queryResult)
         };
-    }
-}
-
-export class BookInitiator implements ItemInitiator {
-    private getBookGQL: GetBookGQL;
-
-    constructor(injector: Injector) {
-        this.getBookGQL = injector.get(GetBookGQL);
-    }
-
-    initBoardItem(name: string): ItemInitResult {
-        return {
-            entityGroups: this.getBookGQL.watch({ name }).valueChanges.pipe(
-                map((result => result.data.Book[0])),
-                map(book => this.getGroupsFromBook(book))
-            ),
-            secretHistoriesLore: false,
-            vaultLocation: false
-        };
-
-    }
-
-    private getGroupsFromBook = (book: Book): EntitiesGroup[] => {
-        const groups: EntitiesGroup[] = [];
-        const { foundInLocation, language, teachesLanguage, studiedIntoLore, teachesRite, resultsInInfluence, resultsInTool } = book;
-        if (foundInLocation.length > 0) {
-            groups.push({
-                label: 'Found In',
-                entities: foundInLocation.map(location => {
-                    return convertToGroupItem(location.Location);
-                })
-            });
-        }
-        if (language !== null) {
-            groups.push({
-                label: 'Need Translation from',
-                entities: [ convertToGroupItem(language) ]
-            });
-        }
-        if (teachesLanguage !== null) {
-            groups.push({
-                label: 'Rewards',
-                entities: [ convertToGroupItem(teachesLanguage) ]
-            });
-        } else {
-            const loreRewards = studiedIntoLore.map(lore => {
-                return convertToGroupItem(lore);
-            });
-            const riteReward = (teachesRite !== null) ? [convertToGroupItem(teachesRite)] : [];
-            const influenceRewards = resultsInInfluence.map(influnce => {
-                return convertToGroupItem(influnce);
-            });
-            const toolReward = (resultsInTool) ? [ convertToGroupItem(resultsInTool) ] : [];
-            const rewards = [
-                ...loreRewards,
-                ...influenceRewards,
-                ...riteReward,
-                ...toolReward
-            ];
-            if (rewards.length > 0) {
-                groups.push({
-                    label: 'Rewards',
-                    entities: rewards
-                });
-            }
-        }
-        return groups;
     }
 }
 
