@@ -4,9 +4,9 @@ import { Query } from 'apollo-angular';
 import { Observable, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { EntitiesGroup } from '../../../shared/model';
-import { GetMansusDoorOptionGQL, GetRiteGQL, GetToolGQL, GetTutorGQL } from '../operations';
+import { GetRiteGQL, GetToolGQL, GetTutorGQL } from '../operations';
 import { convertToGroupItem, createAspectGroupItem } from './board-item-initiator-utils';
-import { ItemInitResult, MansusDoorOption, Rite, Tool, Tutor} from './board-item-initiator.types';
+import { ItemInitResult, Rite, Tool, Tutor} from './board-item-initiator.types';
 
 export interface ItemInitiator {
     initBoardItem(name: string): ItemInitResult;
@@ -56,44 +56,6 @@ export abstract class AbsItemInitiator<QT, QV, E> implements ItemInitiator {
             secretHistoriesLore: this.getSecretHistoryLore(queryResult),
             vaultLocation: this.getVaultLocation(queryResult)
         };
-    }
-}
-
-export class MansusDoorOptionInitiator implements ItemInitiator {
-    private getMansusDoorOptionGQL: GetMansusDoorOptionGQL;
-
-    constructor(injector: Injector) {
-        this.getMansusDoorOptionGQL = injector.get(GetMansusDoorOptionGQL);
-    }
-
-    initBoardItem(name: string): ItemInitResult {
-        return {
-            entityGroups: this.getMansusDoorOptionGQL.watch({ name }).valueChanges.pipe(
-                map((result) => result.data.MansusDoorOption[0]),
-                map(mansusDoorOption => this.getGroupsFromMansusDoorOption(mansusDoorOption))
-            ),
-            secretHistoriesLore: false,
-            vaultLocation: false
-        };
-    }
-
-    private getGroupsFromMansusDoorOption(mansusDoorOption: MansusDoorOption): EntitiesGroup[] {
-        const groups: EntitiesGroup[] = [];
-        const { door, influenceRewards, ingredientRewards, languageRewards, loreRewards } = mansusDoorOption;
-        if (door) {
-            groups.push({
-                label: 'Door',
-                entities: [ convertToGroupItem(door) ]
-            });
-        }
-        if (influenceRewards.length || ingredientRewards.length || languageRewards.length || loreRewards.length) {
-            const rewards = [ ...influenceRewards, ...ingredientRewards, ...languageRewards, ...loreRewards ];
-            groups.push({
-                label: 'Rewards',
-                entities: rewards.map(reward => convertToGroupItem(reward))
-            });
-        }
-        return groups;
     }
 }
 
