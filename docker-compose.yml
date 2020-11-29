@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   cultsimhelpguide:
-    image: cultsimhelpguide
+    image: cultsimhelpguide:4.6.0
     build:
       context: .
       dockerfile: ./Dockerfile
