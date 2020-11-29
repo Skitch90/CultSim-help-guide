@@ -8,3 +8,4 @@ export { LocationInitiator } from './location-initiator';
 export { LoreInitiator } from './lore-initiator';
 export { MansusDoorInitiator } from './mansus-door-initiator';
 export { MansusDoorOptionInitiator } from './mansus-door-option-initiator';
+export { ToolInitiator } from './tool-initiator';

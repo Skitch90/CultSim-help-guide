@@ -4,9 +4,9 @@ import { Query } from 'apollo-angular';
 import { Observable, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { EntitiesGroup } from '../../../shared/model';
-import { GetRiteGQL, GetToolGQL, GetTutorGQL } from '../operations';
-import { convertToGroupItem, createAspectGroupItem } from './board-item-initiator-utils';
-import { ItemInitResult, Rite, Tool, Tutor} from './board-item-initiator.types';
+import { GetRiteGQL, GetTutorGQL } from '../operations';
+import { convertToGroupItem } from './board-item-initiator-utils';
+import { ItemInitResult, Rite, Tutor} from './board-item-initiator.types';
 
 export interface ItemInitiator {
     initBoardItem(name: string): ItemInitResult;
@@ -56,46 +56,6 @@ export abstract class AbsItemInitiator<QT, QV, E> implements ItemInitiator {
             secretHistoriesLore: this.getSecretHistoryLore(queryResult),
             vaultLocation: this.getVaultLocation(queryResult)
         };
-    }
-}
-
-export class ToolInitiator implements ItemInitiator {
-    private getToolGQL: GetToolGQL;
-
-    constructor(injector: Injector) {
-        this.getToolGQL = injector.get(GetToolGQL);
-    }
-
-    initBoardItem(name: string): ItemInitResult {
-        return {
-            entityGroups: this.getToolGQL.watch({ name }).valueChanges.pipe(
-                map(result => result.data.Tool[0]),
-                map(tool => this.getGroupsFromTool(tool))
-            ),
-            secretHistoriesLore: false,
-            vaultLocation: false
-        };
-    }
-
-    private getGroupsFromTool(tool: Tool): EntitiesGroup[] {
-        const groups: EntitiesGroup[] = [];
-        const { aspects, foundInLocation, fromBook } = tool;
-        if (aspects.length > 0) {
-            groups.push({
-                label: 'Aspects',
-                entities: aspects.map(aspect => createAspectGroupItem(aspect))
-            });
-        }
-        if (foundInLocation.length || fromBook.length) {
-            groups.push({
-                label: 'Found From',
-                entities: [
-                    ...foundInLocation.map(location => convertToGroupItem(location.Location)),
-                    ...fromBook.map(book => convertToGroupItem(book))
-                ]
-            });
-        }
-        return groups;
     }
 }
 
