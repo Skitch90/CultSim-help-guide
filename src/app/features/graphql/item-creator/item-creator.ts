@@ -21,7 +21,8 @@ import { SaveFollowerGQL, AddAspectToFollowerGQL, GetEntitiesByAspectDocument, S
     GetRitesDocument,
     SaveInfluenceGQL,
     SetInfluenceAspectGQL,
-    GetInfluencesDocument} from '../operations';
+    GetInfluencesDocument,
+    SaveTutorGQL} from '../operations';
 import { Injector } from '@angular/core';
 import { AspectInfo } from '../graphql.types';
 import { Mutation } from 'apollo-angular';
@@ -292,5 +293,17 @@ export class InfluenceCreator implements ItemCreator {
                 ]}
             ).toPromise();
         });
+    }
+}
+
+export class TutorCreator implements ItemCreator {
+    private readonly saveTutorGQL: SaveTutorGQL;
+
+    constructor(readonly injector: Injector) {
+        this.saveTutorGQL = injector.get(SaveTutorGQL);
+    }
+
+    createItem = async ({ name }: SaveItemInput): Promise<void> => {
+        await this.saveTutorGQL.mutate({ name }).toPromise();
     }
 }

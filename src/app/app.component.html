@@ -10,10 +10,13 @@
       <input matInput #searchName [formControl]="searchTextControl" [matAutocomplete]="auto" (keyup.enter)="addItemToBoard()">
       <mat-icon matSuffix (click)="addItemToBoard()" matTooltip="Add the item to the board">add</mat-icon>
       <mat-autocomplete id="searchResults" #auto="matAutocomplete" [displayWith]="displayFn">
-        <mat-option *ngFor="let item of searchResults | async" [value]="item">
-          <mat-icon matTooltip={{item.label|outputLabel}}>{{item.label|labelIcon}}</mat-icon>
-          <span matTooltip={{item.name}}>{{item.name}}</span>
-        </mat-option>
+        <mat-option *ngIf="isLoading"><mat-progress-bar mode="indeterminate"></mat-progress-bar></mat-option>
+        <ng-container *ngIf="!isLoading">
+          <mat-option *ngFor="let item of searchResults" [value]="item">
+            <mat-icon matTooltip={{item.label|outputLabel}}>{{item.label|labelIcon}}</mat-icon>
+            <span matTooltip={{item.name}}>{{item.name}}</span>
+          </mat-option>
+        </ng-container>
       </mat-autocomplete>
     </mat-form-field>
   </mat-toolbar-row>

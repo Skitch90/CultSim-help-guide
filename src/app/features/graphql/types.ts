@@ -32,6 +32,7 @@ export type Query = {
   MansusDoor?: Maybe<Array<Maybe<MansusDoor>>>;
   Influence?: Maybe<Array<Maybe<Influence>>>;
   Language?: Maybe<Array<Maybe<Language>>>;
+  Tutor?: Maybe<Array<Maybe<Tutor>>>;
   Tool?: Maybe<Array<Maybe<Tool>>>;
   Rite?: Maybe<Array<Maybe<Rite>>>;
   RiteComponent?: Maybe<Array<Maybe<RiteComponent>>>;
@@ -249,6 +250,16 @@ export type QueryLanguageArgs = {
   offset?: Maybe<Scalars['Int']>;
   orderBy?: Maybe<Array<Maybe<_LanguageOrdering>>>;
   filter?: Maybe<_LanguageFilter>;
+};
+
+
+export type QueryTutorArgs = {
+  name?: Maybe<Scalars['String']>;
+  _id?: Maybe<Scalars['String']>;
+  first?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<Maybe<_TutorOrdering>>>;
+  filter?: Maybe<_TutorFilter>;
 };
 
 
@@ -1202,10 +1213,37 @@ export type _LanguageFilter = {
   fromBook_not?: Maybe<_BookFilter>;
   fromBook_in?: Maybe<Array<_BookFilter>>;
   fromBook_not_in?: Maybe<Array<_BookFilter>>;
+  fromTutor?: Maybe<_TutorFilter>;
+  fromTutor_not?: Maybe<_TutorFilter>;
+  fromTutor_in?: Maybe<Array<_TutorFilter>>;
+  fromTutor_not_in?: Maybe<Array<_TutorFilter>>;
+  fromTutor_some?: Maybe<_TutorFilter>;
+  fromTutor_none?: Maybe<_TutorFilter>;
+  fromTutor_single?: Maybe<_TutorFilter>;
+  fromTutor_every?: Maybe<_TutorFilter>;
   fromDreamingIn?: Maybe<_MansusDoorOptionFilter>;
   fromDreamingIn_not?: Maybe<_MansusDoorOptionFilter>;
   fromDreamingIn_in?: Maybe<Array<_MansusDoorOptionFilter>>;
   fromDreamingIn_not_in?: Maybe<Array<_MansusDoorOptionFilter>>;
+};
+
+export type _TutorFilter = {
+  AND?: Maybe<Array<_TutorFilter>>;
+  OR?: Maybe<Array<_TutorFilter>>;
+  name?: Maybe<Scalars['String']>;
+  name_not?: Maybe<Scalars['String']>;
+  name_in?: Maybe<Array<Scalars['String']>>;
+  name_not_in?: Maybe<Array<Scalars['String']>>;
+  name_contains?: Maybe<Scalars['String']>;
+  name_not_contains?: Maybe<Scalars['String']>;
+  name_starts_with?: Maybe<Scalars['String']>;
+  name_not_starts_with?: Maybe<Scalars['String']>;
+  name_ends_with?: Maybe<Scalars['String']>;
+  name_not_ends_with?: Maybe<Scalars['String']>;
+  teachesLanguage?: Maybe<_LanguageFilter>;
+  teachesLanguage_not?: Maybe<_LanguageFilter>;
+  teachesLanguage_in?: Maybe<Array<_LanguageFilter>>;
+  teachesLanguage_not_in?: Maybe<Array<_LanguageFilter>>;
 };
 
 export type _ToolFilter = {
@@ -1722,6 +1760,7 @@ export type Language = {
   name: Scalars['String'];
   requires?: Maybe<Language>;
   fromBook?: Maybe<Book>;
+  fromTutor: Array<Tutor>;
   fromDreamingIn?: Maybe<MansusDoorOption>;
   _id?: Maybe<Scalars['String']>;
 };
@@ -1737,8 +1776,35 @@ export type LanguageFromBookArgs = {
 };
 
 
+export type LanguageFromTutorArgs = {
+  first?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  orderBy?: Maybe<Array<Maybe<_TutorOrdering>>>;
+  filter?: Maybe<_TutorFilter>;
+};
+
+
 export type LanguageFromDreamingInArgs = {
   filter?: Maybe<_MansusDoorOptionFilter>;
+};
+
+export enum _TutorOrdering {
+  NameAsc = 'name_asc',
+  NameDesc = 'name_desc',
+  IdAsc = '_id_asc',
+  IdDesc = '_id_desc'
+}
+
+export type Tutor = {
+  __typename?: 'Tutor';
+  name: Scalars['String'];
+  teachesLanguage?: Maybe<Language>;
+  _id?: Maybe<Scalars['String']>;
+};
+
+
+export type TutorTeachesLanguageArgs = {
+  filter?: Maybe<_LanguageFilter>;
 };
 
 export enum _ToolOrdering {
@@ -1977,8 +2043,14 @@ export type Mutation = {
   RemoveLanguageRequires?: Maybe<_RemoveLanguageRequiresPayload>;
   AddLanguageFromBook?: Maybe<_AddLanguageFromBookPayload>;
   RemoveLanguageFromBook?: Maybe<_RemoveLanguageFromBookPayload>;
+  AddLanguageFromTutor?: Maybe<_AddLanguageFromTutorPayload>;
+  RemoveLanguageFromTutor?: Maybe<_RemoveLanguageFromTutorPayload>;
   AddLanguageFromDreamingIn?: Maybe<_AddLanguageFromDreamingInPayload>;
   RemoveLanguageFromDreamingIn?: Maybe<_RemoveLanguageFromDreamingInPayload>;
+  CreateTutor?: Maybe<Tutor>;
+  DeleteTutor?: Maybe<Tutor>;
+  AddTutorTeachesLanguage?: Maybe<_AddTutorTeachesLanguagePayload>;
+  RemoveTutorTeachesLanguage?: Maybe<_RemoveTutorTeachesLanguagePayload>;
   CreateTool?: Maybe<Tool>;
   DeleteTool?: Maybe<Tool>;
   AddToolAspects?: Maybe<_AddToolAspectsPayload>;
@@ -2720,6 +2792,18 @@ export type MutationRemoveLanguageFromBookArgs = {
 };
 
 
+export type MutationAddLanguageFromTutorArgs = {
+  from: _TutorInput;
+  to: _LanguageInput;
+};
+
+
+export type MutationRemoveLanguageFromTutorArgs = {
+  from: _TutorInput;
+  to: _LanguageInput;
+};
+
+
 export type MutationAddLanguageFromDreamingInArgs = {
   from: _MansusDoorOptionInput;
   to: _LanguageInput;
@@ -2728,6 +2812,28 @@ export type MutationAddLanguageFromDreamingInArgs = {
 
 export type MutationRemoveLanguageFromDreamingInArgs = {
   from: _MansusDoorOptionInput;
+  to: _LanguageInput;
+};
+
+
+export type MutationCreateTutorArgs = {
+  name: Scalars['String'];
+};
+
+
+export type MutationDeleteTutorArgs = {
+  name: Scalars['String'];
+};
+
+
+export type MutationAddTutorTeachesLanguageArgs = {
+  from: _TutorInput;
+  to: _LanguageInput;
+};
+
+
+export type MutationRemoveTutorTeachesLanguageArgs = {
+  from: _TutorInput;
   to: _LanguageInput;
 };
 
@@ -3407,6 +3513,22 @@ export type _RemoveLanguageFromBookPayload = {
   to?: Maybe<Language>;
 };
 
+export type _TutorInput = {
+  name: Scalars['String'];
+};
+
+export type _AddLanguageFromTutorPayload = {
+  __typename?: '_AddLanguageFromTutorPayload';
+  from?: Maybe<Tutor>;
+  to?: Maybe<Language>;
+};
+
+export type _RemoveLanguageFromTutorPayload = {
+  __typename?: '_RemoveLanguageFromTutorPayload';
+  from?: Maybe<Tutor>;
+  to?: Maybe<Language>;
+};
+
 export type _AddLanguageFromDreamingInPayload = {
   __typename?: '_AddLanguageFromDreamingInPayload';
   from?: Maybe<MansusDoorOption>;
@@ -3416,6 +3538,18 @@ export type _AddLanguageFromDreamingInPayload = {
 export type _RemoveLanguageFromDreamingInPayload = {
   __typename?: '_RemoveLanguageFromDreamingInPayload';
   from?: Maybe<MansusDoorOption>;
+  to?: Maybe<Language>;
+};
+
+export type _AddTutorTeachesLanguagePayload = {
+  __typename?: '_AddTutorTeachesLanguagePayload';
+  from?: Maybe<Tutor>;
+  to?: Maybe<Language>;
+};
+
+export type _RemoveTutorTeachesLanguagePayload = {
+  __typename?: '_RemoveTutorTeachesLanguagePayload';
+  from?: Maybe<Tutor>;
   to?: Maybe<Language>;
 };
 
