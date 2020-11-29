@@ -4,9 +4,9 @@ import { Query } from 'apollo-angular';
 import { Observable, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { EntitiesGroup } from '../../../shared/model';
-import { GetRiteGQL, GetTutorGQL } from '../operations';
+import { GetTutorGQL } from '../operations';
 import { convertToGroupItem } from './board-item-initiator-utils';
-import { ItemInitResult, Rite, Tutor} from './board-item-initiator.types';
+import { ItemInitResult, Tutor} from './board-item-initiator.types';
 
 export interface ItemInitiator {
     initBoardItem(name: string): ItemInitResult;
@@ -56,37 +56,6 @@ export abstract class AbsItemInitiator<QT, QV, E> implements ItemInitiator {
             secretHistoriesLore: this.getSecretHistoryLore(queryResult),
             vaultLocation: this.getVaultLocation(queryResult)
         };
-    }
-}
-
-export class RiteInitiator implements ItemInitiator {
-    private getRiteGQL: GetRiteGQL;
-
-    constructor(injector: Injector) {
-        this.getRiteGQL = injector.get(GetRiteGQL);
-    }
-
-    initBoardItem(name: string): ItemInitResult {
-        return {
-            entityGroups: this.getRiteGQL.watch({ name }).valueChanges.pipe(
-                map((result) => result.data.Rite[0]),
-                map(rite => this.getGroupsFromRite(rite))
-            ),
-            secretHistoriesLore: false,
-            vaultLocation: false
-        };
-    }
-
-    private getGroupsFromRite(rite: Rite): EntitiesGroup[] {
-        const groups: EntitiesGroup[] = [];
-        const { fromBook } = rite;
-        if (fromBook.length) {
-            groups.push({
-                label: 'From book',
-                entities: fromBook.map(book => convertToGroupItem(book))
-            });
-        }
-        return groups;
     }
 }
 
