@@ -53,18 +53,11 @@ export class BoardItemComponent implements OnInit {
   ngOnInit(): void {
       const initResult = this.itemInitService.initItem(this.item);
       if (initResult) {
-          this.loading = initResult.loading || of(false);
+          this.loading = initResult.loading;
           this.entities = initResult.entityGroups;
-          this.vaultLocation = this.convertToObservable(initResult.vaultLocation);
-          this.secretHistoriesLore = this.convertToObservable(initResult.secretHistoriesLore);
+          this.vaultLocation = initResult.vaultLocation;
+          this.secretHistoriesLore = initResult.secretHistoriesLore;
       }
-  }
-
-  private convertToObservable(input: boolean | Observable<boolean>): Observable<boolean> {
-      if (typeof input === 'boolean') {
-          return of(input);
-      }
-      return input;
   }
 
   removeFromBoard(item: Entity): void {

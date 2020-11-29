@@ -3,10 +3,10 @@ import * as Model from '../types';
 import { Observable } from 'rxjs';
 
 export type ItemInitResult = {
-    loading?: Observable<boolean>;
+    loading: Observable<boolean>;
     entityGroups: Observable<EntitiesGroup[]>;
-    secretHistoriesLore: boolean | Observable<boolean>;
-    vaultLocation: boolean | Observable<boolean>;
+    secretHistoriesLore: Observable<boolean>;
+    vaultLocation: Observable<boolean>;
 };
 
 type AspectConvertInput = {
