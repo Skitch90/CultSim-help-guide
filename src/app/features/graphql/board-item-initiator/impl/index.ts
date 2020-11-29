@@ -10,3 +10,4 @@ export { MansusDoorInitiator } from './mansus-door-initiator';
 export { MansusDoorOptionInitiator } from './mansus-door-option-initiator';
 export { RiteInitiator } from './rite-initiator';
 export { ToolInitiator } from './tool-initiator';
+export { TutorInitiator } from './tutor-initiator';

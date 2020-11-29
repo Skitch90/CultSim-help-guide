@@ -1,12 +1,9 @@
-import { Injector } from '@angular/core';
 import { ApolloQueryResult } from '@apollo/client/core';
 import { Query } from 'apollo-angular';
 import { Observable, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { EntitiesGroup } from '../../../shared/model';
-import { GetTutorGQL } from '../operations';
-import { convertToGroupItem } from './board-item-initiator-utils';
-import { ItemInitResult, Tutor} from './board-item-initiator.types';
+import { ItemInitResult } from './board-item-initiator.types';
 
 export interface ItemInitiator {
     initBoardItem(name: string): ItemInitResult;
@@ -56,35 +53,5 @@ export abstract class AbsItemInitiator<QT, QV, E> implements ItemInitiator {
             secretHistoriesLore: this.getSecretHistoryLore(queryResult),
             vaultLocation: this.getVaultLocation(queryResult)
         };
-    }
-}
-
-export class TutorInitiator implements ItemInitiator {
-    private readonly getTutorGQL: GetTutorGQL;
-
-    constructor(readonly injector: Injector) {
-        this.getTutorGQL = injector.get(GetTutorGQL);
-    }
-
-    initBoardItem(name: string): ItemInitResult {
-        return {
-            entityGroups: this.getTutorGQL.watch({ name }).valueChanges.pipe(
-                map((result) => result.data.Tutor[0]),
-                map((tutor) => this.getGroupsFromTutor(tutor))
-            ),
-            secretHistoriesLore: false,
-            vaultLocation: false
-        };
-    }
-
-    private getGroupsFromTutor({ teachesLanguage }: Tutor): EntitiesGroup[] {
-        const groups: EntitiesGroup[] = [];
-        if (teachesLanguage) {
-            groups.push({
-                label: 'Teaches',
-                entities: [ convertToGroupItem(teachesLanguage) ]
-            });
-        }
-        return groups;
     }
 }
