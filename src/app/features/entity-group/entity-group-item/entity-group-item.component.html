@@ -19,7 +19,16 @@
 </ng-template>
 
 <ng-template #nameListAspects>
-    <mat-list-item (click)="addToBoard(item)">{{ item.name }} ({{ item.aspects.join('/') }})</mat-list-item>
+    <mat-list-item (click)="addToBoard(item)">
+        <div>
+            {{ item.name }} (
+                <ng-template ngFor let-item [ngForOf]="item.aspects" let-i="index" let-last="last">
+                    <app-aspect [aspect]="item"></app-aspect>
+                    <ng-container *ngIf="!last">/</ng-container>
+                </ng-template>
+                )
+        </div>
+    </mat-list-item>
 </ng-template>
 
 <ng-template #aspectQuantity>
