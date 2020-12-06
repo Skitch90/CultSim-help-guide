@@ -25,6 +25,7 @@ import { AddObstacleLocationDialogComponent } from './features/dialogs/add-obsta
 import { AddLoreUpgradeDialogComponent } from './features/dialogs/add-lore-upgrade-dialog/add-lore-upgrade-dialog.component';
 import { AddDesireChangeDialogComponent } from './features/dialogs/add-desire-change-dialog/add-desire-change-dialog.component';
 import { AddTutorTeachesDialogComponent } from './features/dialogs/add-tutor-teaches-dialog/add-tutor-teaches-dialog.component';
+import { AspectComponent } from './features/entity-group/entity-group-item/aspect/aspect.component';
 
 @NgModule({
     declarations: [
@@ -45,7 +46,8 @@ import { AddTutorTeachesDialogComponent } from './features/dialogs/add-tutor-tea
         AddLoreUpgradeDialogComponent,
         AddDesireChangeDialogComponent,
         AddDoorOptionDialogComponent,
-        AddTutorTeachesDialogComponent
+        AddTutorTeachesDialogComponent,
+        AspectComponent
     ],
     imports: [
         BrowserModule,
