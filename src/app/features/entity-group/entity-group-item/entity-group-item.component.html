@@ -21,7 +21,7 @@
 </ng-template>
 
 <ng-template #aspectQuantity>
-    <mat-list-item (click)="addToBoard(item)">{{ item.name }} {{ item.aspectQuantity }}</mat-list-item>
+    <mat-list-item (click)="addToBoard(item)"><app-aspect [aspect]="item.name"></app-aspect> {{ item.aspectQuantity }}</mat-list-item>
 </ng-template>
 
 <ng-template #mansusOption>
