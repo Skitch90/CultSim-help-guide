@@ -8,7 +8,7 @@
     <mat-form-field class="toolbar-search-box" appearance="fill">
       <mat-label>Search</mat-label>
       <input matInput #searchName [formControl]="searchTextControl" [matAutocomplete]="auto" (keyup.enter)="addItemToBoard()">
-      <mat-icon matSuffix (click)="addItemToBoard()" matTooltip="Add the item to the board">add</mat-icon>
+      <mat-icon matSuffix class="add-icon" (click)="addItemToBoard()" matTooltip="Add the item to the board">add</mat-icon>
       <mat-autocomplete id="searchResults" #auto="matAutocomplete" [displayWith]="displayFn">
         <mat-option *ngIf="isLoading"><mat-progress-bar mode="indeterminate"></mat-progress-bar></mat-option>
         <ng-container *ngIf="!isLoading">
