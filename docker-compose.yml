@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   cultsimhelpguide:
-    image: cultsimhelpguide:4.6.0
+    image: cultsimhelpguide:4.7.0
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -10,3 +10,13 @@ services:
       NODE_ENV: production
     ports:
       - 80:80
+  cultsimhelpguide-latest:
+    image: cultsimhelpguide
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+    ports:
+      - 80:80
+      
