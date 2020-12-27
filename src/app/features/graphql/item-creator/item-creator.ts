@@ -30,7 +30,7 @@ import { DocumentNode } from 'graphql';
 
 const createItem = async (itemName: string, createMutation: Mutation, createRefetchQuery: DocumentNode) => {
     await createMutation.mutate(
-        { name: itemName },
+        { name: itemName.trim() },
         { refetchQueries: [{ query: createRefetchQuery }] }
     ).toPromise();
 };
